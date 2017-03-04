@@ -1,5 +1,7 @@
+import 'dart:html';
 import 'widget.dart';
 import '../game_component.dart';
+import '../services.dart';
 
 class Tile {
   String glyph = '#';
@@ -26,6 +28,8 @@ class Tile {
 }
 
 class GameMap extends GameComponent implements Widget {
+  num cellHeight = 16;
+  num cellWidth = 16;
   List<List<Tile>> _map;
 
   GameMap(num entity, List<String> map): super(entity) {
@@ -45,6 +49,23 @@ class GameMap extends GameComponent implements Widget {
     } catch (ex) {
       print("GameMap.At: Invalid access to ($x, $y)");
       return Tile.invalidTile;
+    }
+  }
+
+  @override
+  draw(CanvasRenderingContext2D context) {
+    context.font = gameOutput.asciiFont;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    num x = cellWidth/2;
+    num y = cellHeight/2;
+    for(var row in _map) {
+      for(var tile in row) {
+        context.fillText(tile.glyph, x, y);
+        x += cellWidth;
+      }
+      x = cellWidth/2;
+      y += cellHeight;
     }
   }
 }

@@ -9,5 +9,6 @@ void main() {
   var world = new World();
   world.initialize();
   services.initialize(world);
+  services.gameMechanics.generateLevel();
   world.update();
 }

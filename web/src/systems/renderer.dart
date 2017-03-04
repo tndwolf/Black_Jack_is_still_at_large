@@ -1,36 +1,38 @@
 import '../game_component.dart';
 import '../game_system.dart';
 import '../world.dart';
-import '../components/map.dart';
+import '../components/widget.dart';
+import '../services.dart';
 
 class Renderer implements GameSystem {
-  GameMap map = null;
-  List<GameComponent> widgets = <GameComponent>[];
+  List<Widget> widgets = <Widget>[];
 
   @override
-  initialize(World world) {
-    // TODO: implement initialize
-  }
+  initialize(World world) { }
 
   @override
   bool register(GameComponent component) {
     var res = false;
-    if(component is GameMap) {
-      map = component as Map;
-      res = true;
-    } else if (component is GameComponent) {
-      
+    if (component is Widget) {
+      widgets.add(component as Widget);
+      res =  true;
     }
     return res;
   }
 
   @override
   unregister(GameComponent component) {
-    // TODO: implement unregister
+    if (component is Widget) {
+      widgets.add(component as Widget);
+    }
   }
 
   @override
   update(World world) {
-    // TODO: implement update
+    var context = gameOutput.context;
+    context.clearRect(0, 0, gameOutput.canvas.width, gameOutput.canvas.height);
+    for(var widget in widgets) {
+      widget.draw(context);
+    }
   }
 }

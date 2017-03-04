@@ -1,5 +1,5 @@
 class MapFactory {
-  static List<String> generate() {
+  List<String> generate() {
     var res = <String>[];
     for(var y = 0; y < 24; y++) {
       var row = "";

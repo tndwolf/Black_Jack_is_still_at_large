@@ -1,5 +1,6 @@
 import 'game_component.dart';
 import 'game_system.dart';
+import 'systems/renderer.dart';
 
 class World {
   static const num GENERIC_ENTITY = 0;
@@ -24,7 +25,7 @@ class World {
   }
 
   initialize() {
-
+    _systems.add(new Renderer().initialize(this));
   }
 
   num get nextEntity => _lastEntity + 1;
