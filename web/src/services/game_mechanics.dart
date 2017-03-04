@@ -9,6 +9,7 @@ class GameMechanics {
 
   generateLevel() {
     var map = new GameMap(_world.nextEntity, mapFactory.generate());
+    print(map);
     _world.add(map);
   }
 }

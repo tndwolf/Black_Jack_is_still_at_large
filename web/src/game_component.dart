@@ -10,5 +10,5 @@ abstract class GameComponent {
   num entity;
   GameComponent(num this.entity);
   GameComponent.fromJson(Map json);
-  @override String toString();
+  //@override String toString();
 }

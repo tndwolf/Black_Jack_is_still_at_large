@@ -5,4 +5,10 @@
 3. -Widget, Map, MapFactory
 ---
 4. Map, Renderer, GameOutput
-5. 
+5. Map, -Rng, -Services, Color, MapFactory, UserInput
+6. Map.toString...
+---
+
+Lunch
+
+---

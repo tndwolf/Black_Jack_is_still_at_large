@@ -9,4 +9,8 @@ class Color {
       num this.g = 255,
       num this.b = 255,
       num this.a = 255]) {}
+
+  @override String toString() {
+    return "[$r, $g, $b, $a]";
+  }
 }

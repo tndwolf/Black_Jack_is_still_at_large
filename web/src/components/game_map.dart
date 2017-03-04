@@ -6,7 +6,7 @@ import '../services.dart';
 
 class Tile {
   String glyph = '#';
-  Color background = new Color(127, 100, 0);
+  Color background = new Color(96, 80, 0);
   Color color = new Color();
   bool blockLos = true;
   bool blocksMovement = true;
@@ -29,6 +29,19 @@ class Tile {
   }
 
   static Tile get invalidTile => new Tile.fromChar('\\');
+
+  @override String toString() {
+    var res = new StringBuffer()
+      ..write(r'{"type"="tile", ')
+      ..write('\"glyph\"=\"$glyph\", ')
+      ..write('\"blockLos\"=$blockLos, ')
+      ..write('\"blocksMovement\"=$blocksMovement, ')
+      ..write('\"inLos\"=$inLos, ')
+      ..write('\"visited\"=$visited, ')
+      ..write('\"color\"=$color, ')
+      ..write('\"background\"=$background }');
+    return res.toString();
+  }
 }
 
 class GameMap extends GameComponent implements Widget {
@@ -76,5 +89,23 @@ class GameMap extends GameComponent implements Widget {
       x = cellWidth/2;
       y += cellHeight;
     }
+  }
+
+  @override String toString() {
+    var res = new StringBuffer();
+    res..write(r'{"type": "GameMap", "entity": ')
+      ..write("$entity, ")
+      ..write(r'"map": [[');
+    var smap = <String>[];
+    for(var row in _map) {
+      var srow = <String>[];
+      for (var tile in row) {
+        srow.add(tile.toString());
+      }
+      smap.add(srow.join(','));
+    }
+    res.write(smap.join('],['));
+    res.write(']]}');
+    return res.toString();
   }
 }

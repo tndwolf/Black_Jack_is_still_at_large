@@ -28,6 +28,6 @@ initialize(World world) {
   _entityFactory = new EntityFactory();
   _gameOutput = new GameOutput(outCanvas);
   _mapFactory = new MapFactory();
-  _userInput = new UserInput(world, outCanvas);
+  _userInput = new UserInput(world, inputElement);
   _gameMechanics = new GameMechanics(world);
 }
