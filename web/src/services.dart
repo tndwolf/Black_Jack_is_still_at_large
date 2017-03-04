@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:math';
 import 'world.dart';
 import 'services/entity_factory.dart';
 import 'services/game_mechanics.dart';
@@ -10,6 +11,7 @@ EntityFactory _entityFactory;
 GameMechanics _gameMechanics;
 GameOutput _gameOutput;
 MapFactory _mapFactory;
+Random rng;
 UserInput _userInput;
 World _world;
 
@@ -19,8 +21,10 @@ GameOutput get gameOutput => _gameOutput;
 MapFactory get mapFactory => _mapFactory;
 
 initialize(World world) {
-  var outCanvas = querySelector("#output");
+  var inputElement = querySelector("body");
+  var outCanvas = querySelector("#gameView");
   _world = world;
+  rng = new Random();
   _entityFactory = new EntityFactory();
   _gameOutput = new GameOutput(outCanvas);
   _mapFactory = new MapFactory();

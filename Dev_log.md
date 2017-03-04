@@ -4,3 +4,5 @@
     - First issue, not getting focus from Canvas
 3. -Widget, Map, MapFactory
 ---
+4. Map, Renderer, GameOutput
+5. 

@@ -5,5 +5,5 @@ class GameOutput {
   CanvasElement canvas;
   CanvasRenderingContext2D get context => canvas.context2D;
 
-  GameOutput(CanvasElement this.canvas);
+  GameOutput(CanvasElement this.canvas) {}
 }

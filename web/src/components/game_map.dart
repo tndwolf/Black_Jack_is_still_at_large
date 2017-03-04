@@ -1,10 +1,13 @@
 import 'dart:html';
 import 'widget.dart';
+import '../color.dart';
 import '../game_component.dart';
 import '../services.dart';
 
 class Tile {
   String glyph = '#';
+  Color background = new Color(127, 100, 0);
+  Color color = new Color();
   bool blockLos = true;
   bool blocksMovement = true;
   bool inLos = false;
@@ -17,6 +20,7 @@ class Tile {
       case '.': // floor
         blockLos = false;
         blocksMovement = false;
+        color = new Color(255, 225, 0);
         break;
       case '~': // water
         blockLos = false;
@@ -36,8 +40,8 @@ class GameMap extends GameComponent implements Widget {
     _map = <List<Tile>>[];
     for(var row in map) {
       var newRow = <Tile>[];
-      for(var char in row) {
-        newRow.add(new Tile.fromChar(char));
+      for(var c = 0; c < row.length; c++) {
+        newRow.add(new Tile.fromChar(row[c]));
       }
       _map.add(newRow);
     }
@@ -57,10 +61,15 @@ class GameMap extends GameComponent implements Widget {
     context.font = gameOutput.asciiFont;
     context.textAlign = 'center';
     context.textBaseline = 'middle';
-    num x = cellWidth/2;
-    num y = cellHeight/2;
+    var halfCellWidth = cellWidth/2;
+    var halfCellHeight = cellHeight/2;
+    num x = halfCellWidth;
+    num y = halfCellHeight;
     for(var row in _map) {
       for(var tile in row) {
+        context.setFillColorRgb(tile.background.r, tile.background.g, tile.background.b);
+        context.fillRect(x - halfCellWidth, y - halfCellHeight, cellWidth, cellHeight);
+        context.setFillColorRgb(tile.color.r, tile.color.g, tile.color.b);
         context.fillText(tile.glyph, x, y);
         x += cellWidth;
       }

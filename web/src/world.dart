@@ -25,7 +25,7 @@ class World {
   }
 
   initialize() {
-    _systems.add(new Renderer().initialize(this));
+    _systems.add(new Renderer()..initialize(this));
   }
 
   num get nextEntity => _lastEntity + 1;
