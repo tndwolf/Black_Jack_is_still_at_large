@@ -24,6 +24,14 @@ class World {
     _lastEntity = (component.entity > _lastEntity) ? component.entity : _lastEntity;
   }
 
+  GameComponent getComponent(Type type, num entity) {
+    var res = _components.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: null);
+    if (res == null) {
+      res = _behaviors.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: null);
+    }
+    return res;
+  }
+
   initialize() {
     _systems.add(new Renderer()..initialize(this));
   }

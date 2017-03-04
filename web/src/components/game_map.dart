@@ -1,53 +1,16 @@
 import 'dart:html';
+import 'tile.dart';
 import 'widget.dart';
 import '../color.dart';
 import '../game_component.dart';
 import '../services.dart';
 
-class Tile {
-  String glyph = '#';
-  Color background = new Color(96, 80, 0);
-  Color color = new Color();
-  bool blockLos = true;
-  bool blocksMovement = true;
-  bool inLos = false;
-  bool visited = false;
-
-  Tile.fromChar(String char) {
-    glyph = char;
-    switch(glyph) {
-      // Note that default values area for walls '#'
-      case '.': // floor
-        blockLos = false;
-        blocksMovement = false;
-        color = new Color(255, 225, 0);
-        break;
-      case '~': // water
-        blockLos = false;
-        break;
-    }
-  }
-
-  static Tile get invalidTile => new Tile.fromChar('\\');
-
-  @override String toString() {
-    var res = new StringBuffer()
-      ..write(r'{"type"="tile", ')
-      ..write('\"glyph\"=\"$glyph\", ')
-      ..write('\"blockLos\"=$blockLos, ')
-      ..write('\"blocksMovement\"=$blocksMovement, ')
-      ..write('\"inLos\"=$inLos, ')
-      ..write('\"visited\"=$visited, ')
-      ..write('\"color\"=$color, ')
-      ..write('\"background\"=$background }');
-    return res.toString();
-  }
-}
-
 class GameMap extends GameComponent implements Widget {
   num cellHeight = 16;
   num cellWidth = 16;
   List<List<Tile>> _map;
+  num get height => _map.length;
+  num get width => _map[0].length;
 
   GameMap(num entity, List<String> map): super(entity) {
     _map = <List<Tile>>[];
