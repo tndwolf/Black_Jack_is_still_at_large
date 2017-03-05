@@ -27,6 +27,8 @@ class MapFactory {
     if(source != null && source['blocks'] != null) {
       res = _generateFromBlocks(source);
     } else if(source != null && source['type'] == 'desert') {
+      res = _generateDesert(40, 30);
+    } else if(source != null && source['type'] == 'mine') {
       res = _generateMine(40, 30, 2);
     } else {
       for (var y = 0; y < 480 / 24; y++) {
@@ -59,6 +61,7 @@ class MapFactory {
     while(currentX < width) {
       print("MapFactory._generateDesert: Trying to set $currentX, $currentY");
       res[currentY][currentX] = '.';
+      end[1] = currentY;
       var next = rng.nextInt(3);
       switch(next) {
         case 0: currentX++; break;
@@ -67,6 +70,7 @@ class MapFactory {
       }
       currentY = (currentY > height - 1) ? height - 1 : (currentY < 0) ? 0 : currentY;
     }
+    end[0] = currentX;
     return _doubleListToSingle(res);
   }
 
@@ -84,7 +88,7 @@ class MapFactory {
     num currentY = start[1];
     var direction = [1, 0];
     while(currentX < width - 2) {
-      print("MapFactory._generateMine: Trying to set $currentX, $currentY");
+      //print("MapFactory._generateMine: Trying to set $currentX, $currentY");
       var runLength = rng.nextInt(caveLength) + 1;
       for (var i = 0;  i < runLength; i++) {
         res[currentY][currentX] = '.';
@@ -102,6 +106,28 @@ class MapFactory {
         case 3: direction = [0, -1]; break;
       }
     }
+    var halfWidth = width~/2;
+    var halfHeight = height~/2;
+    var endQuadrant = [
+      (start[0] < halfWidth) ? 1 : 0,
+      (start[1] < halfHeight) ? 1 : 0,
+    ];
+    num i = 0;
+    do {
+      end = [
+        rng.nextInt(halfWidth-1) + endQuadrant[0] * halfWidth,
+        rng.nextInt(halfHeight-1) + endQuadrant[1] * halfHeight
+      ];
+      print("MapFactory._generateMine: Start was $start");
+      print("MapFactory._generateMine: End quadrant $endQuadrant");
+      print("MapFactory._generateMine: Halfsize $halfWidth, $halfHeight");
+      print("MapFactory._generateMine: Trying to end at $end");
+    } while (res[end[1]][end[0]] != '.' && i++ < 1000);
+    if (i > 1000) {
+      end = [currentX, currentY];
+    }
+    print("MapFactory._generateMine: Trying to end at $end");
+    res[end[1]][end[0]] = '>';
     return _doubleListToSingle(res);
   }
 

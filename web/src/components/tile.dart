@@ -7,6 +7,7 @@ class Tile {
   bool blockLos = true;
   bool blocksMovement = true;
   bool inLos = false;
+  bool isEndOfLevel = false;
   bool visited = false;
 
   Tile.fromChar(String char) {
@@ -17,6 +18,11 @@ class Tile {
         blockLos = false;
         blocksMovement = false;
         color = new Color(255, 225, 0);
+        break;
+      case '>': // floor
+        blockLos = false;
+        blocksMovement = false;
+        isEndOfLevel = true;
         break;
       case '~': // water
         blockLos = false;

@@ -13,8 +13,8 @@ class GameMap extends GameComponent implements Widget {
   List<List<Tile>> _map;
   num get height => _map.length;
   num get width => _map[0].length;
-  num get offsetX => -centerX * cellWidth~/2;
-  num get offsetY => -centerY * cellHeight~/2;
+  num get offsetX => 0;//-centerX * cellWidth~/2;
+  num get offsetY => 0;//-centerY * cellHeight~/2;
   num z = 0;
 
   GameMap(num entity, List<String> map): super(entity) {
