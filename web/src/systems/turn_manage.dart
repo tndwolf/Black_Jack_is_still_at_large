@@ -17,13 +17,17 @@ class TurnManager implements GameSystem {
   @override
   bool register(GameComponent component) {
     var res = component is Actor;
-    if(res) actors.add(component as Actor);
+    if(res) {
+      var actor = component as Actor;
+      actors.add(actor);
+      if (actor.initiative < 1) actor.initiative = initiative + 1;
+    }
     return res;
   }
 
   bool run(Actor actor) {
     var res = false;
-    if(actor == gameMechanics.player) {
+    if(actor.entity == gameMechanics.player) {
       res = gameMechanics.executeUserInputs();
     } else {
       gameMechanics.runDefaultAi(actor);
@@ -41,7 +45,10 @@ class TurnManager implements GameSystem {
   update(World world) {
     for(var actor in actors) {
       if (run(actor) == false) break;
-      actors.sort((a1, a2) => a1.initiative.compareTo(a2.initiative));
+      else {
+        initiative = actor.initiative;
+      }
     }
+    actors.sort((a1, a2) => a1.initiative.compareTo(a2.initiative));
   }
 }

@@ -81,8 +81,13 @@ class GameMechanics {
   bool executeUserInputs() {
     var res = false;
     if(nextPlayerMove != null) {
+      print('GameMechanics.executeUserInputs: running Player input');
       nextPlayerMove();
       res = true;
+      nextPlayerMove = null;
+      (_world.getComponent(Actor, player) as Actor).initiative += 10;
+    } else {
+      print('GameMechanics.executeUserInputs: waiting Player input');
     }
     return res;
   }
@@ -131,9 +136,19 @@ class GameMechanics {
     }
   }
 
+  runAis() {
+    var ais = _world.getAll(Actor);
+    for(var ai in ais) {
+      if (ai.entity != player)
+      runDefaultAi(ai as Actor);
+    }
+  }
+
   runDefaultAi(Actor actor) {
+    print('GameMechanics.runDefaultAi: running AI of ${actor.entity}');
     //var physical = _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
     move(actor.entity, rng.nextInt(3) - 1, rng.nextInt(3) - 1);
+    actor.initiative += 10;
   }
 
   selectNext() {

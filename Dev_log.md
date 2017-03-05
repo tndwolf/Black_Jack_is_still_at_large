@@ -33,3 +33,6 @@ Stop + Dinner
 
 15. TurnManager, UserInputs, -Actor, GameMechanics
     - Started Turn Manager
+16.  TurnManager, UserInputs, World, GameMechanics
+    - Tried dynamic turn updates... rolled back to fixed updates
+    - Also issues with list.where

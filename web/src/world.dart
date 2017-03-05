@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'game_component.dart';
 import 'game_system.dart';
 import 'systems/grid_manager.dart';
 import 'systems/renderer.dart';
+import 'systems/turn_manage.dart';
 
 class World {
   static const num GENERIC_ENTITY = 0;
@@ -25,6 +27,13 @@ class World {
     _lastEntity = (component.entity > _lastEntity) ? component.entity : _lastEntity;
   }
 
+  List<GameComponent> getAll(Type type) {
+    var res = _components.where((c) => c.runtimeType == type);
+    if (res.length == 0) {
+      res = _behaviors.where((c) => c.runtimeType == type);
+    }
+  }
+
   GameComponent getComponent(Type type, num entity) {
     var res = _components.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: null);
     if (res == null) {
@@ -41,17 +50,20 @@ class World {
   initialize() {
     _systems.add(new GridManager()..initialize(this));
     _systems.add(new Renderer()..initialize(this));
+    //_systems.add(new TurnManager()..initialize(this));
   }
 
   num get nextEntity => _lastEntity + 1;
 
   update() {
+    //print('World.update: start');
     for(var behavior in _behaviors) {
       behavior.update(this);
     }
     for(var system in _systems) {
       system.update(this);
     }
+    //new Timer(new Duration(milliseconds:20), update);
   }
 
   @override toString() {

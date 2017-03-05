@@ -15,25 +15,30 @@ class UserInput {
     var keyEvent = new KeyEvent.wrap(evt);
     //print("UserInput.onKeyPressed: ${keyEvent.keyCode}");
     if (keyEvent.keyCode == 97) {
-      //gameMechanics.move(gameMechanics.player, -1, 0);
-      gameMechanics.setInput(gameMechanics.move(gameMechanics.player, -1, 0));
+      gameMechanics.move(gameMechanics.player, -1, 0);
+      gameMechanics.runAis();
+      //gameMechanics.setInput(() => gameMechanics.move(gameMechanics.player, -1, 0));
     } else if (keyEvent.keyCode == 100) {
-      //gameMechanics.move(gameMechanics.player, 1, 0);
+      gameMechanics.move(gameMechanics.player, 1, 0);
+      gameMechanics.runAis();
     } else if (keyEvent.keyCode == 119) {
-      //gameMechanics.move(gameMechanics.player, 0, -1);
+      gameMechanics.move(gameMechanics.player, 0, -1);
+      gameMechanics.runAis();
     } else if (keyEvent.keyCode == 115) {
-      //gameMechanics.move(gameMechanics.player, 0, 1);
+      gameMechanics.move(gameMechanics.player, 0, 1);
+      gameMechanics.runAis();
     } else if (keyEvent.keyCode == 113) {// q
       gameMechanics.selectNext();
     } else if (keyEvent.keyCode == 101) {// e
-      //gameMechanics.attack(gameMechanics.player, gameMechanics.target);
+      gameMechanics.attack(gameMechanics.player, gameMechanics.target);
+      gameMechanics.runAis();
     } else if (keyEvent.keyCode == 32) {// space
-      //gameMechanics.draw(gameMechanics.player);
+      gameMechanics.draw(gameMechanics.player);
     } else {
       print("Unknown command");
     }
     //print("New position ${world.player}");
-    _world.update();
+    //_world.update();
     //}
   }
 }
