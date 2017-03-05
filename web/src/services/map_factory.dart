@@ -3,25 +3,35 @@ import '../data/map_data.dart';
 
 class Block {
   List<String> block;
-  Block north = 0; // 1 means fill me
-  Block south = 0; // 1 means fill me
-  Block east = 0; // 1 means fill me
-  Block west = 0; // 1 means fill me
+  dynamic north = 0; // 1 means fill me
+  dynamic south = 0; // 1 means fill me
+  dynamic east = 0; // 1 means fill me
+  dynamic west = 0; // 1 means fill me
 }
 
 class MapFactory {
-  var startX = [2, 2];
-  var endX = [2, 2];
+  var start = [2, 2];
+  var end = [2, 2];
+
+  List<String> _doubleListToSingle(List<List<String>> source) {
+    var res = <String>[];
+    for(var row in source) {
+      res.add(row.join());
+    }
+    return res;
+  }
 
   List<String> generate(String template) {
     var res = <String>[];
     var source = mapData[template];
-    if(source['blocks'] != null) {
+    if(source != null && source['blocks'] != null) {
       res = _generateFromBlocks(source);
+    } else if(source != null && source['type'] == 'desert') {
+      res = _generateDesert(640 / 24, 480 / 24);
     } else {
-      for (var y = 0; y < 480 / 16; y++) {
+      for (var y = 0; y < 480 / 24; y++) {
         var row = '';
-        for (var x = 0; x < 640 / 16; x++) {
+        for (var x = 0; x < 640 / 24; x++) {
           row += (rng.nextInt(100) < 90) ? '.' : '#';
         }
         res.add(row);
@@ -30,20 +40,53 @@ class MapFactory {
     return res;
   }
 
+  List<String> _generateDesert(num width, num height) {
+    var res = <List<String>>[];
+    for (var y = 0; y < height; y++) {
+      var row = <String>[];
+      for (var x = 0; x < width; x++) {
+        var probFree = (y < height/2) ? 1 : 100;
+        row.add((rng.nextInt(100) < probFree) ? '.' : '#');
+      }
+      res.add(row);
+    }
+    start = [0, rng.nextInt(height.round())];
+    num currentX = start[0];
+    num currentY = start[1];
+    while(currentX < width) {
+      print("MapFactory._generateDesert: Trying to set $currentX, $currentY");
+      res[currentY][currentX] = '.';
+      var next = rng.nextInt(3);
+      switch(next) {
+        case 0: currentX++; break;
+        case 1: currentY++; break;
+        case 2: currentY--; break;
+      }
+      currentY = (currentY > height - 1) ? height - 1 : (currentY < 0) ? 0 : currentY;
+    }
+    return _doubleListToSingle(res);
+  }
+
   List<String> _generateFromBlocks(Map source) {
     var blocks = source['blocks'];
     var howManyToEnd = source['howManyToEnd'];
     var root = _randomDataBlock(blocks);
-    Block reference = root;
-    for(var i in howManyToEnd) {
-      reference = _addBlock(reference, blocks);
+    Block last = root;
+    for(var i = 0; i < howManyToEnd; i++) {
+      last = _addBlock(root, last, blocks);
     }
   }
 
-  Block _addBlock(Block root, List dataBlocks) {
+  Block _addBlock(Block root, Block last, List dataBlocks) {
     Block res;
-    if (root.east == 1) {
-
+    if (last.east == 1) {
+      last.east = _randomDataBlock(dataBlocks);
+    } else if (last.south == 1) {
+      last.south = _randomDataBlock(dataBlocks);
+    } else if (last.north == 1) {
+      last.north = _randomDataBlock(dataBlocks);
+    } else if (last.west == 1) {
+      //last.east = _randomDataBlock(dataBlocks);
     }
     return res;
   }

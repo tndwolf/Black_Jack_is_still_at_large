@@ -16,5 +16,8 @@ Map mapData = {
     ],
     "howManyToEnd": 10,
     "howManySides": 10
+  },
+  "desert": {
+    "type": "desert",
   }
 };

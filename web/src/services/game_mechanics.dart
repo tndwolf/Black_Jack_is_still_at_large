@@ -98,7 +98,7 @@ class GameMechanics {
   }
 
   generateLevel() {
-    var map = new GameMap(_world.nextEntity, mapFactory.generate());
+    var map = new GameMap(_world.nextEntity, mapFactory.generate('desert'));
     //print("GameMechanics.generateLevel: $map");
     _world.add(map);
     player = entityFactory.CreatePlayer(_world);

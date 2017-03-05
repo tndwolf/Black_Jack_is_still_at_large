@@ -45,3 +45,5 @@ Stop + Dinner
 
 20. MapFactory
     - Started working on map generation
+21. MapFactory
+    - Decided to use specialized diggers

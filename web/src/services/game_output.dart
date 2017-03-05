@@ -4,7 +4,7 @@ import '../components/actor.dart';
 import '../components/physical_object.dart';
 
 class GameOutput {
-  String asciiFont = '16px Monospace';
+  String asciiFont = '24px Monospace';
   CanvasElement canvas;
   CanvasRenderingContext2D get context => canvas.context2D;
 
