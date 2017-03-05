@@ -40,3 +40,8 @@ Stop + Dinner
     - LoS
 19. GameMechanics
     - Still issues with attacking...
+    
+## Second Day
+
+20. MapFactory
+    - Started working on map generation
