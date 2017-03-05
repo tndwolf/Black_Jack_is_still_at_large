@@ -13,11 +13,18 @@ class GridManager implements GameSystem {
   calculateFoV(num cx, num cy) {
     var minX = (cx - fovRadius < 0) ? 0 : cx - fovRadius;
     var minY = (cy - fovRadius < 0) ? 0 : cy - fovRadius;
-    var maxX = (cx + fovRadius < _map.width) ? cx - fovRadius : _map.width;
-    var maxY = (cy + fovRadius < _map.height) ? cy - fovRadius : _map.height;
+    var maxX = (cx + fovRadius < _map.width) ? cx + fovRadius : _map.width;
+    var maxY = (cy + fovRadius < _map.height) ? cy + fovRadius : _map.height;
+    print("GridManger.calculateFoV: $minX,$minY to $maxX,$maxY");
+    var fovRadiusSquared = fovRadius * fovRadius;
     for(num y = minY; y < maxY; y++) {
       for(num x = minX; x < maxX; x++) {
-        _map.at(x, y).inLos = inLoS(cx, cy, x, y);
+        //if((x-cx) * x + y * y < fovRadiusSquared)
+        {
+          var cell = _map.at(x, y)
+            ..inLos = inLoS(cx, cy, x, y);
+          if (cell.inLos) cell.visited = true;
+        }
       }
     }
   }
@@ -31,9 +38,7 @@ class GridManager implements GameSystem {
     var tmp;
     var steep = (y1-y0).abs() > (x1-x0).abs();
     if(steep){
-      //swap x0,y0
       tmp=x0; x0=y0; y0=tmp;
-      //swap x1,y1
       tmp=x1; x1=y1; y1=tmp;
     }
 
@@ -46,16 +51,19 @@ class GridManager implements GameSystem {
     var dx = x1-x0;
     var dy = (y1-y0).abs();
     var err = ((dx/2));
-    var ystep = y0 < y1 ? 1 : -1;
+    var yStep = y0 < y1 ? 1 : -1;
     var y = y0;
 
-    for(num x = x0+1; x <= x1-1; x++){
-      if(!(steep ? map[sign*x][y] != '#' : map[y][sign*x] != '#')) {
-        if (x < x1-1) return false;
+    for(num x = x0; x <= x1-1; x++){
+      {
+        var checkY = steep ? sign * x : y;
+        var checkX = steep ? y : sign * x;
+        var tile = _map.at(checkX, checkY);
+        if (tile.blockLos) return false;
       }
       err = (err - dy);
       if(err < 0){
-        y += ystep;
+        y += yStep;
         err += dx;
       }
     }
@@ -82,7 +90,8 @@ class GridManager implements GameSystem {
 
   @override
   update(World world) {
-    var player = world.getComponent(PhysicalObject, gameMechanics.player) as PhysicalObject;
-    calculateFoV(player.x, player.y);
+    //var player = world.getComponent(PhysicalObject, gameMechanics.player) as PhysicalObject;
+    //calculateFoV(player.x, player.y);
+    calculateFoV(10, 10);
   }
 }

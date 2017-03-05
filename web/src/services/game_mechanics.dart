@@ -10,7 +10,7 @@ class GameMechanics {
 
   generateLevel() {
     var map = new GameMap(_world.nextEntity, mapFactory.generate());
-    print(map);
+    //print("GameMechanics.generateLevel: $map");
     _world.add(map);
     // TODO: create player
     player = _world.nextEntity;

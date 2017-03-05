@@ -1,5 +1,6 @@
 import 'game_component.dart';
 import 'game_system.dart';
+import 'systems/grid_manager.dart';
 import 'systems/renderer.dart';
 
 class World {
@@ -33,6 +34,7 @@ class World {
   }
 
   initialize() {
+    _systems.add(new GridManager()..initialize(this));
     _systems.add(new Renderer()..initialize(this));
   }
 

@@ -43,7 +43,13 @@ class GameMap extends GameComponent implements Widget {
     num y = halfCellHeight;
     for(var row in _map) {
       for(var tile in row) {
-        context.setFillColorRgb(tile.background.r, tile.background.g, tile.background.b);
+        if (tile.inLos) {
+          context.setFillColorRgb(
+              tile.background.r, tile.background.g, tile.background.b);
+        } else {
+          context.setFillColorRgb(
+              0, 0, 0);
+        }
         context.fillRect(x - halfCellWidth, y - halfCellHeight, cellWidth, cellHeight);
         context.setFillColorRgb(tile.color.r, tile.color.g, tile.color.b);
         context.fillText(tile.glyph, x, y);
