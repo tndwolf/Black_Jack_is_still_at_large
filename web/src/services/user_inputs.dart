@@ -20,11 +20,10 @@ class UserInput {
       else if(keyEvent.keyCode == 115) gameMechanics.move(gameMechanics.player, 0, 1);
       else if(keyEvent.keyCode == 113) gameMechanics.selectNext();
       else if(keyEvent.keyCode == 101) gameMechanics.attack();
-      else if(keyEvent.keyCode == 32) gameMechanics.draw();
+      else if(keyEvent.keyCode == 32) gameMechanics.draw(gameMechanics.player);
       else print("Unknown command");
       //print("New position ${world.player}");
       _world.update();
-      gameOutput.examinePlayer();
     //}
   }
 }

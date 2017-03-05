@@ -47,6 +47,14 @@ class GridManager implements GameSystem {
     }
   }
 
+  List<num> getAllInFoV() {
+    var res = <num>[];
+    for(var obj in _objects) {
+      if (map.at(obj.x, obj.y).inLos) res.add(obj.entity);
+    }
+    return res;
+  }
+
   @override
   initialize(World world) {
     map = null;

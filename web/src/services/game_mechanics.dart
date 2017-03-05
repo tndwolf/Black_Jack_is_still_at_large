@@ -9,7 +9,8 @@ import '../systems/grid_manager.dart';
 
 class GameMechanics {
   Deck deck;
-  num player;
+  num player = World.INVALID_ENTITY;
+  num target = World.INVALID_ENTITY;
   World _world;
 
   GameMechanics(World this._world) {
@@ -20,8 +21,14 @@ class GameMechanics {
 
   }
 
-  draw() {
-
+  draw(num entity) {
+    var actor = _world.getComponent(Actor, entity) as Actor;
+    try {
+      actor.hand.add(deck.draw());
+      gameOutput.examinePlayer(actor, _world.getComponent(PhysicalObject, entity) as PhysicalObject);
+    } catch(ex) {
+      print('GameMechanics.draw: unable to draw for $entity');
+    }
   }
 
   generateLevel() {
@@ -51,6 +58,21 @@ class GameMechanics {
   }
 
   selectNext() {
-
+    var grid = _world.getSystem(GridManager) as GridManager;
+    try {
+      var inFoV = grid.getAllInFoV();
+      if (inFoV.length == 0) return;
+      for(var i = 0; i < inFoV.length - 1; i++) {
+        if(target == inFoV[i]) {
+          target = inFoV[i + 1];
+          gameOutput.examineTarget();
+          return;
+        }
+      }
+      target = inFoV[0];
+      gameOutput.examineTarget();
+    } catch(ex) {
+      print('GameMechanics.selectNext: some odd bug...');
+    }
   }
 }
