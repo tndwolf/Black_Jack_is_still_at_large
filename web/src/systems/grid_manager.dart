@@ -117,10 +117,8 @@ class GridManager implements GameSystem {
   }
 
   @override
-  unregister(GameComponent component) {
-    if(component is PhysicalObject) {
-      _objects.remove(component);
-    }
+  clear() {
+    _objects.clear();
   }
 
   @override

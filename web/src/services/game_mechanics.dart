@@ -1,6 +1,7 @@
 import '../card.dart';
 import '../color.dart';
 import '../deck.dart';
+import '../game_component.dart';
 import '../world.dart';
 import '../services.dart';
 import '../components/game_map.dart';
@@ -9,8 +10,16 @@ import '../components/physical_object.dart';
 import '../components/render_object.dart';
 import '../systems/grid_manager.dart';
 
+var _levels = [
+  "desert",
+  "mine",
+  "desert",
+  "mine"
+];
+
 class GameMechanics {
   Deck deck;
+  num currentLevel = 0;
   dynamic nextPlayerMove = null;
   num player = World.INVALID_ENTITY;
   num target = World.INVALID_ENTITY;
@@ -97,11 +106,19 @@ class GameMechanics {
     return res;
   }
 
-  generateLevel() {
-    var map = new GameMap(_world.nextEntity, mapFactory.generate('mine'));
+  generateLevel([List<GameComponent> oldPlayer = null]) {
+    _world.clear();
+    var map = new GameMap(_world.nextEntity, mapFactory.generate(_levels[currentLevel]));
     //print("GameMechanics.generateLevel: $map");
     _world.add(map);
-    player = entityFactory.CreatePlayer(_world);
+    if (oldPlayer == null) {
+      player = entityFactory.CreatePlayer(_world);
+    } else {
+      print("GameMechanics.generateLevel: Copying player");
+      for(var component in oldPlayer) {
+        _world.add(component);
+      }
+    }
     setPosition(player, mapFactory.start[0], mapFactory.start[1]);
     for(num i = 0; i < 1; i++) {
       entityFactory.CreateEnemy(_world);
@@ -147,6 +164,11 @@ class GameMechanics {
         if(entity == target) {
           selectPointer.x = (ex + 0.5) * grid.map.cellWidth;
           selectPointer.y = (ey + 0.5) * grid.map.cellHeight;
+        }
+        if(entity == player && endCell.isEndOfLevel) {
+          currentLevel++;
+          generateLevel(_world.getEntity(player));
+          _world.update();
         }
       }
     } catch(ex) {

@@ -1,5 +1,4 @@
 import '../services.dart';
-import '../data/map_data.dart';
 
 class Block {
   List<String> block;
@@ -23,21 +22,18 @@ class MapFactory {
 
   List<String> generate(String template) {
     var res = <String>[];
-    var source = mapData[template];
-    if(source != null && source['blocks'] != null) {
-      res = _generateFromBlocks(source);
-    } else if(source != null && source['type'] == 'desert') {
-      res = _generateDesert(40, 30);
-    } else if(source != null && source['type'] == 'mine') {
-      res = _generateMine(40, 30, 2);
-    } else {
-      for (var y = 0; y < 480 / 24; y++) {
-        var row = '';
-        for (var x = 0; x < 640 / 24; x++) {
-          row += (rng.nextInt(100) < 90) ? '.' : '#';
+    switch(template) {
+      case 'desert': res = _generateDesert(40, 30); break;
+      case 'mine': res = res = _generateMine(40, 30, 2); break;
+      default:
+        for (var y = 0; y < 480 / 24; y++) {
+          var row = '';
+          for (var x = 0; x < 640 / 24; x++) {
+            row += (rng.nextInt(100) < 90) ? '.' : '#';
+          }
+          res.add(row);
         }
-        res.add(row);
-      }
+        break;
     }
     return res;
   }
@@ -70,7 +66,9 @@ class MapFactory {
       }
       currentY = (currentY > height - 1) ? height - 1 : (currentY < 0) ? 0 : currentY;
     }
-    end[0] = currentX;
+    end[0] = currentX-1;
+    print("MapFactory._generateDesert: Trying to end at $end");
+    res[end[1]][end[0]] = '>';
     return _doubleListToSingle(res);
   }
 
@@ -129,44 +127,5 @@ class MapFactory {
     print("MapFactory._generateMine: Trying to end at $end");
     res[end[1]][end[0]] = '>';
     return _doubleListToSingle(res);
-  }
-
-  List<String> _generateFromBlocks(Map source) {
-    var blocks = source['blocks'];
-    var howManyToEnd = source['howManyToEnd'];
-    var root = _randomDataBlock(blocks);
-    Block last = root;
-    for(var i = 0; i < howManyToEnd; i++) {
-      last = _addBlock(root, last, blocks);
-    }
-  }
-
-  Block _addBlock(Block root, Block last, List dataBlocks) {
-    Block res;
-    if (last.east == 1) {
-      last.east = _randomDataBlock(dataBlocks);
-    } else if (last.south == 1) {
-      last.south = _randomDataBlock(dataBlocks);
-    } else if (last.north == 1) {
-      last.north = _randomDataBlock(dataBlocks);
-    } else if (last.west == 1) {
-      //last.east = _randomDataBlock(dataBlocks);
-    }
-    return res;
-  }
-
-  Block _randomDataBlock(List dataBlocks) {
-    var reference = dataBlocks[rng.nextInt(dataBlocks.length)];
-    var res = new Block()
-      ..block = reference['layout'];
-    for(var exit in reference['exits']) {
-      switch(exit) {
-        case 'N': res.north = 1; break;
-        case 'S': res.south = 1; break;
-        case 'E': res.east = 1; break;
-        case 'W': res.west = 1; break;
-      }
-    }
-    return res;
   }
 }

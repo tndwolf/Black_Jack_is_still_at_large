@@ -37,8 +37,8 @@ class TurnManager implements GameSystem {
   }
 
   @override
-  unregister(GameComponent component) {
-    actors.remove(component);
+  clear() {
+    actors.clear();
   }
 
   @override

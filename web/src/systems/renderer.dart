@@ -22,10 +22,8 @@ class Renderer implements GameSystem {
   }
 
   @override
-  unregister(GameComponent component) {
-    if (component is Widget) {
-      widgets.add(component as Widget);
-    }
+  clear() {
+    widgets.clear();
   }
 
   @override

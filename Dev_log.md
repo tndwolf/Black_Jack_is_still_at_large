@@ -56,3 +56,5 @@ Stop
 
 25. MapFactory, 
     - Exits 1
+26. MapFactory, World, GameMechanics
+    - Level transitions completed, player is permanent

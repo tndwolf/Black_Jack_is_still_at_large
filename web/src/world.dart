@@ -27,6 +27,14 @@ class World {
     _lastEntity = (component.entity > _lastEntity) ? component.entity : _lastEntity;
   }
 
+  clear() {
+      _components.clear();
+      _behaviors.clear();
+      for(var system in _systems) {
+        system.clear();
+      }
+  }
+
   List<GameComponent> getAll(Type type) {
     var res = _components.where((c) => c.runtimeType == type);
     if (res.length == 0) {
@@ -43,12 +51,20 @@ class World {
     return res;
   }
 
+  List<GameComponent> getEntity(num entity) {
+    var res = _components.where((c) => c.entity == entity);
+    return res.toList();
+  }
+
   GameSystem getSystem(Type type) {
     var res = _systems.firstWhere((s) => s.runtimeType == type);
     return res;
   }
 
   initialize() {
+    _systems.clear();
+    _components.clear();
+    _behaviors.clear();
     _systems.add(new GridManager()..initialize(this));
     _systems.add(new Renderer()..initialize(this));
     //_systems.add(new TurnManager()..initialize(this));
