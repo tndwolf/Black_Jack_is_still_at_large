@@ -47,3 +47,11 @@ Stop + Dinner
     - Started working on map generation
 21. MapFactory
     - Decided to use specialized diggers
+22. MapFactory
+    - Desert and open Mines essentially done
+24. MapFactory, GameMap
+    - Improvement to Mines, now complete
+    
+Stop
+
+25. 

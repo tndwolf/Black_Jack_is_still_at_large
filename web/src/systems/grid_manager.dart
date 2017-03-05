@@ -12,6 +12,8 @@ class GridManager implements GameSystem {
   List<PhysicalObject> _objects = <PhysicalObject>[];
 
   calculateFoV(num cx, num cy) {
+    map.centerX = cx;
+    map.centerY = cy;
     clearFoV(cx, cy);
     var minX = (cx - fovRadius < 0) ? 0 : cx - fovRadius;
     var minY = (cy - fovRadius < 0) ? 0 : cy - fovRadius;

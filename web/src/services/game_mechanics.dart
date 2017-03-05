@@ -102,6 +102,7 @@ class GameMechanics {
     //print("GameMechanics.generateLevel: $map");
     _world.add(map);
     player = entityFactory.CreatePlayer(_world);
+    setPosition(player, mapFactory.start[0], mapFactory.start[1]);
     for(num i = 0; i < 1; i++) {
       entityFactory.CreateEnemy(_world);
     }
@@ -208,6 +209,16 @@ class GameMechanics {
 
   setInput(dynamic function) {
     nextPlayerMove = function;
+  }
+
+  setPosition(num entity, num x, num y) {
+    var grid = _world.getSystem(GridManager) as GridManager;
+    var physical = _world.getComponent(PhysicalObject, entity) as PhysicalObject;
+    var render = _world.getComponent(RenderObject, entity) as RenderObject;
+    physical.x = x;
+    physical.y = y;
+    render.x = (x + 0.5) * grid.map.cellWidth;
+    render.y = (y + 0.5) * grid.map.cellHeight;
   }
 
   updateVisibility() {

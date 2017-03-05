@@ -8,9 +8,13 @@ import '../services.dart';
 class GameMap extends GameComponent implements Widget {
   num cellHeight = 16;
   num cellWidth = 16;
+  num centerX = 0;
+  num centerY = 0;
   List<List<Tile>> _map;
   num get height => _map.length;
   num get width => _map[0].length;
+  num get offsetX => -centerX * cellWidth~/2;
+  num get offsetY => -centerY * cellHeight~/2;
   num z = 0;
 
   GameMap(num entity, List<String> map): super(entity) {
@@ -38,10 +42,10 @@ class GameMap extends GameComponent implements Widget {
     context.font = gameOutput.asciiFont;
     context.textAlign = 'center';
     context.textBaseline = 'middle';
-    var halfCellWidth = cellWidth/2;
-    var halfCellHeight = cellHeight/2;
-    num x = halfCellWidth;
-    num y = halfCellHeight;
+    var halfCellWidth = cellWidth~/2;
+    var halfCellHeight = cellHeight~/2;
+    num x = halfCellWidth - offsetX;
+    num y = halfCellHeight - offsetY;
     for(var row in _map) {
       for(var tile in row) {
         if (tile.inLos) {
@@ -58,7 +62,7 @@ class GameMap extends GameComponent implements Widget {
         }
         x += cellWidth;
       }
-      x = cellWidth/2;
+      x = halfCellWidth - offsetX;
       y += cellHeight;
     }
   }

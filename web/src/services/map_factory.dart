@@ -27,7 +27,7 @@ class MapFactory {
     if(source != null && source['blocks'] != null) {
       res = _generateFromBlocks(source);
     } else if(source != null && source['type'] == 'desert') {
-      res = _generateMine(40, 30);
+      res = _generateMine(40, 30, 2);
     } else {
       for (var y = 0; y < 480 / 24; y++) {
         var row = '';
@@ -53,7 +53,7 @@ class MapFactory {
       }
       res.add(row);
     }
-    start = [0, rng.nextInt(height.round())];
+    start = [0, rng.nextInt(height)];
     num currentX = start[0];
     num currentY = start[1];
     while(currentX < width) {
@@ -70,7 +70,7 @@ class MapFactory {
     return _doubleListToSingle(res);
   }
 
-  List<String> _generateMine(num width, num height) {
+  List<String> _generateMine(num width, num height, num caveLength) {
     var res = <List<String>>[];
     for (var y = 0; y < height; y++) {
       var row = <String>[];
@@ -79,21 +79,28 @@ class MapFactory {
       }
       res.add(row);
     }
-    start = [0, rng.nextInt(height.round())];
+    start = [rng.nextInt(width), rng.nextInt(height)];
     num currentX = start[0];
     num currentY = start[1];
-    while(currentX < width) {
+    var direction = [1, 0];
+    while(currentX < width - 2) {
       print("MapFactory._generateMine: Trying to set $currentX, $currentY");
-      res[currentY][currentX] = '.';
+      var runLength = rng.nextInt(caveLength) + 1;
+      for (var i = 0;  i < runLength; i++) {
+        res[currentY][currentX] = '.';
+        currentX += direction[0];
+        currentY += direction[1];
+        currentY = (currentY > height - 2) ? height - 2 : (currentY < 1) ? 1 : currentY;
+        currentX = (currentX > width - 2) ? width - 2 : (currentX < 1) ? 1 : currentX;
+      }
+
       var next = rng.nextInt(4);
       switch(next) {
-        case 0: currentX++; break;
-        case 1: currentY++; break;
-        case 2: currentY--; break;
-        case 3: currentX--; break;
+        case 0: direction = [1, 0]; break;
+        case 1: direction = [-1, 0]; break;
+        case 2: direction = [0, 1]; break;
+        case 3: direction = [0, -1]; break;
       }
-      currentY = (currentY > height - 2) ? height - 1 : (currentY < 1) ? 1 : currentY;
-      currentX = (currentX < 0) ? 0 : currentX;
     }
     return _doubleListToSingle(res);
   }
