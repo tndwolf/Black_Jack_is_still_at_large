@@ -15,6 +15,8 @@ class GameMap extends GameComponent implements Widget {
   num get width => _map[0].length;
   num get offsetX => 0;//-centerX * cellWidth~/2;
   num get offsetY => 0;//-centerY * cellHeight~/2;
+  num x = 0;
+  num y = 0;
   num z = 0;
 
   GameMap(num entity, List<String> map): super(entity) {

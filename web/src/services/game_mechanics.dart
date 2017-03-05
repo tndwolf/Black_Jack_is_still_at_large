@@ -4,10 +4,12 @@ import '../deck.dart';
 import '../game_component.dart';
 import '../world.dart';
 import '../services.dart';
+import '../behaviors/animated_text.dart';
 import '../components/game_map.dart';
 import '../components/actor.dart';
 import '../components/physical_object.dart';
 import '../components/render_object.dart';
+import '../components/text_box.dart';
 import '../systems/grid_manager.dart';
 
 var _levels = [
@@ -131,6 +133,16 @@ class GameMechanics {
     for(num i = 0; i < 1; i++) {
       entityFactory.CreateEnemy(_world);
     }
+    // TODO: remove tests
+    var tb = new TextBox(World.GENERIC_ENTITY)
+      ..text = 'Test!'
+      ..x = 100
+      ..y = 100
+      ..height = 24
+      ..width = 100;
+    _world.add(tb);
+    var ani = new AnimatedText(tb);
+    _world.add(ani);
   }
 
   num getHandValue(List<Card> hand, {num cap: 1000, bool acesAsEleven: true}) {
@@ -188,9 +200,9 @@ class GameMechanics {
     }
   }
 
-  moveTo(PhysicalObject from, num toX, num toY) {
-    var dx = (toX - from.x).sign;
-    var dy = (toY - from.y).sign;
+  moveTo(PhysicalObject from, num toX, num toY, bool flee) {
+    var dx = (toX - from.x).sign * (flee ? -1 : 1);
+    var dy = (toY - from.y).sign * (flee ? -1 : 1);
     if (move(from.entity, dx, dy)) return;
   }
 
@@ -209,11 +221,15 @@ class GameMechanics {
     var physical = _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
     //if (grid.isInLos(physical.x, physical.y)) {
       var target = _world.getComponent(PhysicalObject, player) as PhysicalObject;
-      /*if(inRange(physical, target, actor.range)) {
+      if(inRange(physical, target, actor.range)) {
         attack(actor.entity, player);
-      } else {*/
-        moveTo(physical, target.x, target.y);
-      //}
+      } else {
+        if (physical.health > actor.fleeThreshold) {
+          moveTo(physical, target.x, target.y, false);
+        } else {
+          moveTo(physical, target.x, target.y, true);
+        }
+      }
     //}
     actor.initiative += 10;
     gameMechanics.updateVisibility();

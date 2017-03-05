@@ -63,3 +63,5 @@ Lunch
 
 27. -Actor, GameMechanics
     - Enemy AI, fixed attack bug
+28. -Widget, TextBox, AnimatedText, GameMechanics
+    - Flee AI, Animated text for notifications

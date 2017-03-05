@@ -7,6 +7,7 @@ abstract class Behavior extends GameComponent {
 }
 
 abstract class GameComponent {
+  bool deleteMe = false;
   num entity;
   GameComponent(num this.entity);
   GameComponent.fromJson(Map json);
