@@ -31,7 +31,7 @@ class GameMechanics {
     var atkPhy = _world.getComponent(PhysicalObject, attacker) as PhysicalObject;
     var defActor = _world.getComponent(Actor, target) as Actor;
     var defPhy = _world.getComponent(PhysicalObject, target) as PhysicalObject;
-    try {
+    //try {
       var dam = atkActor.actionResult - defPhy.defense;
       if (dam < 0) {
         print('GameMechanics.attack: missed! $attacker vs $target');
@@ -46,14 +46,14 @@ class GameMechanics {
           //gameOutput.examineTarget(atkActor, atkPhy);
         }
       }
-    } catch(ex) {
-      print('GameMechanics.attack: unable to attack $attacker vs $target. $ex');
-    }
+    //} catch(ex) {
+    //  print('GameMechanics.attack: unable to attack $attacker vs $target. $ex');
+    //}
   }
 
-  damage(num target, num howMuch) {
-    print('GameMechanics.damage: Dealing $howMuch damage to $target');
-    var physical = _world.getComponent(PhysicalObject, target) as PhysicalObject;
+  damage(num entity, num howMuch) {
+    print('GameMechanics.damage: Dealing $howMuch damage to $entity');
+    var physical = _world.getComponent(PhysicalObject, entity) as PhysicalObject;
     while(howMuch > 0) {
       if(physical.healthHand.last.value > howMuch) {
         physical.healthHand.last.value -= howMuch;
@@ -63,14 +63,19 @@ class GameMechanics {
         physical.healthHand.removeLast();
       }
     }
-    if (getHandValue(physical.healthHand) < 1) {
-      print('GameMechanics.damage: Killed $target');
+    if (physical.healthHand.length == 0) {
+      kill(entity);
+      print('GameMechanics.damage: Killed $entity');
     }
   }
 
-  draw(num entity) {
+  draw(num entity, bool newHand) {
     var actor = _world.getComponent(Actor, entity) as Actor;
     try {
+      if(newHand) {
+        actor.hand.clear();
+        actor.hand.add(deck.draw());
+      }
       actor.hand.add(deck.draw());
       gameOutput.examinePlayer(actor, _world.getComponent(PhysicalObject, entity) as PhysicalObject);
     } catch(ex) {
@@ -102,19 +107,27 @@ class GameMechanics {
     }
   }
 
-  num getHandValue(List<Card> hand, [num cap = 1000]) {
+  num getHandValue(List<Card> hand, {num cap: 1000, bool acesAsEleven: true}) {
     var res = 0;
     var aces = 0;
     //var figures = 0;
     for(var card in hand) {
       res += card.value;
-      if (card.value == 1) aces++;
+      if (card.value == 1 && acesAsEleven) aces++;
     }
     while(aces > 0 && res + 10 <= cap) {
       aces--;
       res += 10;
     }
     return res;
+  }
+
+  kill(num entity) {
+    var actor = _world.getComponent(Actor, entity) as Actor;
+    actor.isAlive = false;
+    var render = _world.getComponent(RenderObject, entity) as RenderObject;
+    render.glyph = '%';
+    render.color = new Color(255, 0, 0);
   }
 
   move(num entity, num dx, num dy) {
@@ -130,7 +143,10 @@ class GameMechanics {
         physical.y = ey;
         render.x = (ex + 0.5) * grid.map.cellWidth;
         render.y = (ey + 0.5) * grid.map.cellHeight;
-        //render.color.a = grid.map.at(ex, ey).inLos ? 1 : 0.2;
+        if(entity == target) {
+          selectPointer.x = (ex + 0.5) * grid.map.cellWidth;
+          selectPointer.y = (ey + 0.5) * grid.map.cellHeight;
+        }
       }
     } catch(ex) {
       print('GameMechanics.move: unable to move $entity');
@@ -146,9 +162,13 @@ class GameMechanics {
   }
 
   runDefaultAi(Actor actor) {
+    if (actor.isAlive == false) return;
     print('GameMechanics.runDefaultAi: running AI of ${actor.entity}');
-    //var physical = _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
-    move(actor.entity, rng.nextInt(3) - 1, rng.nextInt(3) - 1);
+    var grid = _world.getSystem(GridManager) as GridManager;
+    var physical = _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
+    if (grid.isInLos(physical.x, physical.y)) {
+      move(actor.entity, rng.nextInt(3) - 1, rng.nextInt(3) - 1);
+    }
     actor.initiative += 10;
     gameMechanics.updateVisibility();
   }
@@ -197,8 +217,8 @@ class GameMechanics {
       for(var obj in objects) {
         var physical = _world.getComponent(PhysicalObject, obj.entity) as PhysicalObject;
         var render = _world.getComponent(RenderObject, obj.entity) as RenderObject;
-        render.color.a = grid.map.at(physical.x, physical.y).inLos ? 1 : 0.2;
-        print('GameMechanics.updateVisibility: ${obj.entity} to ${render.color.a}');
+        render.color.a = grid.isInLoS(physical.x, physical.y) ? 1 : 0.2;
+        //print('GameMechanics.updateVisibility: ${obj.entity} to ${render.color.a}');
       }
     } catch(ex) {
       print('GameMechanics.updateVisibility: some odd bug...');

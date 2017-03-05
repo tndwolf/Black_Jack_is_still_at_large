@@ -19,7 +19,8 @@ class EntityFactory {
       ..y = y);
     world.add(new RenderObject(id)
       ..x = grid.map.cellWidth * (x + 0.5)
-      ..y = grid.map.cellHeight * (y + 0.5));
+      ..y = grid.map.cellHeight * (y + 0.5)
+      ..z = 1);
     return id;
   }
 

@@ -7,6 +7,7 @@ class Actor extends GameComponent {
   num cap = 21;
   List<Card> hand = <Card>[];
   num initiative = 0;
+  bool isAlive = true;
 
   Actor(num entity): super(entity) {}
 }

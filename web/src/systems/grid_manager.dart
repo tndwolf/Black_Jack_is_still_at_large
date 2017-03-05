@@ -97,6 +97,10 @@ class GridManager implements GameSystem {
     return true;
   }
 
+  bool isInLos(num x, num y) {
+    return map.at(x, y).inLos;
+  }
+
   @override
   bool register(GameComponent component) {
     var res = false;

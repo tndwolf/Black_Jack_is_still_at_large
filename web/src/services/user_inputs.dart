@@ -32,8 +32,9 @@ class UserInput {
     } else if (keyEvent.keyCode == 101) {// e
       gameMechanics.attack(gameMechanics.player, gameMechanics.target);
       gameMechanics.runAis();
+      gameMechanics.draw(gameMechanics.player, true);
     } else if (keyEvent.keyCode == 32) {// space
-      gameMechanics.draw(gameMechanics.player);
+      gameMechanics.draw(gameMechanics.player, false);
     } else {
       print("Unknown command");
     }

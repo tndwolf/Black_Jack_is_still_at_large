@@ -21,7 +21,7 @@ class GameOutput {
       output.appendText('- $card');
       output.append(new BRElement());
     }
-    output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, actor.cap)} / ${actor.cap}');
+    output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, cap: actor.cap)} / ${actor.cap}');
     output.append(new BRElement());
     for(var card in actor.hand) {
       output.appendText('- $card');
@@ -40,7 +40,7 @@ class GameOutput {
       output.appendText('- $card');
       output.append(new BRElement());
     }
-    output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, actor.cap)} / ${actor.cap}');
+    output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, cap: actor.cap)} / ${actor.cap}');
     output.append(new BRElement());
     for(var card in actor.hand) {
       output.appendText('- $card');

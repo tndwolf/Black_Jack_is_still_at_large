@@ -38,3 +38,5 @@ Stop + Dinner
     - Also issues with list.where
 17. -Renderer, GameMechanics, -GridManager, World, -GameSystem
     - LoS
+19. GameMechanics
+    - Still issues with attacking...
