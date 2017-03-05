@@ -24,10 +24,23 @@ class GameMechanics {
     var defActor = _world.getComponent(Actor, target) as Actor;
     var defPhy = _world.getComponent(PhysicalObject, target) as PhysicalObject;
     try {
-
+      var dam = atkActor.actionResult - defPhy.defense;
+      if (dam < 0) return; //TODO: missed(atkPhy, defPhy);
+      damage(target, dam);
+      if(attacker ==  player) {
+        gameOutput.examinePlayer(atkActor, atkPhy);
+        gameOutput.examineTarget(defActor, defPhy);
+      } else if (target == player) {
+        gameOutput.examinePlayer(defActor, defPhy);
+        //gameOutput.examineTarget(atkActor, atkPhy);
+      }
     } catch(ex) {
       print('GameMechanics.attack: unable to attack $attacker vs $target');
     }
+  }
+
+  damage(num target, num howMuch) {
+
   }
 
   draw(num entity) {
@@ -45,6 +58,9 @@ class GameMechanics {
     //print("GameMechanics.generateLevel: $map");
     _world.add(map);
     player = entityFactory.CreatePlayer(_world);
+    for(num i = 0; i < 6; i++) {
+      entityFactory.CreateEnemy(_world);
+    }
   }
 
   num getHandValue(List<Card> hand, [num cap = 1000]) {
@@ -85,16 +101,23 @@ class GameMechanics {
     var grid = _world.getSystem(GridManager) as GridManager;
     try {
       var inFoV = grid.getAllInFoV();
+      print("GameMechanics.selectNext: InFov ${inFoV.length}, old $target");
       if (inFoV.length == 0) return;
       for(var i = 0; i < inFoV.length - 1; i++) {
         if(target == inFoV[i]) {
           target = inFoV[i + 1];
-          //gameOutput.examineTarget();
+          gameOutput.examineTarget(
+            _world.getComponent(Actor, target) as Actor,
+            _world.getComponent(PhysicalObject, target) as PhysicalObject
+          );
           return;
         }
       }
       target = inFoV[0];
-      //gameOutput.examineTarget();
+      gameOutput.examineTarget(
+          _world.getComponent(Actor, target) as Actor,
+          _world.getComponent(PhysicalObject, target) as PhysicalObject
+      );
     } catch(ex) {
       print('GameMechanics.selectNext: some odd bug...');
     }

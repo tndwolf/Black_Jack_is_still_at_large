@@ -24,4 +24,5 @@ Stop
 11. HTML, GameMechanics
 12. GameMechanics, Suites, PhysicalObject, GameOutput
     - Blackjack essentially implemented
-13. 
+13. GameMechanics, Actor, EntityFactory
+    - Attacking 1

@@ -1,3 +1,4 @@
+import '../services.dart';
 import '../world.dart';
 import '../components/actor.dart';
 import '../components/physical_object.dart';
@@ -16,6 +17,23 @@ class EntityFactory {
       ..x = x
       ..y = y);
     world.add(new RenderObject(id)
+      ..x = grid.map.cellWidth * (x + 0.5)
+      ..y = grid.map.cellHeight * (y + 0.5));
+    return id;
+  }
+
+  num CreateEnemy(World world) {
+    var grid = world.getSystem(GridManager) as GridManager;
+    num id = world.nextEntity;
+    print('EntityFactory.CreateEnemy: $id');
+    var x = rng.nextInt(grid.map.width - 2) + 1;
+    var y = rng.nextInt(grid.map.height - 2) + 1;
+    world.add(new Actor(id));
+    world.add(new PhysicalObject(id)
+      ..x = x
+      ..y = y);
+    world.add(new RenderObject(id)
+      ..glyph = 'B'
       ..x = grid.map.cellWidth * (x + 0.5)
       ..y = grid.map.cellHeight * (y + 0.5));
     return id;

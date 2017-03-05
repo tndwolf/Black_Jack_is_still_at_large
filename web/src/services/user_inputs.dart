@@ -13,7 +13,7 @@ class UserInput {
   onKeyPressed(KeyboardEvent evt) {
     //if(_focusElement.focus == false) {
     var keyEvent = new KeyEvent.wrap(evt);
-    print("Received ${keyEvent.keyCode}");
+    //print("UserInput.onKeyPressed: ${keyEvent.keyCode}");
     if (keyEvent.keyCode == 97)
       gameMechanics.move(gameMechanics.player, -1, 0);
     else if (keyEvent.keyCode == 100)
@@ -22,11 +22,11 @@ class UserInput {
       gameMechanics.move(gameMechanics.player, 0, -1);
     else if (keyEvent.keyCode == 115)
       gameMechanics.move(gameMechanics.player, 0, 1);
-    else if (keyEvent.keyCode == 113)
+    else if (keyEvent.keyCode == 113) // q
       gameMechanics.selectNext();
-    else if (keyEvent.keyCode == 101)
+    else if (keyEvent.keyCode == 101) // e
       gameMechanics.attack(gameMechanics.player, gameMechanics.target);
-    else if (keyEvent.keyCode == 32)
+    else if (keyEvent.keyCode == 32) // space
       gameMechanics.draw(gameMechanics.player);
     else
       print("Unknown command");
