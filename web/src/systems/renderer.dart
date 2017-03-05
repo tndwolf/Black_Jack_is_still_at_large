@@ -15,6 +15,7 @@ class Renderer implements GameSystem {
     var res = false;
     if (component is Widget) {
       widgets.add(component as Widget);
+      widgets.sort((w1, w2) => w1.z.compareTo(w2.z));
       res =  true;
     }
     return res;
@@ -31,7 +32,6 @@ class Renderer implements GameSystem {
   update(World world) {
     var context = gameOutput.context;
     context.clearRect(0, 0, gameOutput.canvas.width, gameOutput.canvas.height);
-    widgets.sort((w1, w2) => w1.z.compareTo(w2.z));
     for(var widget in widgets) {
       widget.draw(context);
     }

@@ -6,6 +6,7 @@ class Actor extends GameComponent {
   num get actionResult => gameMechanics.getHandValue(hand);
   num cap = 21;
   List<Card> hand = <Card>[];
+  num initiative = 0;
 
   Actor(num entity): super(entity) {}
 }

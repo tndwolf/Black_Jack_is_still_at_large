@@ -28,3 +28,8 @@ Stop
     - Attacking 1
 14. GameMechanics, Renderer, GameOutput
     - Attacking 2, Z order, Pointer
+    
+Stop + Dinner
+
+15. TurnManager, UserInputs, -Actor, GameMechanics
+    - Started Turn Manager

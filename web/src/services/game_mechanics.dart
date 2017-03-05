@@ -11,6 +11,7 @@ import '../systems/grid_manager.dart';
 
 class GameMechanics {
   Deck deck;
+  dynamic nextPlayerMove = null;
   num player = World.INVALID_ENTITY;
   num target = World.INVALID_ENTITY;
   RenderObject selectPointer;
@@ -77,6 +78,15 @@ class GameMechanics {
     }
   }
 
+  bool executeUserInputs() {
+    var res = false;
+    if(nextPlayerMove != null) {
+      nextPlayerMove();
+      res = true;
+    }
+    return res;
+  }
+
   generateLevel() {
     var map = new GameMap(_world.nextEntity, mapFactory.generate());
     //print("GameMechanics.generateLevel: $map");
@@ -121,6 +131,11 @@ class GameMechanics {
     }
   }
 
+  runDefaultAi(Actor actor) {
+    //var physical = _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
+    move(actor.entity, rng.nextInt(3) - 1, rng.nextInt(3) - 1);
+  }
+
   selectNext() {
     var grid = _world.getSystem(GridManager) as GridManager;
     try {
@@ -152,5 +167,9 @@ class GameMechanics {
     } catch(ex) {
       print('GameMechanics.selectNext: some odd bug...');
     }
+  }
+
+  setInput(dynamic function) {
+    nextPlayerMove = function;
   }
 }
