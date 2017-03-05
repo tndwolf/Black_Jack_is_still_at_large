@@ -33,6 +33,11 @@ class World {
     return res;
   }
 
+  GameSystem getSystem(Type type) {
+    var res = _systems.firstWhere((s) => s.runtimeType == type);
+    return res;
+  }
+
   initialize() {
     _systems.add(new GridManager()..initialize(this));
     _systems.add(new Renderer()..initialize(this));

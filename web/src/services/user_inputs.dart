@@ -1,4 +1,5 @@
 import 'dart:html';
+import '../services.dart';
 import '../world.dart';
 
 class UserInput {
@@ -13,14 +14,14 @@ class UserInput {
     //if(_focusElement.focus == false) {
       var keyEvent = new KeyEvent.wrap(evt);
       print("Received ${keyEvent.keyCode}");
-      /*if(keyEvent.keyCode == 97) world.move(world.player, -1, 0);
-      else if(keyEvent.keyCode == 100) world.move(world.player, 1, 0);
-      else if(keyEvent.keyCode == 119) world.move(world.player, 0, -1);
-      else if(keyEvent.keyCode == 115) world.move(world.player, 0, 1);
-      else if(keyEvent.keyCode == 113) world.selectNext();
-      else if(keyEvent.keyCode == 101) attack();
-      else if(keyEvent.keyCode == 32) draw(false);
-      else print("Unknown command");*/
+      if(keyEvent.keyCode == 97) gameMechanics.move(gameMechanics.player, -1, 0);
+      else if(keyEvent.keyCode == 100) gameMechanics.move(gameMechanics.player, 1, 0);
+      else if(keyEvent.keyCode == 119) gameMechanics.move(gameMechanics.player, 0, -1);
+      else if(keyEvent.keyCode == 115) gameMechanics.move(gameMechanics.player, 0, 1);
+      //else if(keyEvent.keyCode == 113) world.selectNext();
+      //else if(keyEvent.keyCode == 101) attack();
+      //else if(keyEvent.keyCode == 32) draw(false);
+      else print("Unknown command");
       //print("New position ${world.player}");
       _world.update();
     //}

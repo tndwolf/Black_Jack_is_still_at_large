@@ -7,21 +7,21 @@ import '../services.dart';
 
 class GridManager implements GameSystem {
   num fovRadius = 9;
-  GameMap _map;
+  GameMap map;
   List<PhysicalObject> _objects = <PhysicalObject>[];
 
   calculateFoV(num cx, num cy) {
     var minX = (cx - fovRadius < 0) ? 0 : cx - fovRadius;
     var minY = (cy - fovRadius < 0) ? 0 : cy - fovRadius;
-    var maxX = (cx + fovRadius < _map.width) ? cx + fovRadius : _map.width;
-    var maxY = (cy + fovRadius < _map.height) ? cy + fovRadius : _map.height;
+    var maxX = (cx + fovRadius < map.width) ? cx + fovRadius : map.width;
+    var maxY = (cy + fovRadius < map.height) ? cy + fovRadius : map.height;
     print("GridManger.calculateFoV: $minX,$minY to $maxX,$maxY");
     var fovRadiusSquared = fovRadius * fovRadius;
     for(num y = minY; y < maxY; y++) {
       for(num x = minX; x < maxX; x++) {
         //if((x-cx) * x + y * y < fovRadiusSquared)
         {
-          var cell = _map.at(x, y)
+          var cell = map.at(x, y)
             ..inLos = inLoS(cx, cy, x, y);
           if (cell.inLos) cell.visited = true;
         }
@@ -58,7 +58,7 @@ class GridManager implements GameSystem {
       {
         var checkY = steep ? sign * x : y;
         var checkX = steep ? y : sign * x;
-        var tile = _map.at(checkX, checkY);
+        var tile = map.at(checkX, checkY);
         if (tile.blockLos) return false;
       }
       err = (err - dy);
@@ -74,7 +74,7 @@ class GridManager implements GameSystem {
   bool register(GameComponent component) {
     var res = false;
     if(component is GameMap) {
-      _map = component as GameMap;
+      map = component as GameMap;
       res = true;
     } else if(component is PhysicalObject) {
       _objects.add(component as PhysicalObject);
@@ -90,8 +90,8 @@ class GridManager implements GameSystem {
 
   @override
   update(World world) {
-    //var player = world.getComponent(PhysicalObject, gameMechanics.player) as PhysicalObject;
-    //calculateFoV(player.x, player.y);
-    calculateFoV(10, 10);
+    var player = world.getComponent(PhysicalObject, gameMechanics.player) as PhysicalObject;
+    calculateFoV(player.x, player.y);
+    //calculateFoV(10, 10);
   }
 }
