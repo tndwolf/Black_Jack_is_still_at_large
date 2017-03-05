@@ -19,7 +19,9 @@ class Tile {
         blocksMovement = false;
         color = new Color(255, 225, 0);
         break;
-      case '>': // floor
+      case '>': // exits
+      case '?':
+      case '∩':
         blockLos = false;
         blocksMovement = false;
         isEndOfLevel = true;

@@ -31,6 +31,7 @@ class GameMechanics {
     selectPointer = new RenderObject(_world.nextEntity)
       ..color = new Color(255, 127, 127)
       ..glyph = "(_)"
+      ..x = -10000
       ..z = 10;
     _world.add(selectPointer);
   }
@@ -40,7 +41,7 @@ class GameMechanics {
     var atkPhy = _world.getComponent(PhysicalObject, attacker) as PhysicalObject;
     var defActor = _world.getComponent(Actor, target) as Actor;
     var defPhy = _world.getComponent(PhysicalObject, target) as PhysicalObject;
-    //try {
+    try {
       var dam = atkActor.actionResult - defPhy.defense;
       if (dam < 0) {
         print('GameMechanics.attack: missed! $attacker vs $target');
@@ -55,15 +56,15 @@ class GameMechanics {
           //gameOutput.examineTarget(atkActor, atkPhy);
         }
       }
-    //} catch(ex) {
-    //  print('GameMechanics.attack: unable to attack $attacker vs $target. $ex');
-    //}
+    } catch(ex) {
+      print('GameMechanics.attack: unable to attack $attacker vs $target. $ex');
+    }
   }
 
   damage(num entity, num howMuch) {
-    print('GameMechanics.damage: Dealing $howMuch damage to $entity');
     var physical = _world.getComponent(PhysicalObject, entity) as PhysicalObject;
-    while(howMuch > 0) {
+    print('GameMechanics.damage: Dealing $howMuch damage to $entity, health was ${physical.health}');
+    while(howMuch > 0 && physical.healthHand.length > 0) {
       if(physical.healthHand.last.value > howMuch) {
         physical.healthHand.last.value -= howMuch;
         howMuch = 0;
@@ -106,6 +107,12 @@ class GameMechanics {
     return res;
   }
 
+  bool inRange(PhysicalObject from, PhysicalObject to, num range) {
+    var dx = from.x - to.x;
+    var dy = from.y - to.y;
+    return dx * dx + dy * dy < range * range;
+  }
+
   generateLevel([List<GameComponent> oldPlayer = null]) {
     _world.clear();
     var map = new GameMap(_world.nextEntity, mapFactory.generate(_levels[currentLevel]));
@@ -120,6 +127,7 @@ class GameMechanics {
       }
     }
     setPosition(player, mapFactory.start[0], mapFactory.start[1]);
+    draw(player, true);
     for(num i = 0; i < 1; i++) {
       entityFactory.CreateEnemy(_world);
     }
@@ -148,7 +156,8 @@ class GameMechanics {
     render.color = new Color(255, 0, 0);
   }
 
-  move(num entity, num dx, num dy) {
+  bool move(num entity, num dx, num dy) {
+    var res = false;
     var grid = _world.getSystem(GridManager) as GridManager;
     var physical = _world.getComponent(PhysicalObject, entity) as PhysicalObject;
     var render = _world.getComponent(RenderObject, entity) as RenderObject;
@@ -157,6 +166,7 @@ class GameMechanics {
       var ey = physical.y + dy;
       var endCell = grid.map.at(ex, ey);
       if (endCell.blocksMovement == false) {
+        res = true;
         physical.x = ex;
         physical.y = ey;
         render.x = (ex + 0.5) * grid.map.cellWidth;
@@ -173,7 +183,15 @@ class GameMechanics {
       }
     } catch(ex) {
       print('GameMechanics.move: unable to move $entity');
+    } finally {
+      return res;
     }
+  }
+
+  moveTo(PhysicalObject from, num toX, num toY) {
+    var dx = (toX - from.x).sign;
+    var dy = (toY - from.y).sign;
+    if (move(from.entity, dx, dy)) return;
   }
 
   runAis() {
@@ -189,9 +207,14 @@ class GameMechanics {
     print('GameMechanics.runDefaultAi: running AI of ${actor.entity}');
     var grid = _world.getSystem(GridManager) as GridManager;
     var physical = _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
-    if (grid.isInLos(physical.x, physical.y)) {
-      move(actor.entity, rng.nextInt(3) - 1, rng.nextInt(3) - 1);
-    }
+    //if (grid.isInLos(physical.x, physical.y)) {
+      var target = _world.getComponent(PhysicalObject, player) as PhysicalObject;
+      /*if(inRange(physical, target, actor.range)) {
+        attack(actor.entity, player);
+      } else {*/
+        moveTo(physical, target.x, target.y);
+      //}
+    //}
     actor.initiative += 10;
     gameMechanics.updateVisibility();
   }

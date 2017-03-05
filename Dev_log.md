@@ -58,3 +58,8 @@ Stop
     - Exits 1
 26. MapFactory, World, GameMechanics
     - Level transitions completed, player is permanent
+    
+Lunch
+
+27. -Actor, GameMechanics
+    - Enemy AI, fixed attack bug
