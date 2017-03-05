@@ -1,4 +1,5 @@
 import 'dart:html';
+import '../services.dart';
 import '../components/actor.dart';
 import '../components/physical_object.dart';
 
@@ -12,11 +13,11 @@ class GameOutput {
   examinePlayer(Actor actor, PhysicalObject physical) {
     var output = querySelector('#player');
     output.innerHtml = '';
-    output.appendText('Defense: ${physical.health}');
+    output.appendText('Defense: ${physical.defense}');
     output.append(new BRElement());
     output.appendText('Health: ${physical.health}');
     output.append(new BRElement());
-    output.appendText('Hand: ');
+    output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, actor.cap)} / ${actor.cap}');
     output.append(new BRElement());
     for(var card in actor.hand) {
       output.appendText('- $card');
@@ -27,15 +28,15 @@ class GameOutput {
   examineTarget(PhysicalObject physical) {
     var output = querySelector('#target');
     output.innerHtml = '';
-    output.appendText('Defense: ${physical.health}');
+    output.appendText('Defense: ${physical.defense}');
     output.append(new BRElement());
     output.appendText('Health: ${physical.health}');
     output.append(new BRElement());
     output.appendText('Hand: ');
     output.append(new BRElement());
-    for(var card in actor.hand) {
+    /*for(var card in actor.hand) {
       output.appendText('- $card');
       output.append(new BRElement());
-    }
+    }*/
   }
 }

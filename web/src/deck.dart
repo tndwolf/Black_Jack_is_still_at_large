@@ -5,8 +5,8 @@ class Deck {
   num _index = 0;
 
   Deck() {
-    for (var suite in suites) {
-      for(num i = 2; i < 11; i++) {
+    for (var suite in suites.values) {
+      for(num i = 1; i < 10; i++) {
         cards.add(new Card(i, suite));
       }
     }

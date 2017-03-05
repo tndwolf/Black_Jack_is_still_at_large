@@ -7,7 +7,7 @@
 Stop
 
 4. Map, Renderer, GameOutput
-5. Map, --Rng, -Services, Color, MapFactory, UserInput
+5. Map, -Services, Color, MapFactory, UserInput
 6. Map.toString...
     - One full pomodoro for serialization... let's move this to the nice-to-have
     
@@ -22,3 +22,6 @@ Lunch
 Stop
 
 11. HTML, GameMechanics
+12. GameMechanics, Suites, PhysicalObject, GameOutput
+    - Blackjack essentially implemented
+13. 

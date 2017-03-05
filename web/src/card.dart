@@ -1,9 +1,13 @@
-var suites = ["Spades", "Clubs", "Diamonds", "Hearths"];
+enum suites { Spades, Clubs, Diamonds, Hearths }
+
+String suiteToString(suites suite) {
+  return "${suite.toString().substring(suite.toString().indexOf('.')+1)}";
+}
 
 /// Card class
 class Card {
   num value;
-  String suite;
-  Card(num this.value, String this.suite);
-  @override toString() { return "$value of $suite"; }
+  suites suite;
+  Card(num this.value, suites this.suite);
+  @override toString() { return "$value of ${suiteToString(suite)}"; }
 }
