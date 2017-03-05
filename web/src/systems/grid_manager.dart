@@ -122,4 +122,7 @@ class GridManager implements GameSystem {
     var player = world.getComponent(PhysicalObject, gameMechanics.player) as PhysicalObject;
     calculateFoV(player.x, player.y);
   }
+
+  @override
+  updateRealTime(World world) { return; }
 }

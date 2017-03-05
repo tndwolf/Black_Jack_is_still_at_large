@@ -38,7 +38,7 @@ class UserInput {
       print("Unknown command");
     }
     //print("New position ${world.player}");
-    //_world.update();
+    _world.update();
     //}
   }
 }

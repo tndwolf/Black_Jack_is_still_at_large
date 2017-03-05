@@ -119,8 +119,8 @@ class GameMechanics {
 
   move(num entity, num dx, num dy) {
     var grid = _world.getSystem(GridManager) as GridManager;
-    var physical = _world.getComponent(PhysicalObject, player) as PhysicalObject;
-    var renderer = _world.getComponent(RenderObject, player) as RenderObject;
+    var physical = _world.getComponent(PhysicalObject, entity) as PhysicalObject;
+    var render = _world.getComponent(RenderObject, entity) as RenderObject;
     try {
       var ex = physical.x + dx;
       var ey = physical.y + dy;
@@ -128,8 +128,9 @@ class GameMechanics {
       if (endCell.blocksMovement == false) {
         physical.x = ex;
         physical.y = ey;
-        renderer.x = (ex + 0.5) * grid.map.cellWidth;
-        renderer.y = (ey + 0.5) * grid.map.cellHeight;
+        render.x = (ex + 0.5) * grid.map.cellWidth;
+        render.y = (ey + 0.5) * grid.map.cellHeight;
+        //render.color.a = grid.map.at(ex, ey).inLos ? 1 : 0.2;
       }
     } catch(ex) {
       print('GameMechanics.move: unable to move $entity');
@@ -149,6 +150,7 @@ class GameMechanics {
     //var physical = _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
     move(actor.entity, rng.nextInt(3) - 1, rng.nextInt(3) - 1);
     actor.initiative += 10;
+    gameMechanics.updateVisibility();
   }
 
   selectNext() {
@@ -186,5 +188,20 @@ class GameMechanics {
 
   setInput(dynamic function) {
     nextPlayerMove = function;
+  }
+
+  updateVisibility() {
+    var objects = _world.getAll(PhysicalObject);
+    var grid = _world.getSystem(GridManager) as GridManager;
+    try {
+      for(var obj in objects) {
+        var physical = _world.getComponent(PhysicalObject, obj.entity) as PhysicalObject;
+        var render = _world.getComponent(RenderObject, obj.entity) as RenderObject;
+        render.color.a = grid.map.at(physical.x, physical.y).inLos ? 1 : 0.2;
+        print('GameMechanics.updateVisibility: ${obj.entity} to ${render.color.a}');
+      }
+    } catch(ex) {
+      print('GameMechanics.updateVisibility: some odd bug...');
+    }
   }
 }

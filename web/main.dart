@@ -11,4 +11,5 @@ void main() {
   services.initialize(world);
   services.gameMechanics.generateLevel();
   world.update();
+  world.updateRealTime();
 }

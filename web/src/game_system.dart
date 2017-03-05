@@ -6,4 +6,5 @@ abstract class GameSystem {
   bool register(GameComponent component);
   unregister(GameComponent component);
   update(World world);
+  updateRealTime(World world);
 }

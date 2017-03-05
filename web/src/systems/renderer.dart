@@ -30,6 +30,16 @@ class Renderer implements GameSystem {
 
   @override
   update(World world) {
+    /*var context = gameOutput.context;
+    context.clearRect(0, 0, gameOutput.canvas.width, gameOutput.canvas.height);
+    for(var widget in widgets) {
+      widget.draw(context);
+    }*/
+    return;
+  }
+
+  @override
+  updateRealTime(World world) {
     var context = gameOutput.context;
     context.clearRect(0, 0, gameOutput.canvas.width, gameOutput.canvas.height);
     for(var widget in widgets) {

@@ -36,3 +36,5 @@ Stop + Dinner
 16.  TurnManager, UserInputs, World, GameMechanics
     - Tried dynamic turn updates... rolled back to fixed updates
     - Also issues with list.where
+17. -Renderer, GameMechanics, -GridManager, World, -GameSystem
+    - LoS

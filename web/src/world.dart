@@ -32,6 +32,7 @@ class World {
     if (res.length == 0) {
       res = _behaviors.where((c) => c.runtimeType == type);
     }
+    return res.toList();
   }
 
   GameComponent getComponent(Type type, num entity) {
@@ -57,13 +58,23 @@ class World {
 
   update() {
     //print('World.update: start');
-    for(var behavior in _behaviors) {
+    /*for(var behavior in _behaviors) {
       behavior.update(this);
-    }
+    }*/
     for(var system in _systems) {
       system.update(this);
     }
     //new Timer(new Duration(milliseconds:20), update);
+  }
+
+  updateRealTime() {
+    for(var behavior in _behaviors) {
+      behavior.update(this);
+    }
+    for(var system in _systems) {
+      system.updateRealTime(this);
+    }
+    new Timer(new Duration(milliseconds:20), updateRealTime);
   }
 
   @override toString() {

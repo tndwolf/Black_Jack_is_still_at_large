@@ -51,4 +51,7 @@ class TurnManager implements GameSystem {
     }
     actors.sort((a1, a2) => a1.initiative.compareTo(a2.initiative));
   }
+
+  @override
+  updateRealTime(World world) { return; }
 }
