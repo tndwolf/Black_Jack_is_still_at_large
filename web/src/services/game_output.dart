@@ -17,6 +17,10 @@ class GameOutput {
     output.append(new BRElement());
     output.appendText('Health: ${physical.health}');
     output.append(new BRElement());
+    for(var card in physical.healthHand) {
+      output.appendText('- $card');
+      output.append(new BRElement());
+    }
     output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, actor.cap)} / ${actor.cap}');
     output.append(new BRElement());
     for(var card in actor.hand) {
@@ -32,6 +36,10 @@ class GameOutput {
     output.append(new BRElement());
     output.appendText('Health: ${physical.health}');
     output.append(new BRElement());
+    for(var card in physical.healthHand) {
+      output.appendText('- $card');
+      output.append(new BRElement());
+    }
     output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, actor.cap)} / ${actor.cap}');
     output.append(new BRElement());
     for(var card in actor.hand) {

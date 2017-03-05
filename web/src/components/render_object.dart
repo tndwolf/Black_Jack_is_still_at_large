@@ -8,6 +8,7 @@ class RenderObject extends GameComponent implements Widget {
   Color color = new Color();
   num x = 0;
   num y = 0;
+  num z = 0;
 
   RenderObject(num entity): super(entity) {}
 

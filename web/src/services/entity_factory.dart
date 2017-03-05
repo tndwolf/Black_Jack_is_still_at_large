@@ -1,3 +1,4 @@
+import '../card.dart';
 import '../services.dart';
 import '../world.dart';
 import '../components/actor.dart';
@@ -31,7 +32,8 @@ class EntityFactory {
     world.add(new Actor(id));
     world.add(new PhysicalObject(id)
       ..x = x
-      ..y = y);
+      ..y = y
+      ..healthHand.add(new Card(2, suites.Hearths)));
     world.add(new RenderObject(id)
       ..glyph = 'B'
       ..x = grid.map.cellWidth * (x + 0.5)

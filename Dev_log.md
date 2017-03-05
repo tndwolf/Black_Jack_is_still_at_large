@@ -26,3 +26,5 @@ Stop
     - Blackjack essentially implemented
 13. GameMechanics, Actor, EntityFactory
     - Attacking 1
+14. GameMechanics, Renderer, GameOutput
+    - Attacking 2, Z order, Pointer

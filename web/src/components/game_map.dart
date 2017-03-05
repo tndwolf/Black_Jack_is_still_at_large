@@ -11,6 +11,7 @@ class GameMap extends GameComponent implements Widget {
   List<List<Tile>> _map;
   num get height => _map.length;
   num get width => _map[0].length;
+  num z = 0;
 
   GameMap(num entity, List<String> map): super(entity) {
     _map = <List<Tile>>[];

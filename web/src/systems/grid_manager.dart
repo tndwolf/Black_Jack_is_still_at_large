@@ -17,7 +17,7 @@ class GridManager implements GameSystem {
     var minY = (cy - fovRadius < 0) ? 0 : cy - fovRadius;
     var maxX = (cx + fovRadius < map.width) ? cx + fovRadius : map.width;
     var maxY = (cy + fovRadius < map.height) ? cy + fovRadius : map.height;
-    print("GridManger.calculateFoV: $minX,$minY to $maxX,$maxY");
+    //print("GridManger.calculateFoV: $minX,$minY to $maxX,$maxY");
     var fovRadiusSquared = fovRadius * fovRadius;
     for(num y = minY; y < maxY; y++) {
       for(num x = minX; x < maxX; x++) {

@@ -1,4 +1,5 @@
 import '../card.dart';
+import '../color.dart';
 import '../deck.dart';
 import '../world.dart';
 import '../services.dart';
@@ -12,10 +13,16 @@ class GameMechanics {
   Deck deck;
   num player = World.INVALID_ENTITY;
   num target = World.INVALID_ENTITY;
+  RenderObject selectPointer;
   World _world;
 
   GameMechanics(World this._world) {
     deck = new Deck();
+    selectPointer = new RenderObject(_world.nextEntity)
+      ..color = new Color(255, 127, 127)
+      ..glyph = "(_)"
+      ..z = 10;
+    _world.add(selectPointer);
   }
 
   attack(num attacker, num target) {
@@ -25,22 +32,39 @@ class GameMechanics {
     var defPhy = _world.getComponent(PhysicalObject, target) as PhysicalObject;
     try {
       var dam = atkActor.actionResult - defPhy.defense;
-      if (dam < 0) return; //TODO: missed(atkPhy, defPhy);
-      damage(target, dam);
-      if(attacker ==  player) {
-        gameOutput.examinePlayer(atkActor, atkPhy);
-        gameOutput.examineTarget(defActor, defPhy);
-      } else if (target == player) {
-        gameOutput.examinePlayer(defActor, defPhy);
-        //gameOutput.examineTarget(atkActor, atkPhy);
+      if (dam < 0) {
+        print('GameMechanics.attack: missed! $attacker vs $target');
+        //TODO: missed(atkPhy, defPhy);
+      } else {
+        damage(target, dam);
+        if(attacker ==  player) {
+          gameOutput.examinePlayer(atkActor, atkPhy);
+          gameOutput.examineTarget(defActor, defPhy);
+        } else if (target == player) {
+          gameOutput.examinePlayer(defActor, defPhy);
+          //gameOutput.examineTarget(atkActor, atkPhy);
+        }
       }
     } catch(ex) {
-      print('GameMechanics.attack: unable to attack $attacker vs $target');
+      print('GameMechanics.attack: unable to attack $attacker vs $target. $ex');
     }
   }
 
   damage(num target, num howMuch) {
-
+    print('GameMechanics.damage: Dealing $howMuch damage to $target');
+    var physical = _world.getComponent(PhysicalObject, target) as PhysicalObject;
+    while(howMuch > 0) {
+      if(physical.healthHand.last.value > howMuch) {
+        physical.healthHand.last.value -= howMuch;
+        howMuch = 0;
+      } else {
+        howMuch -= physical.healthHand.last.value;
+        physical.healthHand.removeLast();
+      }
+    }
+    if (getHandValue(physical.healthHand) < 1) {
+      print('GameMechanics.damage: Killed $target');
+    }
   }
 
   draw(num entity) {
@@ -58,7 +82,7 @@ class GameMechanics {
     //print("GameMechanics.generateLevel: $map");
     _world.add(map);
     player = entityFactory.CreatePlayer(_world);
-    for(num i = 0; i < 6; i++) {
+    for(num i = 0; i < 1; i++) {
       entityFactory.CreateEnemy(_world);
     }
   }
@@ -101,6 +125,7 @@ class GameMechanics {
     var grid = _world.getSystem(GridManager) as GridManager;
     try {
       var inFoV = grid.getAllInFoV();
+      inFoV.remove(player);
       print("GameMechanics.selectNext: InFov ${inFoV.length}, old $target");
       if (inFoV.length == 0) return;
       for(var i = 0; i < inFoV.length - 1; i++) {
@@ -110,6 +135,9 @@ class GameMechanics {
             _world.getComponent(Actor, target) as Actor,
             _world.getComponent(PhysicalObject, target) as PhysicalObject
           );
+          var render = _world.getComponent(RenderObject, target) as RenderObject;
+          selectPointer.x = render.x;
+          selectPointer.y = render.y;
           return;
         }
       }
@@ -118,6 +146,9 @@ class GameMechanics {
           _world.getComponent(Actor, target) as Actor,
           _world.getComponent(PhysicalObject, target) as PhysicalObject
       );
+      var render = _world.getComponent(RenderObject, target) as RenderObject;
+      selectPointer.x = render.x;
+      selectPointer.y = render.y;
     } catch(ex) {
       print('GameMechanics.selectNext: some odd bug...');
     }
