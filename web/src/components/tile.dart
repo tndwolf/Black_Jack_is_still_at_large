@@ -20,7 +20,11 @@ class Tile {
         break;
       case '~': // water
         blockLos = false;
+        color = new Color(64, 127, 255);
         break;
+      case '♣':
+        blockLos = false;
+        color = new Color(127, 225, 32);
     }
   }
 

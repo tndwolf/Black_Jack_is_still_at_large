@@ -19,5 +19,8 @@ Map mapData = {
   },
   "desert": {
     "type": "desert",
-  }
+  },
+  "mine": {
+    "type": "mine",
+  },
 };

@@ -27,7 +27,7 @@ class MapFactory {
     if(source != null && source['blocks'] != null) {
       res = _generateFromBlocks(source);
     } else if(source != null && source['type'] == 'desert') {
-      res = _generateDesert(640 / 24, 480 / 24);
+      res = _generateMine(40, 30);
     } else {
       for (var y = 0; y < 480 / 24; y++) {
         var row = '';
@@ -41,12 +41,15 @@ class MapFactory {
   }
 
   List<String> _generateDesert(num width, num height) {
+    num halfHeight = (height/2).round();
     var res = <List<String>>[];
     for (var y = 0; y < height; y++) {
       var row = <String>[];
       for (var x = 0; x < width; x++) {
-        var probFree = (y < height/2) ? 1 : 100;
-        row.add((rng.nextInt(100) < probFree) ? '.' : '#');
+        int probFree = 10 * (halfHeight - y).abs() ~/ halfHeight;  //(y < height/2) ? 1 : 100;
+        var next = (rng.nextInt(100) > probFree * probFree) ? '.' : '#';
+        if (next == '.') next = (rng.nextInt(100) > 95) ? '♣' : '.';
+        row.add(next);
       }
       res.add(row);
     }
@@ -63,6 +66,34 @@ class MapFactory {
         case 2: currentY--; break;
       }
       currentY = (currentY > height - 1) ? height - 1 : (currentY < 0) ? 0 : currentY;
+    }
+    return _doubleListToSingle(res);
+  }
+
+  List<String> _generateMine(num width, num height) {
+    var res = <List<String>>[];
+    for (var y = 0; y < height; y++) {
+      var row = <String>[];
+      for (var x = 0; x < width; x++) {
+        row.add('#');
+      }
+      res.add(row);
+    }
+    start = [0, rng.nextInt(height.round())];
+    num currentX = start[0];
+    num currentY = start[1];
+    while(currentX < width) {
+      print("MapFactory._generateMine: Trying to set $currentX, $currentY");
+      res[currentY][currentX] = '.';
+      var next = rng.nextInt(4);
+      switch(next) {
+        case 0: currentX++; break;
+        case 1: currentY++; break;
+        case 2: currentY--; break;
+        case 3: currentX--; break;
+      }
+      currentY = (currentY > height - 2) ? height - 1 : (currentY < 1) ? 1 : currentY;
+      currentX = (currentX < 0) ? 0 : currentX;
     }
     return _doubleListToSingle(res);
   }
