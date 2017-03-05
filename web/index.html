@@ -19,6 +19,15 @@
 
 <body>
     <h1>Black Jack is still at large</h1>
-    <div id="output" style="text-align: center;"><canvas id="gameView" width="640" height="480"></canvas></div>
+    <table id="output" style="text-align: center;">
+        <tr>
+            <td rowspan="2" class="box">
+                <canvas id="gameView" width="640" height="480"></canvas>
+            </td>
+            <td class="box"><div id="player"></div></td>
+        </tr>
+        <tr><td class="box"><div id="target"></div></td></tr>
+
+    </table>
 </body>
 </html>

@@ -16,10 +16,14 @@ h1 {
     text-decoration: underline;
 }
 
-#gameView {
+.box {
     border: 1px solid gold;
     background: #333333;
     color: #b0b0b0;
+    min-width: 200px;
+    min-heght: 200px;
+}
+
+#output{
     margin: auto;
-    text-align: center;
 }

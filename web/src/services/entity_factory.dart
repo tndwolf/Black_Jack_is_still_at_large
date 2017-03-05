@@ -13,7 +13,6 @@ class EntityFactory {
     var y = 6;
     world.add(new Actor(id));
     world.add(new PhysicalObject(id)
-      ..glyph = '@'
       ..health = 10
       ..x = x
       ..y = y);

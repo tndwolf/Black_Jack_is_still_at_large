@@ -1,3 +1,4 @@
+import '../deck.dart';
 import '../world.dart';
 import '../services.dart';
 import '../components/game_map.dart';
@@ -7,10 +8,21 @@ import '../components/render_object.dart';
 import '../systems/grid_manager.dart';
 
 class GameMechanics {
+  Deck deck;
   num player;
   World _world;
 
-  GameMechanics(World this._world) { }
+  GameMechanics(World this._world) {
+    deck = new Deck();
+  }
+
+  attack() {
+
+  }
+
+  draw() {
+
+  }
 
   generateLevel() {
     var map = new GameMap(_world.nextEntity, mapFactory.generate());
@@ -36,5 +48,9 @@ class GameMechanics {
     } catch(ex) {
       print('GameMechanics.move: unable to move $entity');
     }
+  }
+
+  selectNext() {
+
   }
 }

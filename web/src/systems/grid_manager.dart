@@ -6,11 +6,13 @@ import '../components/physical_object.dart';
 import '../services.dart';
 
 class GridManager implements GameSystem {
+  num fovClearance = 1;
   num fovRadius = 9;
   GameMap map;
   List<PhysicalObject> _objects = <PhysicalObject>[];
 
   calculateFoV(num cx, num cy) {
+    clearFoV(cx, cy);
     var minX = (cx - fovRadius < 0) ? 0 : cx - fovRadius;
     var minY = (cy - fovRadius < 0) ? 0 : cy - fovRadius;
     var maxX = (cx + fovRadius < map.width) ? cx + fovRadius : map.width;
@@ -29,9 +31,26 @@ class GridManager implements GameSystem {
     }
   }
 
+  clearFoV(num cx, num cy) {
+    var fovClearRadius = fovRadius + fovClearance;
+    var minX = (cx - fovClearRadius < 0) ? 0 : cx - fovClearRadius;
+    var minY = (cy - fovClearRadius < 0) ? 0 : cy - fovClearRadius;
+    var maxX = (cx + fovClearRadius < map.width) ? cx + fovClearRadius : map.width;
+    var maxY = (cy + fovClearRadius < map.height) ? cy + fovClearRadius : map.height;
+    //print("GridManger.calculateFoV: $minX,$minY to $maxX,$maxY");
+    for(num y = minY; y < maxY; y++) {
+      for(num x = minX; x < maxX; x++) {
+        {
+          map.at(x, y).inLos = false;
+        }
+      }
+    }
+  }
+
   @override
   initialize(World world) {
-    // TODO: implement initialize
+    map = null;
+    _objects.clear();
   }
 
   bool inLoS(num x0, num y0, num x1, num y1){
@@ -85,13 +104,14 @@ class GridManager implements GameSystem {
 
   @override
   unregister(GameComponent component) {
-    // TODO: implement unregister
+    if(component is PhysicalObject) {
+      _objects.remove(component);
+    }
   }
 
   @override
   update(World world) {
     var player = world.getComponent(PhysicalObject, gameMechanics.player) as PhysicalObject;
     calculateFoV(player.x, player.y);
-    //calculateFoV(10, 10);
   }
 }
