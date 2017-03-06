@@ -73,3 +73,5 @@ Lunch
 
 31. GameMechanics, EntityFactory, EntityTemplates
     - Enemy creation 2
+32. GameMechanics, EntityFactory, AnimatedTextQueue
+    - Fixed and finished enemy creation

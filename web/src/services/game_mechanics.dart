@@ -5,6 +5,7 @@ import '../game_component.dart';
 import '../world.dart';
 import '../services.dart';
 import '../behaviors/animated_text.dart';
+import '../behaviors/animated_text_queue.dart';
 import '../components/game_map.dart';
 import '../components/actor.dart';
 import '../components/physical_object.dart';
@@ -126,6 +127,13 @@ class GameMechanics {
       ..fadeOutMillis = 500);
   }
 
+  floatTextDeferred(String text, RenderObject render, Color color) {
+    var ani = _world.getComponent(AnimatedTextQueue, render.entity) as AnimatedTextQueue;
+    if (ani != null) {
+      ani.addText(text, render.x, render.y, color);
+    }
+  }
+
   bool inRange(PhysicalObject from, PhysicalObject to, num range) {
     var dx = from.x - to.x;
     var dy = from.y - to.y;
@@ -174,7 +182,7 @@ class GameMechanics {
     var render = _world.getComponent(RenderObject, entity) as RenderObject;
     render.glyph = '%';
     render.color = new Color(255, 0, 0);
-    floatText('DEAD', render.x, render.y, new Color(255, 0, 0));
+    floatTextDeferred('DEAD', render, new Color(255, 0, 0));
   }
 
   bool move(num entity, num dx, num dy) {
