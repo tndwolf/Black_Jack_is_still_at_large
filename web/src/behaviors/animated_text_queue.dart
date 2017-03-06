@@ -7,8 +7,7 @@ import '../components/render_object.dart';
 
 class NextText {
   String text;
-  num x;
-  num y;
+  RenderObject renderer;
   Color color;
 }
 
@@ -20,12 +19,11 @@ class AnimatedTextQueue extends Behavior {
   AnimatedTextQueue([num entity = World.GENERIC_ENTITY])
       : super(entity) {}
 
-  addText(String text, num x, num y, Color color) {
+  addText(String text, RenderObject renderer, Color color) {
     var next = new NextText()
       ..color = color
       ..text = text
-      ..x = x
-      ..y = y;
+      ..renderer = renderer;
     animations.add(next);
   }
 
@@ -33,10 +31,12 @@ class AnimatedTextQueue extends Behavior {
   update(World world) {
     var deltaTime = 20;
     refTime += deltaTime;
+    print('AnimatedTextQueue: in queue ${animations.length}');
     if (animations.length > 0 && refTime > waitTime) {
       refTime = 0;
       var next = animations.removeAt(0);
-      gameMechanics.floatText(next.text, next.x, next.y, next.color);
+      print('AnimatedTextQueue: next text ${next.text}');
+      gameMechanics.floatText(next.text, next.renderer.x, next.renderer.y, next.color);
     }
   }
 }

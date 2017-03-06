@@ -82,7 +82,7 @@ class GameMechanics {
       kill(entity);
       //print('GameMechanics.damage: Killed $entity');
     } else {
-      floatText(dealt.toString(), render.x, render.y, new Color(255, 0, 0));
+      floatTextOn(dealt.toString(), render, new Color(255, 0, 0));
     }
   }
 
@@ -123,15 +123,35 @@ class GameMechanics {
       ..width = text.length * 16;
     _world.add(tb);
     _world.add(new AnimatedText(tb)
-      ..animationPixelPerSec = [0, -16]
+      ..animationPixelPerSec = [0, -32]
       ..fadeOutMillis = 500);
   }
 
   floatTextDeferred(String text, RenderObject render, Color color) {
-    var ani = _world.getComponent(AnimatedTextQueue, render.entity) as AnimatedTextQueue;
-    if (ani != null) {
-      ani.addText(text, render.x, render.y, color);
-    }
+    print("GameMechanics.floatTextDeferred: texting");
+    //var ani = _world.getComponent(AnimatedTextQueue, render.entity) as AnimatedTextQueue;
+    print("GameMechanics.floatTextDeferred: fa qualcosa");
+    /*if (ani != null) {
+      print("GameMechanics.floatTextDeferred: found previous");
+      ani.addText(text, render, color);
+    } else {*/
+      print("GameMechanics.floatTextDeferred: new one");
+      _world.add(new AnimatedTextQueue(render.entity)
+        ..addText(text, render, color));
+    //}
+  }
+
+  floatTextOn(String text, RenderObject render, Color color) {
+    var tb = new TextBox(World.GENERIC_ENTITY)
+      ..color = color
+      ..text = text
+      ..x = render.x
+      ..y = render.y
+      ..width = text.length * 16;
+    _world.add(tb);
+    _world.add(new AnimatedText(tb)
+      ..animationPixelPerSec = [0, -32]
+      ..fadeOutMillis = 500);
   }
 
   bool inRange(PhysicalObject from, PhysicalObject to, num range) {
@@ -155,6 +175,10 @@ class GameMechanics {
     }
     setPosition(player, mapFactory.start[0], mapFactory.start[1]);
     draw(player, true);
+    gameOutput.examinePlayer(
+      _world.getComponent(Actor, player) as Actor,
+      _world.getComponent(PhysicalObject, player) as PhysicalObject
+    );
     for(num i = 0; i < 1; i++) {
       entityFactory.CreateEnemy(_world, randomItem(_levels[currentLevel]['enemies']));
     }
@@ -182,7 +206,7 @@ class GameMechanics {
     var render = _world.getComponent(RenderObject, entity) as RenderObject;
     render.glyph = '%';
     render.color = new Color(255, 0, 0);
-    floatTextDeferred('DEAD', render, new Color(255, 0, 0));
+    floatTextOn('DEAD', render, new Color(255, 0, 0));
   }
 
   bool move(num entity, num dx, num dy) {
@@ -209,10 +233,12 @@ class GameMechanics {
           generateLevel(_world.getEntity(player));
           _world.update();
         }
+        //floatTextOn('MOVE', render, new Color(255, 0, 255));
       }
     } catch(ex) {
       print('GameMechanics.move: unable to move $entity');
     } finally {
+      draw(entity, true);
       return res;
     }
   }
@@ -264,7 +290,7 @@ class GameMechanics {
           draw(actor.entity, true);
         } else {
           var render = _world.getComponent(RenderObject, actor.entity) as RenderObject;
-          floatText('Flee', render.x, render.y, new Color(255, 255, 0));
+          floatTextDeferred('Flee', render, new Color(255, 255, 0));
           moveTo(physical, target.x, target.y, true);
           draw(actor.entity, true);
         }

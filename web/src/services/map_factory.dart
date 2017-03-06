@@ -55,7 +55,7 @@ class MapFactory {
     num currentX = start[0];
     num currentY = start[1];
     while(currentX < width) {
-      print("MapFactory._generateDesert: Trying to set $currentX, $currentY");
+      //print("MapFactory._generateDesert: Trying to set $currentX, $currentY");
       res[currentY][currentX] = ' ';
       end[1] = currentY;
       var next = rng.nextInt(3);
@@ -67,7 +67,7 @@ class MapFactory {
       currentY = (currentY > height - 1) ? height - 1 : (currentY < 0) ? 0 : currentY;
     }
     end[0] = currentX-1;
-    print("MapFactory._generateDesert: Trying to end at $end");
+    //print("MapFactory._generateDesert: Trying to end at $end");
     res[end[1]][end[0]] = '?';
     return _doubleListToSingle(res);
   }
@@ -116,15 +116,15 @@ class MapFactory {
         rng.nextInt(halfWidth-1) + endQuadrant[0] * halfWidth,
         rng.nextInt(halfHeight-1) + endQuadrant[1] * halfHeight
       ];
-      print("MapFactory._generateMine: Start was $start");
-      print("MapFactory._generateMine: End quadrant $endQuadrant");
-      print("MapFactory._generateMine: Halfsize $halfWidth, $halfHeight");
-      print("MapFactory._generateMine: Trying to end at $end");
+      //print("MapFactory._generateMine: Start was $start");
+      //print("MapFactory._generateMine: End quadrant $endQuadrant");
+      //print("MapFactory._generateMine: Halfsize $halfWidth, $halfHeight");
+      //print("MapFactory._generateMine: Trying to end at $end");
     } while (res[end[1]][end[0]] != ' ' && i++ < 1000);
     if (i > 1000) {
       end = [currentX, currentY];
     }
-    print("MapFactory._generateMine: Trying to end at $end");
+    //print("MapFactory._generateMine: Trying to end at $end");
     res[end[1]][end[0]] = '>';
     return _doubleListToSingle(res);
   }

@@ -70,8 +70,14 @@ Lunch
 30. GameMechanics, EntityFactory, EntityTemplates
     - Enemy creation 1
 
+Stop
 
 31. GameMechanics, EntityFactory, EntityTemplates
     - Enemy creation 2
 32. GameMechanics, EntityFactory, AnimatedTextQueue
     - Fixed and finished enemy creation
+    
+Headache
+
+33. GameMechanics, EntityFactory, AnimatedTextQueue, World
+    - Bugfixing

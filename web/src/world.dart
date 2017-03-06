@@ -45,9 +45,9 @@ class World {
 
   GameComponent getComponent(Type type, num entity) {
     var res = _components.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: null);
-    if (res == null) {
+    /*if (res == null) {
       res = _behaviors.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: null);
-    }
+    }*/
     return res;
   }
 
