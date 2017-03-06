@@ -67,3 +67,5 @@ Lunch
     - Flee AI, Animated text for notifications
 29. GameMechanics, PhysicalObject, -MapFactory
     - Fixed latest bug with Health, bit of refactoring
+30. GameMechanics, EntityFactory, EntityTemplates
+    - Enemy creation 1

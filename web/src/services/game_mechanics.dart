@@ -227,21 +227,27 @@ class GameMechanics {
 
   runDefaultAi(Actor actor) {
     if (actor.isAlive == false) return;
-    print('GameMechanics.runDefaultAi: running AI of ${actor.entity}');
+    //print('GameMechanics.runDefaultAi: running AI of ${actor.entity}');
     var grid = _world.getSystem(GridManager) as GridManager;
     var physical = _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
-    //if (grid.isInLos(physical.x, physical.y)) {
+    if (grid.isInLos(physical.x, physical.y)) {
       var target = _world.getComponent(PhysicalObject, player) as PhysicalObject;
       if(inRange(physical, target, actor.range)) {
+        print('GameMechanics.runDefaultAi: attack ${actor.entity} vs $player');
         attack(actor.entity, player);
+        draw(actor.entity, true);
       } else {
         if (physical.health > actor.fleeThreshold) {
           moveTo(physical, target.x, target.y, false);
+          draw(actor.entity, true);
         } else {
+          var render = _world.getComponent(RenderObject, actor.entity) as RenderObject;
+          floatText('Flee', render.x, render.y, new Color(255, 255, 0));
           moveTo(physical, target.x, target.y, true);
+          draw(actor.entity, true);
         }
       }
-    //}
+    }
     actor.initiative += 10;
     gameMechanics.updateVisibility();
   }
@@ -275,7 +281,7 @@ class GameMechanics {
       selectPointer.x = render.x;
       selectPointer.y = render.y;
     } catch(ex) {
-      print('GameMechanics.selectNext: some odd bug...');
+      //print('GameMechanics.selectNext: some odd bug...');
     }
   }
 
@@ -304,7 +310,7 @@ class GameMechanics {
         //print('GameMechanics.updateVisibility: ${obj.entity} to ${render.color.a}');
       }
     } catch(ex) {
-      print('GameMechanics.updateVisibility: some odd bug...');
+      //print('GameMechanics.updateVisibility: some odd bug...');
     }
   }
 }

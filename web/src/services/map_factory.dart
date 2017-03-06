@@ -46,7 +46,7 @@ class MapFactory {
       for (var x = 0; x < width; x++) {
         int probFree = 10 * (halfHeight - y).abs() ~/ halfHeight;  //(y < height/2) ? 1 : 100;
         var next = (rng.nextInt(100) > probFree * probFree) ? ' ' : '#';
-        if (next == '.') next = (rng.nextInt(100) > 95) ? '♣' : ' ';
+        if (next == ' ') next = (rng.nextInt(100) > 95) ? '♣' : ' ';
         row.add(next);
       }
       res.add(row);
@@ -89,7 +89,7 @@ class MapFactory {
       //print("MapFactory._generateMine: Trying to set $currentX, $currentY");
       var runLength = rng.nextInt(caveLength) + 1;
       for (var i = 0;  i < runLength; i++) {
-        res[currentY][currentX] = '.';
+        res[currentY][currentX] = ' ';
         currentX += direction[0];
         currentY += direction[1];
         currentY = (currentY > height - 2) ? height - 2 : (currentY < 1) ? 1 : currentY;
