@@ -15,6 +15,7 @@ class Tile {
     switch(glyph) {
     // Note that default values area for walls '#'
       case '.': // floor
+      case ' ':
         blockLos = false;
         blocksMovement = false;
         color = new Color(255, 225, 0);

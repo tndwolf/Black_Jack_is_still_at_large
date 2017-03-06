@@ -73,6 +73,7 @@ class World {
   num get nextEntity => _lastEntity + 1;
 
   update() {
+    _components.removeWhere((c) => c.deleteMe);
     //print('World.update: start');
     /*for(var behavior in _behaviors) {
       behavior.update(this);
@@ -84,6 +85,7 @@ class World {
   }
 
   updateRealTime() {
+    _behaviors.removeWhere((b) => b.deleteMe);
     for(var behavior in _behaviors) {
       behavior.update(this);
     }

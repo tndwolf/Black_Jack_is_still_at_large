@@ -64,20 +64,26 @@ class GameMechanics {
   }
 
   damage(num entity, num howMuch) {
+    var dealt = 0;
     var physical = _world.getComponent(PhysicalObject, entity) as PhysicalObject;
     print('GameMechanics.damage: Dealing $howMuch damage to $entity, health was ${physical.health}');
     while(howMuch > 0 && physical.healthHand.length > 0) {
       if(physical.healthHand.last.value > howMuch) {
+        dealt += howMuch;
         physical.healthHand.last.value -= howMuch;
         howMuch = 0;
       } else {
+        dealt += physical.healthHand.last.value;
         howMuch -= physical.healthHand.last.value;
         physical.healthHand.removeLast();
       }
     }
+    var render = _world.getComponent(RenderObject, entity) as RenderObject;
     if (physical.healthHand.length == 0) {
       kill(entity);
-      print('GameMechanics.damage: Killed $entity');
+      //print('GameMechanics.damage: Killed $entity');
+    } else {
+      floatText(dealt.toString(), render.x, render.y, new Color(255, 0, 0));
     }
   }
 
@@ -109,6 +115,19 @@ class GameMechanics {
     return res;
   }
 
+  floatText(String text, num x, num y, Color color) {
+    var tb = new TextBox(World.GENERIC_ENTITY)
+      ..color = color
+      ..text = text
+      ..x = x
+      ..y = y
+      ..width = text.length * 16;
+    _world.add(tb);
+    _world.add(new AnimatedText(tb)
+      ..animationPixelPerSec = [0, -16]
+      ..fadeOutMillis = 500);
+  }
+
   bool inRange(PhysicalObject from, PhysicalObject to, num range) {
     var dx = from.x - to.x;
     var dy = from.y - to.y;
@@ -133,16 +152,6 @@ class GameMechanics {
     for(num i = 0; i < 1; i++) {
       entityFactory.CreateEnemy(_world);
     }
-    // TODO: remove tests
-    var tb = new TextBox(World.GENERIC_ENTITY)
-      ..text = 'Test!'
-      ..x = 100
-      ..y = 100
-      ..height = 24
-      ..width = 100;
-    _world.add(tb);
-    var ani = new AnimatedText(tb);
-    _world.add(ani);
   }
 
   num getHandValue(List<Card> hand, {num cap: 1000, bool acesAsEleven: true}) {
@@ -163,9 +172,11 @@ class GameMechanics {
   kill(num entity) {
     var actor = _world.getComponent(Actor, entity) as Actor;
     actor.isAlive = false;
+    actor.deleteMe = true;
     var render = _world.getComponent(RenderObject, entity) as RenderObject;
     render.glyph = '%';
     render.color = new Color(255, 0, 0);
+    floatText('DEAD', render.x, render.y, new Color(255, 0, 0));
   }
 
   bool move(num entity, num dx, num dy) {

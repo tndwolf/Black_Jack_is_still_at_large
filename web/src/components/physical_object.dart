@@ -6,7 +6,7 @@ class PhysicalObject extends GameComponent {
   List<Card> defenseHand = <Card>[];
   List<Card> healthHand = <Card>[];
   num get defense => gameMechanics.getHandValue(defenseHand);
-  num get health => gameMechanics.getHandValue(healthHand);
+  num get health => gameMechanics.getHandValue(healthHand, acesAsEleven: false);
   num x;
   num y;
 

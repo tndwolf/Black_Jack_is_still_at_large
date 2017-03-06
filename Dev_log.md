@@ -65,3 +65,5 @@ Lunch
     - Enemy AI, fixed attack bug
 28. -Widget, TextBox, AnimatedText, GameMechanics
     - Flee AI, Animated text for notifications
+29. GameMechanics, PhysicalObject, -MapFactory
+    - Fixed latest bug with Health, bit of refactoring
