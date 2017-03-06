@@ -29,7 +29,10 @@ h1 {
 }
 
 #player, #target {
+    font-family: monospace;
+    font-size: 16px;
     max-width: 200px;
     height: 240px;
     text-align: left;
+
 }

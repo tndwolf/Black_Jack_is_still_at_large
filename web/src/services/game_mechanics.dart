@@ -14,8 +14,12 @@ import '../components/text_box.dart';
 import '../systems/grid_manager.dart';
 
 var _levels = [
-  {"map": "desert", "enemies": ["nativeBow"]},
-  {"map": "mine", "enemies": ["native"]}
+  {"map": "desert", "name": "Dead Man's Canyon", "enemies": ["native"], "howMany": 4},
+  {"map": "desert", "name": "Inside Dead Man's Canyon", "enemies": ["native", "nativeBow"], "howMany": 6},
+  {"map": "mine", "name": "Mines, top floor", "enemies": ["bandit"], "howMany": 6},
+  {"map": "mine", "name": "Mines, first floor", "enemies": ["bandit", "outlaw"], "howMany": 6},
+  {"map": "mine", "name": "The old Mines", "enemies": ["outlaw", "outlaw", "liutenent"], "howMany": 6},
+  {"map": "mine", "name": "Black Jack's lair", "enemies": ["outlaw", "outlaw", "liutenent"], "howMany": 6, "spawnBoss": true}
 ];
 
 class GameMechanics {
@@ -179,8 +183,13 @@ class GameMechanics {
       _world.getComponent(Actor, player) as Actor,
       _world.getComponent(PhysicalObject, player) as PhysicalObject
     );
-    for(num i = 0; i < 1; i++) {
+    for(num i = 0; i < _levels[currentLevel]['howMany']; i++) {
       entityFactory.CreateEnemy(_world, randomItem(_levels[currentLevel]['enemies']));
+    }
+    if (_levels[currentLevel]['spawnBoss'] != null) {
+      entityFactory.CreateEnemy(_world, 'boss');
+      map.at(mapFactory.end[0], mapFactory.end[1])
+        ..isEndOfLevel = false;
     }
   }
 
@@ -290,7 +299,7 @@ class GameMechanics {
           draw(actor.entity, true);
         } else {
           var render = _world.getComponent(RenderObject, actor.entity) as RenderObject;
-          floatTextDeferred('Flee', render, new Color(255, 255, 0));
+          floatTextOn('Flee', render, new Color(255, 255, 0));
           moveTo(physical, target.x, target.y, true);
           draw(actor.entity, true);
         }

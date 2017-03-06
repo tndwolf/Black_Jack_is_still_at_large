@@ -81,3 +81,5 @@ Headache
 
 33. GameMechanics, EntityFactory, AnimatedTextQueue, World
     - Bugfixing
+34. GameMechanics, EntityTemplates
+    - Enemies and enemies creation on the map
