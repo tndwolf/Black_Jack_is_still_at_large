@@ -13,10 +13,8 @@ import '../components/text_box.dart';
 import '../systems/grid_manager.dart';
 
 var _levels = [
-  "desert",
-  "mine",
-  "desert",
-  "mine"
+  {"map": "desert", "enemies": ["nativeBow"]},
+  {"map": "mine", "enemies": ["native"]}
 ];
 
 class GameMechanics {
@@ -136,7 +134,7 @@ class GameMechanics {
 
   generateLevel([List<GameComponent> oldPlayer = null]) {
     _world.clear();
-    var map = new GameMap(_world.nextEntity, mapFactory.generate(_levels[currentLevel]));
+    var map = new GameMap(_world.nextEntity, mapFactory.generate(_levels[currentLevel]['map']));
     //print("GameMechanics.generateLevel: $map");
     _world.add(map);
     if (oldPlayer == null) {
@@ -150,7 +148,7 @@ class GameMechanics {
     setPosition(player, mapFactory.start[0], mapFactory.start[1]);
     draw(player, true);
     for(num i = 0; i < 1; i++) {
-      entityFactory.CreateEnemy(_world);
+      entityFactory.CreateEnemy(_world, randomItem(_levels[currentLevel]['enemies']));
     }
   }
 
@@ -215,6 +213,22 @@ class GameMechanics {
     var dx = (toX - from.x).sign * (flee ? -1 : 1);
     var dy = (toY - from.y).sign * (flee ? -1 : 1);
     if (move(from.entity, dx, dy)) return;
+  }
+
+  List<num> randomPosition() {
+    var map = (_world.getSystem(GridManager) as GridManager).map;
+    var i = 0;
+    var x = -1;
+    var y = -1;
+    do {
+      x = rng.nextInt(map.width);
+      y = rng.nextInt(map.height);
+    } while (map.at(x, y).blocksMovement == true && i++ < 1000);
+    return [x, y];
+  }
+
+  dynamic randomItem(List<dynamic> source) {
+    return source[rng.nextInt(source.length)];
   }
 
   runAis() {

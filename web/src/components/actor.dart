@@ -5,6 +5,7 @@ import '../services.dart';
 class Actor extends GameComponent {
   num get actionResult => gameMechanics.getHandValue(hand);
   num cap = 21;
+  bool finalBoss = false;
   num fleeThreshold = 7;
   List<Card> hand = <Card>[];
   num initiative = 0;

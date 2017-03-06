@@ -1,4 +1,5 @@
 import '../card.dart';
+import '../color.dart';
 import '../services.dart';
 import '../world.dart';
 import '../components/actor.dart';
@@ -31,29 +32,38 @@ class EntityFactory {
     print('EntityFactory.CreateEnemy: $id from $template');
     try {
       var temp = entityTemplates[template];
+      var ctemp = temp['color'];
+      var color = new Color(ctemp[0], ctemp[1], ctemp[2], ctemp[3]);
+      print('EntityFactory.CreateEnemy: template $ctemp to color $color');
       var position = gameMechanics.randomPosition();
+      //print('EntityFactory.CreateEnemy: position $position');
       world.add(new Actor(id)
         ..cap = temp['cap']
-        ..fleeThreshold = temp['fleeThreshold']);
+        ..finalBoss = temp['finalBoss']
+        ..fleeThreshold = temp['fleeThreshold']
+        ..range = temp['range']);
+      var physical = new PhysicalObject(id)
+        ..x = position[0]
+        ..y = position[1];
+      /*physical.defenseHand.last.value = temp['defense'];
+      physical.healthHand.last.value = temp['health'];
+      if(temp['defenseBonus'] > 0) {
+        physical.defenseHand.add(new Card(temp['defenseBonus'], suites.Spades));
+      }
+      if(temp['healthBonus'] > 0) {
+        physical.healthHand.add(new Card(temp['healthBonus'], suites.Hearths));
+      }*/
+      world.add(physical);
       world.add(new RenderObject(id)
-        ..glyph = 'B'
-        ..x = grid.map.cellWidth * (x + 0.5)
-        ..y = grid.map.cellHeight * (y + 0.5));
+        ..glyph = temp['glyph']
+        ..color = new Color(temp['color'][0], temp['color'][1], temp['color'][2], temp['color'][3])
+        ..x = grid.map.cellWidth * (position[0] + 0.5)
+        ..y = grid.map.cellHeight * (position[1] + 0.5));
     } catch (ex) {
       print('EntityFactory.CreateEnemy: Failed - $ex');
+    } finally {
+      //print('EntityFactory.CreateEnemy: Created $id from $template');
+      return id;
     }
-
-    var x = rng.nextInt(grid.map.width - 2) + 1;
-    var y = rng.nextInt(grid.map.height - 2) + 1;
-    world.add(new Actor(id));
-    world.add(new PhysicalObject(id)
-      ..x = x
-      ..y = y
-      ..healthHand.add(new Card(2, suites.Hearths)));
-    world.add(new RenderObject(id)
-      ..glyph = 'B'
-      ..x = grid.map.cellWidth * (x + 0.5)
-      ..y = grid.map.cellHeight * (y + 0.5));
-    return id;
   }
 }

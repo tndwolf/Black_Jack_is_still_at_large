@@ -22,10 +22,13 @@ class TextBox extends GameComponent implements Widget {
     context.textAlign = 'center';
     context.textBaseline = 'middle';
 
-    var halfWidth = width ~/ 2;
-    var halfHeight = height ~/ 2;
-    context.setFillColorRgb(background.r, background.g, background.b, background.a);
-    context.fillRect(x - halfWidth, y - halfHeight, width, height);
+    //var halfWidth = width ~/ 2;
+    //var halfHeight = height ~/ 2;
+    //context.setFillColorRgb(background.r, background.g, background.b, background.a);
+    //context.fillRect(x - halfWidth, y - halfHeight, width, height);
+    context.setStrokeColorRgb(background.r, background.g, background.b, background.a);
+    context.lineWidth = 3;
+    context.strokeText(text, x, y);
     context.setFillColorRgb(color.r, color.g, color.b, color.a);
     context.fillText(text, x, y);
   }

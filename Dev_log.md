@@ -69,3 +69,7 @@ Lunch
     - Fixed latest bug with Health, bit of refactoring
 30. GameMechanics, EntityFactory, EntityTemplates
     - Enemy creation 1
+
+
+31. GameMechanics, EntityFactory, EntityTemplates
+    - Enemy creation 2
