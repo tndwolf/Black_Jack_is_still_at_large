@@ -62,6 +62,9 @@ class World {
     if (res == null) {
       res = _behaviors.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: () => null);
     }
+    if (res == null) {
+      res = _toBeAdded.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: () => null);
+    }
     return res;
   }
 
@@ -90,9 +93,6 @@ class World {
     _components.removeWhere((c) => c.deleteMe);
     //_toBeAdded.forEach((c) => _add(c));
     //print('World.update: start');
-    /*for(var behavior in _behaviors) {
-      behavior.update(this);
-    }*/
     for(var system in _systems) {
       system.update(this);
     }

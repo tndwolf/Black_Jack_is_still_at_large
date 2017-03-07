@@ -22,6 +22,7 @@ class Tile {
         break;
       case '>': // exits
       case '?':
+      case '»':
       case '∩':
         blockLos = false;
         blocksMovement = false;

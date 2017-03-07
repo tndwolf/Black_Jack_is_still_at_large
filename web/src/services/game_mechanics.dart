@@ -127,6 +127,18 @@ class GameMechanics {
       ..fadeOutMillis = 500);
   }
 
+  floatTextCentered(String text, Color color) {
+    var ani = _world.getComponent(AnimatedTextQueue, World.GENERIC_ENTITY) as AnimatedTextQueue;
+    if (ani != null) {
+      print("GameMechanics.floatTextDeferred: found previous");
+      ani.addCenteredText(text, color);
+    } else {
+      print("GameMechanics.floatTextDeferred: new one");
+      _world.add(new AnimatedTextQueue(World.GENERIC_ENTITY)
+        ..addCenteredText(text, color));
+    }
+  }
+
   floatTextDeferred(String text, RenderObject render, Color color) {
     //print("GameMechanics.floatTextDeferred: texting");
     var ani = _world.getComponent(AnimatedTextQueue, render.entity) as AnimatedTextQueue;
@@ -193,6 +205,8 @@ class GameMechanics {
       ..x = -10000
       ..z = 100;
     _world.add(selectPointer);
+    floatTextCentered(_levels[currentLevel]['name'], new Color(255, 255, 255));
+    floatTextCentered('find a path to the mines', new Color(255, 255, 255));
   }
 
   num getHandValue(List<Card> hand, {num cap: 1000, bool acesAsEleven: true}) {
@@ -301,7 +315,7 @@ class GameMechanics {
           draw(actor.entity, true);
         } else {
           var render = _world.getComponent(RenderObject, actor.entity) as RenderObject;
-          floatTextDeferred('Flee', render, new Color(255, 255, 0));
+          floatTextDeferred('Fleeing', render, new Color(255, 255, 0));
           moveTo(physical, target.x, target.y, true);
           draw(actor.entity, true);
         }
@@ -339,7 +353,7 @@ class GameMechanics {
       var render = _world.getComponent(RenderObject, target) as RenderObject;
       selectPointer.x = render.x;
       selectPointer.y = render.y;
-      print('GameMechanics.selectNext: select pointer ${selectPointer.x}, ${selectPointer.y}');
+      //print('GameMechanics.selectNext: select pointer ${selectPointer.x}, ${selectPointer.y}');
     } catch(ex) {
       //print('GameMechanics.selectNext: some odd bug...');
     }
@@ -366,7 +380,7 @@ class GameMechanics {
       for(var obj in objects) {
         var physical = _world.getComponent(PhysicalObject, obj.entity) as PhysicalObject;
         var render = _world.getComponent(RenderObject, obj.entity) as RenderObject;
-        render.color.a = grid.isInLoS(physical.x, physical.y) ? 1 : 0.2;
+        render.color.a = grid.isInLos(physical.x, physical.y) ? 1 : 0.2;
         //print('GameMechanics.updateVisibility: ${obj.entity} to ${render.color.a}');
       }
     } catch(ex) {

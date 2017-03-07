@@ -68,7 +68,7 @@ class MapFactory {
     }
     end[0] = currentX-1;
     //print("MapFactory._generateDesert: Trying to end at $end");
-    res[end[1]][end[0]] = '?';
+    res[end[1]][end[0]] = '»';
     return _doubleListToSingle(res);
   }
 

@@ -91,3 +91,10 @@ Headache + Sleep
 
 35. GameOutput, -GameMechanics, -Card
     - Identification of enemies and better description boxes
+36. GameMechanics, AnimatedTextQueue, -EntityFactory
+    - Refinement and bug fixing
+
+Dinner
+
+37. GameMechanics, AnimatedTextQueue, -World
+    - More bugfixing and refinement

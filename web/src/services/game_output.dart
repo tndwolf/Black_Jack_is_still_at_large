@@ -8,6 +8,8 @@ class GameOutput {
   String asciiFont = '24px Monospace';
   CanvasElement canvas;
   CanvasRenderingContext2D get context => canvas.context2D;
+  num get height => canvas.height;
+  num get width => canvas.width;
 
   GameOutput(CanvasElement this.canvas) {}
 
