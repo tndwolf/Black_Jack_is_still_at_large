@@ -13,8 +13,22 @@ class World {
   List<GameComponent> _components = <GameComponent>[];
   num _lastEntity = 0;
   List<GameSystem> _systems = <GameSystem>[];
+  List<GameComponent> _toBeAdded = <GameComponent>[];
 
   add(GameComponent component) {
+    if (component is Behavior) {
+      _toBeAdded.add(component);
+    } else {
+      for(var system in _systems) {
+        system.register(component);
+      }
+      // TODO should check if the component is an orphan...
+      _components.add(component);
+    }
+    _lastEntity = (component.entity > _lastEntity) ? component.entity : _lastEntity;
+  }
+
+  _add(GameComponent component) {
     if (component is Behavior) {
       _behaviors.add(component as Behavior);
     } else {
@@ -44,10 +58,10 @@ class World {
   }
 
   GameComponent getComponent(Type type, num entity) {
-    var res = _components.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: null);
-    /*if (res == null) {
-      res = _behaviors.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: null);
-    }*/
+    var res = _components.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: () => null);
+    if (res == null) {
+      res = _behaviors.firstWhere((c) => c.runtimeType == type && c.entity == entity, orElse: () => null);
+    }
     return res;
   }
 
@@ -74,6 +88,7 @@ class World {
 
   update() {
     _components.removeWhere((c) => c.deleteMe);
+    //_toBeAdded.forEach((c) => _add(c));
     //print('World.update: start');
     /*for(var behavior in _behaviors) {
       behavior.update(this);
@@ -85,6 +100,8 @@ class World {
   }
 
   updateRealTime() {
+    _toBeAdded.forEach((c) => _add(c));
+    _toBeAdded.clear();
     _behaviors.removeWhere((b) => b.deleteMe);
     for(var behavior in _behaviors) {
       behavior.update(this);

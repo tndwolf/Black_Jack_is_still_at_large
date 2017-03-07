@@ -33,12 +33,6 @@ class GameMechanics {
 
   GameMechanics(World this._world) {
     deck = new Deck();
-    selectPointer = new RenderObject(_world.nextEntity)
-      ..color = new Color(255, 127, 127)
-      ..glyph = "(_)"
-      ..x = -10000
-      ..z = 10;
-    _world.add(selectPointer);
   }
 
   attack(num attacker, num target) {
@@ -88,7 +82,7 @@ class GameMechanics {
       kill(entity);
       //print('GameMechanics.damage: Killed $entity');
     } else {
-      floatTextOn(dealt.toString(), render, new Color(255, 0, 0));
+      floatTextDeferred(dealt.toString(), render, new Color(255, 0, 0));
     }
   }
 
@@ -134,17 +128,17 @@ class GameMechanics {
   }
 
   floatTextDeferred(String text, RenderObject render, Color color) {
-    print("GameMechanics.floatTextDeferred: texting");
-    //var ani = _world.getComponent(AnimatedTextQueue, render.entity) as AnimatedTextQueue;
-    print("GameMechanics.floatTextDeferred: fa qualcosa");
-    /*if (ani != null) {
-      print("GameMechanics.floatTextDeferred: found previous");
+    //print("GameMechanics.floatTextDeferred: texting");
+    var ani = _world.getComponent(AnimatedTextQueue, render.entity) as AnimatedTextQueue;
+    //print("GameMechanics.floatTextDeferred: fa qualcosa");
+    if (ani != null) {
+      //print("GameMechanics.floatTextDeferred: found previous");
       ani.addText(text, render, color);
-    } else {*/
-      print("GameMechanics.floatTextDeferred: new one");
+    } else {
+      //print("GameMechanics.floatTextDeferred: new one");
       _world.add(new AnimatedTextQueue(render.entity)
         ..addText(text, render, color));
-    //}
+    }
   }
 
   floatTextOn(String text, RenderObject render, Color color) {
@@ -193,6 +187,12 @@ class GameMechanics {
       map.at(mapFactory.end[0], mapFactory.end[1])
         ..isEndOfLevel = false;
     }
+    selectPointer = new RenderObject(World.GENERIC_ENTITY)
+      ..color = new Color(255, 127, 127)
+      ..glyph = "(_)"
+      ..x = -10000
+      ..z = 100;
+    _world.add(selectPointer);
   }
 
   num getHandValue(List<Card> hand, {num cap: 1000, bool acesAsEleven: true}) {
@@ -217,7 +217,7 @@ class GameMechanics {
     var render = _world.getComponent(RenderObject, entity) as RenderObject;
     render.glyph = '%';
     render.color = new Color(255, 0, 0);
-    floatTextOn('DEAD', render, new Color(255, 0, 0));
+    floatTextDeferred('DEAD', render, new Color(255, 0, 0));
   }
 
   bool move(num entity, num dx, num dy) {
@@ -244,7 +244,7 @@ class GameMechanics {
           generateLevel(_world.getEntity(player));
           _world.update();
         }
-        //floatTextOn('MOVE', render, new Color(255, 0, 255));
+        //floatTextDeferred('MOVE', render, new Color(255, 0, 255));
       }
     } catch(ex) {
       print('GameMechanics.move: unable to move $entity');
@@ -301,7 +301,7 @@ class GameMechanics {
           draw(actor.entity, true);
         } else {
           var render = _world.getComponent(RenderObject, actor.entity) as RenderObject;
-          floatTextOn('Flee', render, new Color(255, 255, 0));
+          floatTextDeferred('Flee', render, new Color(255, 255, 0));
           moveTo(physical, target.x, target.y, true);
           draw(actor.entity, true);
         }
@@ -339,6 +339,7 @@ class GameMechanics {
       var render = _world.getComponent(RenderObject, target) as RenderObject;
       selectPointer.x = render.x;
       selectPointer.y = render.y;
+      print('GameMechanics.selectNext: select pointer ${selectPointer.x}, ${selectPointer.y}');
     } catch(ex) {
       //print('GameMechanics.selectNext: some odd bug...');
     }

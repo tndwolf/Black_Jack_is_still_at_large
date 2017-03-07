@@ -13,7 +13,7 @@ class NextText {
 
 class AnimatedTextQueue extends Behavior {
   List<NextText> animations = <NextText>[];
-  num waitTime = 500;
+  num waitTime = 0;
   num refTime = 0;
 
   AnimatedTextQueue([num entity = World.GENERIC_ENTITY])
@@ -31,12 +31,17 @@ class AnimatedTextQueue extends Behavior {
   update(World world) {
     var deltaTime = 20;
     refTime += deltaTime;
-    print('AnimatedTextQueue: in queue ${animations.length}');
+    //print('AnimatedTextQueue: in queue ${animations.length}');
     if (animations.length > 0 && refTime > waitTime) {
       refTime = 0;
       var next = animations.removeAt(0);
-      print('AnimatedTextQueue: next text ${next.text}');
+      //print('AnimatedTextQueue: next text ${next.text} in ${waitTime - refTime}');
       gameMechanics.floatText(next.text, next.renderer.x, next.renderer.y, next.color);
+      waitTime = 500;
+    } else if (animations.length == 0 && refTime > waitTime) {
+      deleteMe = true;
+    } else {
+      //print('AnimatedTextQueue: next in ${waitTime - refTime}');
     }
   }
 }
