@@ -83,3 +83,11 @@ Headache
     - Bugfixing
 34. GameMechanics, EntityTemplates
     - Enemies and enemies creation on the map
+    
+Headache + Sleep
+
+
+## Third Day
+
+35. GameOutput, -GameMechanics, -Card
+    - Identification of enemies and better description boxes

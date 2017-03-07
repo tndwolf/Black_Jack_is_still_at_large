@@ -68,6 +68,8 @@ class GameMechanics {
 
   damage(num entity, num howMuch) {
     var dealt = 0;
+    _world.getComponent(Actor, entity) as Actor
+      ..isIdentified = true;
     var physical = _world.getComponent(PhysicalObject, entity) as PhysicalObject;
     print('GameMechanics.damage: Dealing $howMuch damage to $entity, health was ${physical.health}');
     while(howMuch > 0 && physical.healthHand.length > 0) {

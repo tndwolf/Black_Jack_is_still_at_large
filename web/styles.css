@@ -24,6 +24,19 @@ h1 {
     min-height: 200px;
 }
 
+.card {
+    border-radius: 3px;
+    display: inline-block;
+    margin: 2px;
+    width: 2em;
+    text-align: center;
+}
+
+.dark_suite {
+    background: white;
+    color: dimgray;
+}
+
 #output{
     margin: auto;
 }
@@ -31,8 +44,14 @@ h1 {
 #player, #target {
     font-family: monospace;
     font-size: 16px;
+    font-weight: bold;
     max-width: 200px;
     height: 240px;
     text-align: left;
 
+}
+
+.red_suite {
+    background: white;
+    color: maroon;
 }

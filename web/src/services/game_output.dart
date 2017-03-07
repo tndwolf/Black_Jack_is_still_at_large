@@ -1,4 +1,5 @@
 import 'dart:html';
+import '../card.dart';
 import '../services.dart';
 import '../components/actor.dart';
 import '../components/physical_object.dart';
@@ -13,38 +14,39 @@ class GameOutput {
   examinePlayer(Actor actor, PhysicalObject physical) {
     var output = querySelector('#player');
     output.innerHtml = '';
-    output.appendText('Defense: ${physical.defense}');
+    printHand(output, 'Defense', physical.defense, physical.defenseHand);
     output.append(new BRElement());
-    output.appendText('Health: ${physical.health}');
+    printHand(output, 'Health', physical.health, physical.healthHand);
     output.append(new BRElement());
-    for(var card in physical.healthHand) {
-      output.appendText('- $card');
-      output.append(new BRElement());
-    }
-    output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, cap: actor.cap)} / ${actor.cap}');
-    output.append(new BRElement());
-    for(var card in actor.hand) {
-      output.appendText('- $card');
-      output.append(new BRElement());
-    }
+    printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand);
   }
 
   examineTarget(Actor actor, PhysicalObject physical) {
     var output = querySelector('#target');
     output.innerHtml = '';
-    output.appendText('Defense: ${physical.defense}');
-    output.append(new BRElement());
-    output.appendText('Health: ${physical.health}');
-    output.append(new BRElement());
-    for(var card in physical.healthHand) {
-      output.appendText('- $card');
+    if (actor.isIdentified) {
+      printHand(output, 'Defense', physical.defense, physical.defenseHand);
+      output.append(new BRElement());
+      printHand(output, 'Health', physical.health, physical.healthHand);
+      output.append(new BRElement());
+    } else {
+      output.appendText('Defense: ???');
+      output.append(new BRElement());
+      output.appendText('Health: ???');
       output.append(new BRElement());
     }
-    output.appendText('Hand: ${gameMechanics.getHandValue(actor.hand, cap: actor.cap)} / ${actor.cap}');
+    //printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand);
+    output.append(new ParagraphElement()..text = physical.description);
+  }
+
+  printHand(Element output, String name, num value, List<Card> hand) {
+    output.appendText('$name: $value');
     output.append(new BRElement());
-    for(var card in actor.hand) {
-      output.appendText('- $card');
-      output.append(new BRElement());
+    for(var card in hand) {
+      var span = new SpanElement()
+          ..className = (card.suite == suites.Spades || card.suite == suites.Clubs) ? 'card dark_suite' : 'card red_suite'
+          ..text = card.toShortString();
+      output.append(span);
     }
   }
 }

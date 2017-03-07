@@ -44,7 +44,8 @@ class EntityFactory {
         ..range = temp['range']);
       var physical = new PhysicalObject(id)
         ..x = position[0]
-        ..y = position[1];
+        ..y = position[1]
+        ..description = temp['descritpion'];
       physical.defenseHand
         ..clear()
         ..add(new Card(temp['defense'], suites.Spades));

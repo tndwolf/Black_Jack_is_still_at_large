@@ -10,4 +10,13 @@ class Card {
   suites suite;
   Card(num this.value, suites this.suite);
   @override toString() { return "$value of ${suiteToString(suite)}"; }
+
+  String toShortString() {
+    var shortSuite = suite == suites.Clubs ?
+    '♣' : suite == suites.Hearths ?
+    '♥' : suite == suites.Diamonds ?
+    '♦' : '♠';
+    var shortValue = (value == 1) ? 'A' : value.toString();
+    return '$shortValue$shortSuite';
+  }
 }
