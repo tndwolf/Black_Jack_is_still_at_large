@@ -19,6 +19,7 @@ EntityFactory get entityFactory => _entityFactory;
 GameMechanics get gameMechanics => _gameMechanics;
 GameOutput get gameOutput => _gameOutput;
 MapFactory get mapFactory => _mapFactory;
+UserInput get userInput => _userInput;
 
 initialize(World world) {
   var inputElement = querySelector("body");

@@ -9,6 +9,8 @@ class NextText {
   String text;
   RenderObject renderer;
   Color color;
+  num fadeTime;
+  num waitTime;
 }
 
 class AnimatedTextQueue extends Behavior {
@@ -20,19 +22,23 @@ class AnimatedTextQueue extends Behavior {
   AnimatedTextQueue([num entity = World.GENERIC_ENTITY])
       : super(entity) {}
 
-  addCenteredText(String text, Color color) {
+  addCenteredText(String text, Color color, [num fadeTime = 500]) {
     var next = new NextText()
       ..color = color
       ..text = text
-      ..renderer = null;
+      ..renderer = null
+      ..waitTime = waitTime
+      ..fadeTime = fadeTime;
     animations.add(next);
   }
 
-  addText(String text, RenderObject renderer, Color color) {
+  addText(String text, RenderObject renderer, Color color, [num fadeTime = 500]) {
     var next = new NextText()
       ..color = color
       ..text = text
-      ..renderer = renderer;
+      ..renderer = renderer
+      ..waitTime = waitTime
+      ..fadeTime = fadeTime;
     animations.add(next);
   }
 
@@ -43,15 +49,15 @@ class AnimatedTextQueue extends Behavior {
     //print('AnimatedTextQueue: in queue ${animations.length}, next in ${_waitTime - refTime}');
     if (animations.length > 0 && refTime > _waitTime) {
       refTime = 0;
-      _waitTime = waitTime;
       var next = animations.removeAt(0);
+      _waitTime = next.waitTime;
       //print('AnimatedTextQueue: creating text ${next.text}, next in ${_waitTime - refTime}');
       if (next.renderer == null) {
         gameMechanics.floatText(
-            next.text, gameOutput.width~/2, gameOutput.height~/2, next.color);
+            next.text, gameOutput.width~/2, gameOutput.height~/2, next.color, fadeOutMillis: next.fadeTime);
       } else {
         gameMechanics.floatText(
-            next.text, next.renderer.x, next.renderer.y, next.color);
+            next.text, next.renderer.x, next.renderer.y, next.color, fadeOutMillis: next.fadeTime);
       }
     } else if (animations.length == 0 && refTime > _waitTime) {
       deleteMe = true;
