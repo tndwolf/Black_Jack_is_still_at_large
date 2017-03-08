@@ -105,3 +105,5 @@ Dinner
 
 39. GameMechanics, UserInputs, GridManager, GameOutput
     - Better AI, implemented BUSTED status (buggy? cannot understand), Basic sound!
+40. GameMechanics, MapFactory, EntityFactory
+    - Fixed generation of mines and enemies generation

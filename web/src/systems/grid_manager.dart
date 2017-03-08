@@ -105,7 +105,7 @@ class GridManager implements GameSystem {
 
   bool isOccupied(num x, num y) {
     var res = _objects.firstWhere((o) => o.x == x && o.y == y, orElse: () => null);
-    return res != null;
+    return res != null && gameMechanics.isAlive(res.entity);
   }
 
   bool isWalkable(num x, num y) {

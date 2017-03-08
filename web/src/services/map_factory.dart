@@ -81,7 +81,7 @@ class MapFactory {
       }
       res.add(row);
     }
-    start = [rng.nextInt(width), rng.nextInt(height)];
+    start = [rng.nextInt(width~/4)+1, rng.nextInt(height-2)+1];
     num currentX = start[0];
     num currentY = start[1];
     var direction = [1, 0];

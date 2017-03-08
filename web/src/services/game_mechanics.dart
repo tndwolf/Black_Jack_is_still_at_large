@@ -146,13 +146,18 @@ class GameMechanics {
         actor.hand.add(deck.draw());
       }
       actor.hand.add(deck.draw());
-      gameOutput.examinePlayer(
-          actor, _world.getComponent(PhysicalObject, entity) as PhysicalObject);
+      if(entity == player) {
+        gameOutput.examinePlayer(
+            actor,
+            _world.getComponent(PhysicalObject, entity) as PhysicalObject);
+      }
     } catch (ex) {
       print('GameMechanics.draw: unable to draw for $entity');
     }
-    print('GameMechanics.draw: ${actor.actionResult} vs ${actor.cap}');
-    print('GameMechanics.draw: ${actor.actionResult > actor.cap}');
+    if(entity == player) {
+      print('GameMechanics.draw: ${actor.actionResult} vs ${actor.cap}');
+      print('GameMechanics.draw: ${actor.actionResult > actor.cap}');
+    }
     return actor.actionResult > actor.cap;
   }
 
@@ -286,6 +291,14 @@ class GameMechanics {
     return res;
   }
 
+  bool isAlive(num entity) {
+    try {
+      return (_world.getComponent(Actor, entity) as Actor).isAlive;
+    } catch (ex) {
+      return false;
+    }
+  }
+
   kill(num entity) {
     var actor = _world.getComponent(Actor, entity) as Actor;
     actor.isAlive = false;
@@ -335,8 +348,8 @@ class GameMechanics {
   moveTo(PhysicalObject from, num toX, num toY, bool flee) {
     var dx = (toX - from.x).sign * (flee ? -1 : 1);
     var dy = (toY - from.y).sign * (flee ? -1 : 1);
-    if (dx != 0) dy = 0;
     if (move(from.entity, dx, dy)) return;
+    else move(from.entity, rng.nextInt(3)-1, rng.nextInt(3)-1);
   }
 
   List<num> randomPosition() {

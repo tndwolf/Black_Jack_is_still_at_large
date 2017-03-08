@@ -52,12 +52,12 @@ class EntityFactory {
       physical.healthHand
         ..clear()
         ..add(new Card(temp['health'], suites.Hearths));
-      /*if(temp['defenseBonus'] > 0) {
-        physical.defenseHand.add(new Card(temp['defenseBonus'], suites.Spades));
+      if(temp['defenseBonus'] > 0) {
+        physical.defenseHand.add(new Card(rng.nextInt(temp['defenseBonus'] - 1) +2, suites.Spades));
       }
       if(temp['healthBonus'] > 0) {
         physical.healthHand.add(new Card(temp['healthBonus'], suites.Hearths));
-      }*/
+      }
       world.add(physical);
       world.add(new RenderObject(id)
         ..glyph = temp['glyph']
