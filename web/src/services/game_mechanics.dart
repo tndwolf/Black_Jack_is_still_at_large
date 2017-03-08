@@ -89,12 +89,15 @@ class GameMechanics {
     try {
       print('GameMechanics.attack: Test ${atkActor.actionResult} vs ${defPhy.defense}');
       var dam = atkActor.actionResult - defPhy.defense;
-      if (dam < 0) {
+      if (dam < 1) {
         print('GameMechanics.attack: missed! $attacker vs $target');
         //TODO: missed(atkPhy, defPhy);
+        floatTextDeferred('Missed', _world.getComponent(RenderObject, target) as RenderObject, new Color(255, 0, 255));
+        gameOutput.playSound('miss_01');
       } else {
         print('GameMechanics.attack: hit! $dam');
         damage(target, dam);
+        gameOutput.playSound('shot_01');
         if (attacker == player) {
           gameOutput.examinePlayer(atkActor, atkPhy);
           gameOutput.examineTarget(defActor, defPhy);
@@ -135,7 +138,7 @@ class GameMechanics {
     }
   }
 
-  draw(num entity, bool newHand) {
+  bool draw(num entity, bool newHand) {
     var actor = _world.getComponent(Actor, entity) as Actor;
     try {
       if (newHand) {
@@ -148,6 +151,9 @@ class GameMechanics {
     } catch (ex) {
       print('GameMechanics.draw: unable to draw for $entity');
     }
+    print('GameMechanics.draw: ${actor.actionResult} vs ${actor.cap}');
+    print('GameMechanics.draw: ${actor.actionResult > actor.cap}');
+    return actor.actionResult > actor.cap;
   }
 
   bool executeUserInputs() {
@@ -191,6 +197,10 @@ class GameMechanics {
   }
 
   floatTextDeferred(String text, RenderObject render, Color color) {
+    if (render == null) {
+      // HACK: this is an horrible hack... but it saves time and refactoring...
+      render = _world.getComponent(RenderObject, player) as RenderObject;
+    }
     //print("GameMechanics.floatTextDeferred: texting");
     var ani = _world.getComponent(AnimatedTextQueue, render.entity)
         as AnimatedTextQueue;
@@ -297,7 +307,7 @@ class GameMechanics {
       var ex = physical.x + dx;
       var ey = physical.y + dy;
       var endCell = grid.map.at(ex, ey);
-      if (endCell.blocksMovement == false) {
+      if (endCell.blocksMovement == false && grid.isOccupied(ex, ey) == false) {
         res = true;
         physical.x = ex;
         physical.y = ey;
@@ -325,18 +335,22 @@ class GameMechanics {
   moveTo(PhysicalObject from, num toX, num toY, bool flee) {
     var dx = (toX - from.x).sign * (flee ? -1 : 1);
     var dy = (toY - from.y).sign * (flee ? -1 : 1);
+    if (dx != 0) dy = 0;
     if (move(from.entity, dx, dy)) return;
   }
 
   List<num> randomPosition() {
-    var map = (_world.getSystem(GridManager) as GridManager).map;
+    var grid = _world.getSystem(GridManager) as GridManager;
     var i = 0;
     var x = -1;
     var y = -1;
     do {
-      x = rng.nextInt(map.width);
-      y = rng.nextInt(map.height);
-    } while (map.at(x, y).blocksMovement == true && i++ < 1000);
+      x = rng.nextInt(grid.map.width);
+      y = rng.nextInt(grid.map.height);
+    } while (
+      grid.isWalkable(x, y) == true
+      && grid.isOccupied(x, y) == false
+      && i++ < 1000);
     return [x, y];
   }
 
@@ -376,6 +390,8 @@ class GameMechanics {
           draw(actor.entity, true);
         }
       }
+    } else {
+      move(actor.entity, rng.nextInt(3)-1, rng.nextInt(3)-1);
     }
     actor.initiative += 10;
     gameMechanics.updateVisibility();

@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:web_audio';
 import '../card.dart';
 import '../services.dart';
 import '../components/actor.dart';
@@ -6,6 +7,7 @@ import '../components/physical_object.dart';
 
 class GameOutput {
   String asciiFont = '24px Monospace';
+  AudioContext audioContext = new AudioContext();
   CanvasElement canvas;
   CanvasRenderingContext2D get context => canvas.context2D;
   num get height => canvas.height;
@@ -39,6 +41,38 @@ class GameOutput {
     }
     //printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand);
     output.append(new ParagraphElement()..text = physical.description);
+  }
+
+  playSound(String soundId) async {
+    var gainNode = audioContext.createGain();
+    HttpRequest req;
+
+    try {
+      req = await HttpRequest.request('assets/$soundId.wav', responseType: 'arraybuffer');
+    } catch (e) {
+      print('error getting ogg');
+      return;
+    }
+
+    var audioBuffer = await audioContext.decodeAudioData(req.response);
+
+    /*var button = querySelector('#play') as ButtonElement
+    ..disabled = false
+    ..onClick.listen((_) {*/
+    var source = audioContext.createBufferSource();
+    source.buffer = audioBuffer;
+    //source.connectNode(gainNode, 0, 0);
+    source.connectNode(audioContext.destination); // by me
+    //gainNode.connectNode(audioContext.destination, 0, 0);
+    source.start(0);
+    //  });
+
+    /*querySelector('#volume').onChange.listen((e) {
+    var volume = int.parse(e.target.value);
+    var max = int.parse(e.target.max);
+    var fraction = volume / max;
+    gainNode.gain.value = fraction * fraction;
+  });*/
   }
 
   printHand(Element output, String name, num value, List<Card> hand) {

@@ -98,3 +98,10 @@ Dinner
 
 37. GameMechanics, AnimatedTextQueue, -World
     - More bugfixing and refinement
+38. GameMechanics, AnimatedTextQueue, -UserInputs
+    - Implemented Endgame, in theory the game is done!
+    
+## Fourth Day
+
+39. GameMechanics, UserInputs, GridManager, GameOutput
+    - Better AI, implemented BUSTED status (buggy? cannot understand), Basic sound!

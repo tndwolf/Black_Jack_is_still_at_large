@@ -103,6 +103,15 @@ class GridManager implements GameSystem {
     return map.at(x, y).inLos;
   }
 
+  bool isOccupied(num x, num y) {
+    var res = _objects.firstWhere((o) => o.x == x && o.y == y, orElse: () => null);
+    return res != null;
+  }
+
+  bool isWalkable(num x, num y) {
+    return !(map.at(x, y).blocksMovement);
+  }
+
   @override
   bool register(GameComponent component) {
     var res = false;

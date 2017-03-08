@@ -1,4 +1,5 @@
 import 'dart:html';
+import '../color.dart';
 import '../services.dart';
 import '../world.dart';
 
@@ -35,7 +36,11 @@ class UserInput {
         gameMechanics.runAis();
         gameMechanics.draw(gameMechanics.player, true);
       } else if (keyEvent.keyCode == 32) { // space
-        gameMechanics.draw(gameMechanics.player, false);
+        if(gameMechanics.draw(gameMechanics.player, false) == true) {
+          print("BUSTED");
+          gameMechanics.floatTextDeferred('BUSTED', null ,new Color(255, 0, 255));
+          gameMechanics.runAis();
+        }
       } else {
         print("Unknown command");
       }
