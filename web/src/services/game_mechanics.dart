@@ -23,7 +23,7 @@ var _levels = [
       "Good Luck!"
     ],
     "enemies": ["native"],
-    "howMany": 4
+    "howMany": 10
   },
   {
     "map": "desert",
@@ -33,7 +33,7 @@ var _levels = [
       "Prepare your irons"
     ],
     "enemies": ["native", "nativeBow"],
-    "howMany": 6
+    "howMany": 10
   },
   {
     "map": "mine",
@@ -44,25 +44,25 @@ var _levels = [
       "Beware"
     ],
     "enemies": ["bandit"],
-    "howMany": 6
+    "howMany": 10
   },
   {
     "map": "mine",
     "description": ["Mines, first floor"],
     "enemies": ["bandit", "outlaw"],
-    "howMany": 6
+    "howMany": 10
   },
   {
     "map": "mine",
     "description": ["- THE OLD MINES -", "The deeper layer of the mines"],
     "enemies": ["outlaw", "outlaw", "liutenent"],
-    "howMany": 6
+    "howMany": 10
   },
   {
     "map": "mine",
     "description": ["♠ BLACK JACK'S LAIR ♠", "Confront the man himself"],
     "enemies": ["outlaw", "outlaw", "liutenent"],
-    "howMany": 6,
+    "howMany": 9,
     "spawnBoss": true
   }
 ];
@@ -70,8 +70,11 @@ var _levels = [
 class GameMechanics {
   Deck deck;
   num currentLevel = 0;
+  num enemies = 0;
+  num _maxEnemies = 10;
   dynamic nextPlayerMove = null;
   num player = World.INVALID_ENTITY;
+  num round = 0;
   num target = World.INVALID_ENTITY;
   RenderObject selectPointer;
   World _world;
@@ -86,12 +89,18 @@ class GameMechanics {
         _world.getComponent(PhysicalObject, attacker) as PhysicalObject;
     var defActor = _world.getComponent(Actor, target) as Actor;
     var defPhy = _world.getComponent(PhysicalObject, target) as PhysicalObject;
+    var grid = _world.getSystem(GridManager) as GridManager;
+    if (grid.isInLos(defPhy.x, defPhy.y) == false) {
+      print('GameMechanics.attack: out of sight! $attacker vs $target');
+      floatTextDeferred('Missed', _world.getComponent(RenderObject, target) as RenderObject, new Color(255, 0, 255));
+      gameOutput.playSound('miss_01');
+      return;
+    }
     try {
       print('GameMechanics.attack: Test ${atkActor.actionResult} vs ${defPhy.defense}');
       var dam = atkActor.actionResult - defPhy.defense;
       if (dam < 1) {
         print('GameMechanics.attack: missed! $attacker vs $target');
-        //TODO: missed(atkPhy, defPhy);
         floatTextDeferred('Missed', _world.getComponent(RenderObject, target) as RenderObject, new Color(255, 0, 255));
         gameOutput.playSound('miss_01');
       } else {
@@ -241,6 +250,8 @@ class GameMechanics {
 
   generateLevel([List<GameComponent> oldPlayer = null]) {
     _world.clear();
+    round = 0;
+    enemies = 0;
     var map = new GameMap(
         _world.nextEntity, mapFactory.generate(_levels[currentLevel]['map']));
     //print("GameMechanics.generateLevel: $map");
@@ -260,6 +271,7 @@ class GameMechanics {
     for (num i = 0; i < _levels[currentLevel]['howMany']; i++) {
       entityFactory.CreateEnemy(
           _world, randomItem(_levels[currentLevel]['enemies']));
+      enemies++;
     }
     if (_levels[currentLevel]['spawnBoss'] != null) {
       entityFactory.CreateEnemy(_world, 'boss');
@@ -274,6 +286,7 @@ class GameMechanics {
     for(var text in _levels[currentLevel]['description']) {
       floatTextCentered(text, new Color(255, 255, 255), 1000);
     }
+    updateVisibility();
   }
 
   num getHandValue(List<Card> hand, {num cap: 1000, bool acesAsEleven: true}) {
@@ -307,6 +320,8 @@ class GameMechanics {
     render.glyph = '%';
     render.color = new Color(255, 0, 0);
     floatTextDeferred('DEAD', render, new Color(255, 0, 0));
+    selectPointer.x = -10000;
+    enemies--;
     if(actor.finalBoss == true) winGame();
   }
 
@@ -352,14 +367,15 @@ class GameMechanics {
     else move(from.entity, rng.nextInt(3)-1, rng.nextInt(3)-1);
   }
 
-  List<num> randomPosition() {
+  List<num> randomPosition(num deltaBorder) {
+    var margin = deltaBorder ~/ 2;
     var grid = _world.getSystem(GridManager) as GridManager;
     var i = 0;
     var x = -1;
     var y = -1;
     do {
-      x = rng.nextInt(grid.map.width);
-      y = rng.nextInt(grid.map.height);
+      x = rng.nextInt(grid.map.width - margin) + margin;
+      y = rng.nextInt(grid.map.height - margin) + margin;
     } while (
       grid.isWalkable(x, y) == true
       && grid.isOccupied(x, y) == false
@@ -372,10 +388,13 @@ class GameMechanics {
   }
 
   runAis() {
+    round++;
+    if (round % _levels[currentLevel]['howMany'] == 0) spawnEnemy();
     var ais = _world.getAll(Actor);
     for (var ai in ais) {
       if (ai.entity != player) runDefaultAi(ai as Actor);
     }
+    updateVisibility();
   }
 
   runDefaultAi(Actor actor) {
@@ -407,7 +426,6 @@ class GameMechanics {
       move(actor.entity, rng.nextInt(3)-1, rng.nextInt(3)-1);
     }
     actor.initiative += 10;
-    gameMechanics.updateVisibility();
   }
 
   selectNext() {
@@ -454,6 +472,11 @@ class GameMechanics {
     physical.y = y;
     render.x = (x + 0.5) * grid.map.cellWidth;
     render.y = (y + 0.5) * grid.map.cellHeight;
+  }
+
+  spawnEnemy() {
+    //if (enemies++ < _maxEnemies)
+    //  entityFactory.CreateEnemy(_world, randomItem(_levels[currentLevel]['enemies']));
   }
 
   updateVisibility() {

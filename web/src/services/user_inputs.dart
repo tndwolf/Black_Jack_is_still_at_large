@@ -30,6 +30,7 @@ class UserInput {
         gameMechanics.move(gameMechanics.player, 0, 1);
         gameMechanics.runAis();
       } else if (keyEvent.keyCode == 113) { // q
+        gameMechanics.updateVisibility();
         gameMechanics.selectNext();
       } else if (keyEvent.keyCode == 101) { // e
         gameMechanics.attack(gameMechanics.player, gameMechanics.target);
@@ -40,6 +41,8 @@ class UserInput {
           print("BUSTED");
           gameMechanics.floatTextDeferred('BUSTED', null ,new Color(255, 0, 255));
           gameMechanics.runAis();
+        } else {
+          gameMechanics.updateVisibility();
         }
       } else {
         print("Unknown command");

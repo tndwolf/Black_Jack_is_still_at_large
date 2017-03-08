@@ -35,7 +35,7 @@ class EntityFactory {
       var ctemp = temp['color'];
       var color = new Color(ctemp[0], ctemp[1], ctemp[2], ctemp[3]);
       print('EntityFactory.CreateEnemy: template $ctemp to color $color');
-      var position = gameMechanics.randomPosition();
+      var position = gameMechanics.randomPosition(6);
       //print('EntityFactory.CreateEnemy: position $position');
       world.add(new Actor(id)
         ..cap = temp['cap']

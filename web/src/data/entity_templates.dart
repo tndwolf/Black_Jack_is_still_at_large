@@ -3,7 +3,7 @@ var entityTemplates = {
     "cap": 21,
     "color": [255, 127, 96, 1],
     "defense": 10,
-    "defenseBonus": 5,
+    "defenseBonus": 0,
     "description": "A native american armed with a Tomahawk, looks hostile",
     "finalBoss": false,
     "fleeThreshold": 5,
