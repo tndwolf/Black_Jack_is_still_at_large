@@ -107,3 +107,10 @@ Dinner
     - Better AI, implemented BUSTED status (buggy? cannot understand), Basic sound!
 40. GameMechanics, MapFactory, EntityFactory
     - Fixed generation of mines and enemies generation
+41. GameMechanics, EntityFactory
+    - More bugfixing
+    
+## Fifth Day
+
+42. GameMechanics, GridManager, -PhysicalObject, Tile, GameOutput
+    - Started implementing cover

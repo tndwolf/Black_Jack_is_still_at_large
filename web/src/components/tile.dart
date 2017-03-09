@@ -8,6 +8,7 @@ class Tile {
   bool blocksMovement = true;
   bool inLos = false;
   bool isEndOfLevel = false;
+  bool providesCover = true;
   bool visited = false;
 
   Tile.fromChar(String char) {
@@ -18,6 +19,7 @@ class Tile {
       case ' ':
         blockLos = false;
         blocksMovement = false;
+        providesCover = false;
         color = new Color(255, 225, 0);
         break;
       case '>': // exits
@@ -27,10 +29,12 @@ class Tile {
         blockLos = false;
         blocksMovement = false;
         isEndOfLevel = true;
+        providesCover = false;
         break;
       case '~': // water
         blockLos = false;
         color = new Color(64, 127, 255);
+        providesCover = false;
         break;
       case '♣':
         blockLos = false;

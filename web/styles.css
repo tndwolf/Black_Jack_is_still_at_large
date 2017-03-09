@@ -32,9 +32,17 @@ h1 {
     text-align: center;
 }
 
+.cover {
+    color: cyan;
+}
+
 .dark_suite {
     background: white;
     color: dimgray;
+}
+
+.fleeing {
+    color: yellow;
 }
 
 #output{

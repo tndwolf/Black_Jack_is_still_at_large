@@ -91,32 +91,32 @@ class GameMechanics {
     var defPhy = _world.getComponent(PhysicalObject, target) as PhysicalObject;
     var grid = _world.getSystem(GridManager) as GridManager;
     if (grid.isInLos(defPhy.x, defPhy.y) == false) {
-      print('GameMechanics.attack: out of sight! $attacker vs $target');
+      //print('GameMechanics.attack: out of sight! $attacker vs $target');
       floatTextDeferred('Missed', _world.getComponent(RenderObject, target) as RenderObject, new Color(255, 0, 255));
       gameOutput.playSound('miss_01');
       return;
     }
     try {
-      print('GameMechanics.attack: Test ${atkActor.actionResult} vs ${defPhy.defense}');
+      //print('GameMechanics.attack: Test ${atkActor.actionResult} vs ${defPhy.defense}');
       var dam = atkActor.actionResult - defPhy.defense;
       if (dam < 1) {
-        print('GameMechanics.attack: missed! $attacker vs $target');
+        //print('GameMechanics.attack: missed! $attacker vs $target');
         floatTextDeferred('Missed', _world.getComponent(RenderObject, target) as RenderObject, new Color(255, 0, 255));
         gameOutput.playSound('miss_01');
       } else {
-        print('GameMechanics.attack: hit! $dam');
+        //print('GameMechanics.attack: hit! $dam');
         damage(target, dam);
         gameOutput.playSound('shot_01');
         if (attacker == player) {
-          gameOutput.examinePlayer(atkActor, atkPhy);
-          gameOutput.examineTarget(defActor, defPhy);
+          gameOutput.examinePlayer(atkActor, atkPhy, hasCover(player));
+          gameOutput.examineTarget(defActor, defPhy, hasCover(defPhy));
         } else if (target == player) {
-          gameOutput.examinePlayer(defActor, defPhy);
+          gameOutput.examinePlayer(defActor, defPhy, hasCover(player));
           //gameOutput.examineTarget(atkActor, atkPhy);
         }
       }
     } catch (ex) {
-      print('GameMechanics.attack: unable to attack $attacker vs $target. $ex');
+      print('GameMechanics.attack: EXCEPTION unable to attack $attacker vs $target. $ex');
     }
   }
 
@@ -125,8 +125,7 @@ class GameMechanics {
     _world.getComponent(Actor, entity) as Actor..isIdentified = true;
     var physical =
         _world.getComponent(PhysicalObject, entity) as PhysicalObject;
-    print(
-        'GameMechanics.damage: Dealing $howMuch damage to $entity, health was ${physical.health}');
+    //print('GameMechanics.damage: Dealing $howMuch damage to $entity, health was ${physical.health}');
     while (howMuch > 0 && physical.healthHand.length > 0) {
       if (physical.healthHand.last.value > howMuch) {
         dealt += howMuch;
@@ -158,14 +157,15 @@ class GameMechanics {
       if(entity == player) {
         gameOutput.examinePlayer(
             actor,
-            _world.getComponent(PhysicalObject, entity) as PhysicalObject);
+            _world.getComponent(PhysicalObject, entity) as PhysicalObject,
+            hasCover(entity));
       }
     } catch (ex) {
-      print('GameMechanics.draw: unable to draw for $entity');
+      print('GameMechanics.draw: EXCEPTION unable to draw for $entity');
     }
     if(entity == player) {
-      print('GameMechanics.draw: ${actor.actionResult} vs ${actor.cap}');
-      print('GameMechanics.draw: ${actor.actionResult > actor.cap}');
+      //print('GameMechanics.draw: ${actor.actionResult} vs ${actor.cap}');
+      //print('GameMechanics.draw: ${actor.actionResult > actor.cap}');
     }
     return actor.actionResult > actor.cap;
   }
@@ -173,13 +173,13 @@ class GameMechanics {
   bool executeUserInputs() {
     var res = false;
     if (nextPlayerMove != null) {
-      print('GameMechanics.executeUserInputs: running Player input');
+      //print('GameMechanics.executeUserInputs: running Player input');
       nextPlayerMove();
       res = true;
       nextPlayerMove = null;
       (_world.getComponent(Actor, player) as Actor).initiative += 10;
     } else {
-      print('GameMechanics.executeUserInputs: waiting Player input');
+      print('GameMechanics.executeUserInputs: EXCEPTION waiting Player input');
     }
     return res;
   }
@@ -201,10 +201,10 @@ class GameMechanics {
     var ani = _world.getComponent(AnimatedTextQueue, World.GENERIC_ENTITY)
         as AnimatedTextQueue;
     if (ani != null) {
-      print("GameMechanics.floatTextDeferred: found previous");
+      //print("GameMechanics.floatTextDeferred: found previous");
       ani.addCenteredText(text, color, fadeTime);
     } else {
-      print("GameMechanics.floatTextDeferred: new one");
+      //print("GameMechanics.floatTextDeferred: new one");
       _world.add(new AnimatedTextQueue(World.GENERIC_ENTITY)
         ..addCenteredText(text, color, fadeTime));
     }
@@ -267,7 +267,8 @@ class GameMechanics {
     setPosition(player, mapFactory.start[0], mapFactory.start[1]);
     draw(player, true);
     gameOutput.examinePlayer(_world.getComponent(Actor, player) as Actor,
-        _world.getComponent(PhysicalObject, player) as PhysicalObject);
+        _world.getComponent(PhysicalObject, player) as PhysicalObject,
+        hasCover(player));
     for (num i = 0; i < _levels[currentLevel]['howMany']; i++) {
       entityFactory.CreateEnemy(
           _world, randomItem(_levels[currentLevel]['enemies']));
@@ -302,6 +303,10 @@ class GameMechanics {
       res += 10;
     }
     return res;
+  }
+
+  bool hasCover(num entity) {
+    return (_world.getSystem(GridManager) as GridManager).hasCover(entity);
   }
 
   bool isAlive(num entity) {
@@ -349,6 +354,9 @@ class GameMechanics {
           currentLevel++;
           generateLevel(_world.getEntity(player));
           _world.update();
+        }
+        if(grid.isInLos(ex, ey) && physical.hasCover == false && grid.hasCover(entity)) {
+          floatTextDeferred('COVER', render, new Color(0, 255, 255));
         }
         //floatTextDeferred('MOVE', render, new Color(255, 0, 255));
       }
@@ -439,7 +447,8 @@ class GameMechanics {
         if (target == inFoV[i]) {
           target = inFoV[i + 1];
           gameOutput.examineTarget(_world.getComponent(Actor, target) as Actor,
-              _world.getComponent(PhysicalObject, target) as PhysicalObject);
+              _world.getComponent(PhysicalObject, target) as PhysicalObject,
+              grid.hasCover(target));
           var render =
               _world.getComponent(RenderObject, target) as RenderObject;
           selectPointer.x = render.x;
@@ -449,7 +458,8 @@ class GameMechanics {
       }
       target = inFoV[0];
       gameOutput.examineTarget(_world.getComponent(Actor, target) as Actor,
-          _world.getComponent(PhysicalObject, target) as PhysicalObject);
+          _world.getComponent(PhysicalObject, target) as PhysicalObject,
+          grid.hasCover(target));
       var render = _world.getComponent(RenderObject, target) as RenderObject;
       selectPointer.x = render.x;
       selectPointer.y = render.y;

@@ -15,7 +15,7 @@ class GameOutput {
 
   GameOutput(CanvasElement this.canvas) {}
 
-  examinePlayer(Actor actor, PhysicalObject physical) {
+  examinePlayer(Actor actor, PhysicalObject physical, bool hasCover) {
     var output = querySelector('#player');
     output.innerHtml = '';
     printHand(output, 'Defense', physical.defense, physical.defenseHand);
@@ -23,9 +23,13 @@ class GameOutput {
     printHand(output, 'Health', physical.health, physical.healthHand);
     output.append(new BRElement());
     printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand);
+    output.append(new BRElement());
+    if(hasCover) {
+      output.append(new SpanElement()..text = 'Cover'..className = 'cover');
+    }
   }
 
-  examineTarget(Actor actor, PhysicalObject physical) {
+  examineTarget(Actor actor, PhysicalObject physical, bool hasCover) {
     var output = querySelector('#target');
     output.innerHtml = '';
     if (actor.isIdentified) {
@@ -33,11 +37,21 @@ class GameOutput {
       output.append(new BRElement());
       printHand(output, 'Health', physical.health, physical.healthHand);
       output.append(new BRElement());
+      output.appendText('Range: ${actor.range}');
+      output.append(new BRElement());
+      if(physical.health < actor.fleeThreshold) {
+        output.append(new SpanElement()..text = 'Fleeing'..className = 'fleeing');
+        output.append(new BRElement());
+      }
+      if(hasCover) {
+        output.append(new SpanElement()..text = 'Cover'..className = 'cover');
+      }
     } else {
       output.appendText('Defense: ???');
       output.append(new BRElement());
       output.appendText('Health: ???');
       output.append(new BRElement());
+      output.appendText('Range: ???');
     }
     //printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand);
     output.append(new ParagraphElement()..text = physical.description);

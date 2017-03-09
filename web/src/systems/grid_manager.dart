@@ -57,6 +57,20 @@ class GridManager implements GameSystem {
     return res;
   }
 
+  bool hasCover(num entity) {
+    var obj = _objects.firstWhere((o) => o.entity == entity, orElse: () => null);
+    if (obj != null) {
+      for(num y = -1; y < 2; y++) {
+        for (num x = -1; x < 2; x++) {
+          if (map.at(obj.x + x, obj.y + y).providesCover) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   @override
   initialize(World world) {
     map = null;
@@ -134,6 +148,13 @@ class GridManager implements GameSystem {
   update(World world) {
     var player = world.getComponent(PhysicalObject, gameMechanics.player) as PhysicalObject;
     calculateFoV(player.x, player.y);
+    for(var obj in _objects) {
+      if(isInLos(obj.x, obj.y) && hasCover(obj.entity)) {
+        obj.hasCover = true;
+      } else {
+        obj.hasCover = false;
+      }
+    }
   }
 
   @override
