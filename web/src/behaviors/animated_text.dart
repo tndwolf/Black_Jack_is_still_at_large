@@ -16,7 +16,7 @@ class AnimatedText extends Behavior {
     var deltaTime = 20;
     refTime += deltaTime;
     { // color
-      var alpha = (1000 - refTime) / fadeOutMillis;
+      var alpha = (fadeOutMillis - refTime) / fadeOutMillis;
       textBox.background.a = alpha;
       textBox.color.a = alpha;
       if (alpha <= 0) {

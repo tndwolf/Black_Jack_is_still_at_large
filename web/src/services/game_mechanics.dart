@@ -6,6 +6,7 @@ import '../world.dart';
 import '../services.dart';
 import '../behaviors/animated_text.dart';
 import '../behaviors/animated_text_queue.dart';
+import '../behaviors/fade.dart';
 import '../components/game_map.dart';
 import '../components/actor.dart';
 import '../components/physical_object.dart';
@@ -23,7 +24,8 @@ var _levels = [
       "Good Luck!"
     ],
     "enemies": ["native"],
-    "howMany": 10
+    "howMany": 10,
+    "spawnBoss": true
   },
   {
     "map": "desert",
@@ -328,6 +330,11 @@ class GameMechanics {
     selectPointer.x = -10000;
     enemies--;
     if(actor.finalBoss == true) winGame();
+    else if(entity == player) {
+      _world.add(new Fade()
+        ..text = ['You are DEAD', 'Press space to Restart']
+        ..y = 200);
+    }
   }
 
   bool move(num entity, num dx, num dy) {
@@ -518,14 +525,19 @@ class GameMechanics {
       "As you pull the trigger",
       "Black Jack falls to the ground",
       "A fuming hole between his eyes...",
+      '',
       "...You won",
+      '',
       "The other badits flee as you kneel",
       "taking your trophy from the body",
-      "Before starting your long way back.",
+      "before starting your long way back.",
+      '',
       "CONGRATULATIONS!"
     ];
     for(var text in winText) {
-      floatTextCentered(text, new Color(0, 255, 255), 1000);
+      _world.add(new Fade()
+        ..text = winText
+        ..y = 100);
     }
   }
 }

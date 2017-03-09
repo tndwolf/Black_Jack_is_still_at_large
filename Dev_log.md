@@ -114,3 +114,7 @@ Dinner
 
 42. GameMechanics, GridManager, -PhysicalObject, Tile, GameOutput
     - Started implementing cover
+43. GameMechanics, -GridManager, UserInputs, GameOutput
+    - Implemented Cover
+44. GameMechanics, Fade, -World
+    - Winning condition better implemented

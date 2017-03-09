@@ -18,6 +18,9 @@ class World {
   add(GameComponent component) {
     if (component is Behavior) {
       _toBeAdded.add(component);
+      for(var system in _systems) {
+        system.register(component);
+      }
     } else {
       for(var system in _systems) {
         system.register(component);
@@ -31,6 +34,9 @@ class World {
   _add(GameComponent component) {
     if (component is Behavior) {
       _behaviors.add(component as Behavior);
+      for(var system in _systems) {
+        system.register(component);
+      }
     } else {
       for(var system in _systems) {
         system.register(component);
