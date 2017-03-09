@@ -41,6 +41,10 @@ h1 {
     color: dimgray;
 }
 
+.dead {
+    color: red;
+}
+
 .fleeing {
     color: yellow;
 }

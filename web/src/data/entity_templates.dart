@@ -10,7 +10,7 @@ var entityTemplates = {
     "glyph": "n",
     "health": 7,
     "healthBonus": 0,
-    "range": 1,
+    "range": 2,
   },
   "nativeBow": {
     "cap": 21,

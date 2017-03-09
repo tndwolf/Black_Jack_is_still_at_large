@@ -39,17 +39,29 @@ class GameOutput {
       output.append(new BRElement());
       output.appendText('Range: ${actor.range}');
       output.append(new BRElement());
-      if(physical.health < actor.fleeThreshold) {
-        output.append(new SpanElement()..text = 'Fleeing'..className = 'fleeing');
-        output.append(new BRElement());
-      }
-      if(hasCover) {
-        output.append(new SpanElement()..text = 'Cover'..className = 'cover');
+      if(actor.isAlive) {
+        if (physical.health < actor.fleeThreshold) {
+          output.append(new SpanElement()
+            ..text = 'Fleeing'
+            ..className = 'fleeing');
+          output.append(new BRElement());
+        }
+        if (hasCover) {
+          output.append(new SpanElement()
+            ..text = 'Cover'
+            ..className = 'cover');
+        }
+      } else {
+        output.append(new SpanElement()
+          ..text = 'Dead'
+          ..className = 'dead');
       }
     } else {
       output.appendText('Defense: ???');
       output.append(new BRElement());
+      output.append(new BRElement());
       output.appendText('Health: ???');
+      output.append(new BRElement());
       output.append(new BRElement());
       output.appendText('Range: ???');
     }

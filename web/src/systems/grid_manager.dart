@@ -1,3 +1,4 @@
+import '../card.dart';
 import '../game_component.dart';
 import '../game_system.dart';
 import '../world.dart';
@@ -21,12 +22,11 @@ class GridManager implements GameSystem {
     var maxY = (cy + fovRadius < map.height) ? cy + fovRadius : map.height;
     //print("GridManger.calculateFoV: $minX,$minY to $maxX,$maxY");
     var fovRadiusSquared = fovRadius * fovRadius;
-    for(num y = minY; y < maxY; y++) {
-      for(num x = minX; x < maxX; x++) {
+    for (num y = minY; y < maxY; y++) {
+      for (num x = minX; x < maxX; x++) {
         //if((x-cx) * x + y * y < fovRadiusSquared)
         {
-          var cell = map.at(x, y)
-            ..inLos = inLoS(cx, cy, x, y);
+          var cell = map.at(x, y)..inLos = inLoS(cx, cy, x, y);
           if (cell.inLos) cell.visited = true;
         }
       }
@@ -37,11 +37,13 @@ class GridManager implements GameSystem {
     var fovClearRadius = fovRadius + fovClearance;
     var minX = (cx - fovClearRadius < 0) ? 0 : cx - fovClearRadius;
     var minY = (cy - fovClearRadius < 0) ? 0 : cy - fovClearRadius;
-    var maxX = (cx + fovClearRadius < map.width) ? cx + fovClearRadius : map.width;
-    var maxY = (cy + fovClearRadius < map.height) ? cy + fovClearRadius : map.height;
+    var maxX =
+        (cx + fovClearRadius < map.width) ? cx + fovClearRadius : map.width;
+    var maxY =
+        (cy + fovClearRadius < map.height) ? cy + fovClearRadius : map.height;
     //print("GridManger.calculateFoV: $minX,$minY to $maxX,$maxY");
-    for(num y = minY; y < maxY; y++) {
-      for(num x = minX; x < maxX; x++) {
+    for (num y = minY; y < maxY; y++) {
+      for (num x = minX; x < maxX; x++) {
         {
           map.at(x, y).inLos = false;
         }
@@ -51,21 +53,21 @@ class GridManager implements GameSystem {
 
   List<num> getAllInFoV() {
     var res = <num>[];
-    for(var obj in _objects) {
+    for (var obj in _objects) {
       if (map.at(obj.x, obj.y).inLos) res.add(obj.entity);
     }
     return res;
   }
 
   bool hasCover(num entity) {
-    var obj = _objects.firstWhere((o) => o.entity == entity, orElse: () => null);
+    var obj =
+        _objects.firstWhere((o) => o.entity == entity, orElse: () => null);
     if (obj != null) {
-      for(num y = -1; y < 2; y++) {
-        for (num x = -1; x < 2; x++) {
-          if (map.at(obj.x + x, obj.y + y).providesCover) {
-            return true;
-          }
-        }
+      if (map.at(obj.x + 1, obj.y).providesCover ||
+          map.at(obj.x - 1, obj.y).providesCover ||
+          map.at(obj.x, obj.y + 1).providesCover ||
+          map.at(obj.x, obj.y - 1).providesCover) {
+        return true;
       }
     }
     return false;
@@ -77,27 +79,31 @@ class GridManager implements GameSystem {
     _objects.clear();
   }
 
-  bool inLoS(num x0, num y0, num x1, num y1){
+  bool inLoS(num x0, num y0, num x1, num y1) {
     var tmp;
-    var steep = (y1-y0).abs() > (x1-x0).abs();
-    if(steep){
-      tmp=x0; x0=y0; y0=tmp;
-      tmp=x1; x1=y1; y1=tmp;
+    var steep = (y1 - y0).abs() > (x1 - x0).abs();
+    if (steep) {
+      tmp = x0;
+      x0 = y0;
+      y0 = tmp;
+      tmp = x1;
+      x1 = y1;
+      y1 = tmp;
     }
 
     num sign = 1;
-    if(x0>x1){
+    if (x0 > x1) {
       sign = -1;
       x0 *= -1;
       x1 *= -1;
     }
-    var dx = x1-x0;
-    var dy = (y1-y0).abs();
-    var err = ((dx/2));
+    var dx = x1 - x0;
+    var dy = (y1 - y0).abs();
+    var err = ((dx / 2));
     var yStep = y0 < y1 ? 1 : -1;
     var y = y0;
 
-    for(num x = x0; x <= x1-1; x++){
+    for (num x = x0; x <= x1 - 1; x++) {
       {
         var checkY = steep ? sign * x : y;
         var checkX = steep ? y : sign * x;
@@ -105,7 +111,7 @@ class GridManager implements GameSystem {
         if (tile.blockLos) return false;
       }
       err = (err - dy);
-      if(err < 0){
+      if (err < 0) {
         y += yStep;
         err += dx;
       }
@@ -118,7 +124,8 @@ class GridManager implements GameSystem {
   }
 
   bool isOccupied(num x, num y) {
-    var res = _objects.firstWhere((o) => o.x == x && o.y == y, orElse: () => null);
+    var res =
+        _objects.firstWhere((o) => o.x == x && o.y == y, orElse: () => null);
     return res != null && gameMechanics.isAlive(res.entity);
   }
 
@@ -129,10 +136,10 @@ class GridManager implements GameSystem {
   @override
   bool register(GameComponent component) {
     var res = false;
-    if(component is GameMap) {
+    if (component is GameMap) {
       map = component as GameMap;
       res = true;
-    } else if(component is PhysicalObject) {
+    } else if (component is PhysicalObject) {
       _objects.add(component as PhysicalObject);
       res = true;
     }
@@ -146,17 +153,24 @@ class GridManager implements GameSystem {
 
   @override
   update(World world) {
-    var player = world.getComponent(PhysicalObject, gameMechanics.player) as PhysicalObject;
+    var player = world.getComponent(PhysicalObject, gameMechanics.player)
+        as PhysicalObject;
     calculateFoV(player.x, player.y);
-    for(var obj in _objects) {
-      if(isInLos(obj.x, obj.y) && hasCover(obj.entity)) {
-        obj.hasCover = true;
-      } else {
+    for (var obj in _objects) {
+      if (isInLos(obj.x, obj.y) && hasCover(obj.entity)) {
+        if (obj.hasCover == false) {
+          obj.hasCover = true;
+          obj.defenseHand.add(new Card(4, suites.Clubs));
+        }
+      } else if (obj.hasCover == true) {
         obj.hasCover = false;
+        obj.defenseHand.removeLast();
       }
     }
   }
 
   @override
-  updateRealTime(World world) { return; }
+  updateRealTime(World world) {
+    return;
+  }
 }

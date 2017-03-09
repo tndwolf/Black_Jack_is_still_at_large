@@ -39,6 +39,7 @@ class UserInput {
       } else if (keyEvent.keyCode == 32) { // space
         if(gameMechanics.draw(gameMechanics.player, false) == true) {
           print("BUSTED");
+          gameMechanics.draw(gameMechanics.player, true);
           gameMechanics.floatTextDeferred('BUSTED', null ,new Color(255, 0, 255));
           gameMechanics.runAis();
         } else {

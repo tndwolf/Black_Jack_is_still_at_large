@@ -109,7 +109,7 @@ class GameMechanics {
         gameOutput.playSound('shot_01');
         if (attacker == player) {
           gameOutput.examinePlayer(atkActor, atkPhy, hasCover(player));
-          gameOutput.examineTarget(defActor, defPhy, hasCover(defPhy));
+          gameOutput.examineTarget(defActor, defPhy, hasCover(target));
         } else if (target == player) {
           gameOutput.examinePlayer(defActor, defPhy, hasCover(player));
           //gameOutput.examineTarget(atkActor, atkPhy);
@@ -356,14 +356,20 @@ class GameMechanics {
           _world.update();
         }
         if(grid.isInLos(ex, ey) && physical.hasCover == false && grid.hasCover(entity)) {
+          physical.hasCover = true;
+          physical.defenseHand.add(new Card(4, suites.Clubs));
           floatTextDeferred('COVER', render, new Color(0, 255, 255));
-        }
-        //floatTextDeferred('MOVE', render, new Color(255, 0, 255));
+        } /*else if(physical.hasCover == true && !grid.hasCover(entity)) {
+          physical.hasCover = true;
+          physical.defenseHand.add(new Card(4, suites.Clubs));
+        }*/
       }
     } catch (ex) {
       print('GameMechanics.move: unable to move $entity');
     } finally {
+      grid.update(_world);
       draw(entity, true);
+      updateVisibility();
       return res;
     }
   }
