@@ -3,7 +3,12 @@ import 'dart:web_audio';
 
 class AssetsManager {
   AudioContext _audioContext = new AudioContext();
+  Map<String, ImageElement> _sprites = <String, ImageElement>{};
   Map<String, AudioBuffer> _sounds = <String, AudioBuffer>{};
+
+  getSprite(String name) {
+    return _sprites[name];
+  }
 
   playSound(String name) {
     _audioContext.createBufferSource()
@@ -23,7 +28,7 @@ class AssetsManager {
   }
 
   loadImage(String asset) {
-
+    _sprites[asset.split('.')[0]] = new ImageElement(src: 'assets/$asset');
   }
 
   loadSound(String asset) async {

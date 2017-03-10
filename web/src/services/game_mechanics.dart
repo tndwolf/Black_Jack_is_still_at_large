@@ -349,7 +349,8 @@ class GameMechanics {
       currentFade.fadeOut();
       currentFade = new Fade()
         ..text = ['You are DEAD', 'Press space to Restart']
-        ..y = 200;
+        ..y = 200
+        ..backgroundImage = assetsManager.getSprite('hat_blood');
       _world.add(currentFade);
     }
   }
@@ -514,16 +515,20 @@ class GameMechanics {
   showHelp() {
     currentFade.fadeOut();
     currentFade = new Fade()
+      ..backgroundImage = assetsManager.getSprite('hat')
       ..fadeInMillis = 0
+      ..fadeOutMillis = 0
       ..text = ['This is an help screen']
       ..y = 400;
-        _world.add(currentFade);
+    _world.add(currentFade);
     state = GameState.HELP;
   }
 
   showTitle() {
     currentFade = new Fade()
+      ..backgroundImage = assetsManager.getSprite('title')
       ..fadeInMillis = 0
+      ..fadeOutMillis = 0
       ..text = ['Press any key to START']
       ..y = 400;
     _world.add(currentFade);

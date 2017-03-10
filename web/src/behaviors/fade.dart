@@ -7,6 +7,7 @@ import 'dart:html';
 class Fade extends Behavior implements Widget {
   num _alpha = 0;
   Color background = new Color(0, 0, 0);
+  ImageElement backgroundImage = null;
   Color color = new Color(255, 255, 255);
   num fadeMillis;
   num fadeOutMillis = 1000;
@@ -26,8 +27,13 @@ class Fade extends Behavior implements Widget {
   @override
   draw(CanvasRenderingContext2D context) {
     context.setFillColorRgb(background.r, background.g, background.b, _alpha);
-    print('Fade.draw: $_alpha');
+    //print('Fade.draw: $_alpha, fadeMillis $fadeMillis, $fadeInMillis, $fadeOutMillis');
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    if(backgroundImage != null) {
+      context.globalAlpha = _alpha;
+      context.drawImageScaled(backgroundImage, 0, 0, context.canvas.width, context.canvas.height);
+      context.globalAlpha = 1;
+    }
     num y = this.y;
     for(var row in text) {
       context.setFillColorRgb(color.r, color.g, color.b, _alpha);
@@ -43,16 +49,15 @@ class Fade extends Behavior implements Widget {
 
   @override
   update(World world) {
-    print('Fade.update: updating');
+    //print('Fade.update: updating');
     var deltaTime = 20;
     refTime += deltaTime;
     fadeMillis = _fadingOut ? fadeInMillis : fadeOutMillis;
     if (_fadingOut) {
       _alpha = (fadeMillis - refTime) / fadeMillis;
-      _alpha = _alpha < 0 ? 0 : _alpha;
-      // 1------0.5------0
     } else {
       _alpha = refTime / fadeMillis;
     }
+    _alpha = _alpha < 0 ? 0 : _alpha == double.INFINITY ? 1 : _alpha;
   }
 }

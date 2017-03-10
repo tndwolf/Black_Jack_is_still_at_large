@@ -7,7 +7,10 @@ import 'src/world.dart';
 
 var assets = [
   'shot_01.wav',
-  'miss_01.wav'
+  'miss_01.wav',
+  'hat.png',
+  'hat_blood.png',
+  'title.png'
 ];
 
 void main() {

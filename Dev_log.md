@@ -125,3 +125,5 @@ Dinner
     - Fixed pointer bug and invisibility bug, assets management for sound
 46. GameMechanics, UserInputs, GameOutput
     - Game Screens (Title, HELP, DEAD)
+47. GameMechanics, UserInputs, GameOutput, Fade, AssetsManager, -Main
+    - Background images and completed game screens and reload after death

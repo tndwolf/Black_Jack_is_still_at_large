@@ -18,6 +18,7 @@ class UserInput {
       case GameState.DEAD:
         gameMechanics.hideFade();
         gameMechanics.showTitle();
+        gameMechanics.generateLevel();
         gameMechanics.state = GameState.TITLE;
         break;
       case GameState.HELP:

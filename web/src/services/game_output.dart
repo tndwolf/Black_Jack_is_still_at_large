@@ -13,7 +13,9 @@ class GameOutput {
   num get height => canvas.height;
   num get width => canvas.width;
 
-  GameOutput(CanvasElement this.canvas) {}
+  GameOutput(CanvasElement this.canvas) {
+    context.imageSmoothingEnabled = false;
+  }
 
   examinePlayer(Actor actor, PhysicalObject physical, bool hasCover) {
     var output = querySelector('#player');
@@ -22,7 +24,7 @@ class GameOutput {
     output.append(new BRElement());
     printHand(output, 'Health', physical.health, physical.healthHand);
     output.append(new BRElement());
-    printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand);
+    printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand, ' / ${actor.cap}');
     output.append(new BRElement());
     if(hasCover) {
       output.append(new SpanElement()..text = 'Cover'..className = 'cover');
@@ -73,8 +75,8 @@ class GameOutput {
     assetsManager.playSound(soundId);
   }
 
-  printHand(Element output, String name, num value, List<Card> hand) {
-    output.appendText('$name: $value');
+  printHand(Element output, String name, num value, List<Card> hand, [String postFix = '']) {
+    output.appendText('$name: $value $postFix');
     output.append(new BRElement());
     for(var card in hand) {
       var span = new SpanElement()
