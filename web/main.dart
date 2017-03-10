@@ -5,10 +5,16 @@ import 'dart:html';
 import 'src/services.dart' as services;
 import 'src/world.dart';
 
+var assets = [
+  'shot_01.wav',
+  'miss_01.wav'
+];
+
 void main() {
   var world = new World();
   world.initialize();
   services.initialize(world);
+  services.loadAssets(assets);
   services.gameMechanics.generateLevel();
   world.update();
   world.updateRealTime();

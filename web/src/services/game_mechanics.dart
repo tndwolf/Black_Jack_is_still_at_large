@@ -289,6 +289,7 @@ class GameMechanics {
     for(var text in _levels[currentLevel]['description']) {
       floatTextCentered(text, new Color(255, 255, 255), 1000);
     }
+    _world.update();
     updateVisibility();
   }
 
@@ -353,10 +354,7 @@ class GameMechanics {
         physical.y = ey;
         render.x = (ex + 0.5) * grid.map.cellWidth;
         render.y = (ey + 0.5) * grid.map.cellHeight;
-        if (entity == target) {
-          selectPointer.x = (ex + 0.5) * grid.map.cellWidth;
-          selectPointer.y = (ey + 0.5) * grid.map.cellHeight;
-        }
+        updatePointer();
         if (entity == player && endCell.isEndOfLevel) {
           currentLevel++;
           generateLevel(_world.getEntity(player));
@@ -500,6 +498,17 @@ class GameMechanics {
   spawnEnemy() {
     //if (enemies++ < _maxEnemies)
     //  entityFactory.CreateEnemy(_world, randomItem(_levels[currentLevel]['enemies']));
+  }
+
+  updatePointer() {
+    var grid = _world.getSystem(GridManager) as GridManager;
+    var physical = _world.getComponent(PhysicalObject, target) as PhysicalObject;
+    if (grid.isInLos(physical.x, physical.y)) {
+      selectPointer.x = (physical.x + 0.5) * grid.map.cellWidth;
+      selectPointer.y = (physical.y + 0.5) * grid.map.cellHeight;
+    } else {
+      selectPointer.x = -10000;
+    }
   }
 
   updateVisibility() {

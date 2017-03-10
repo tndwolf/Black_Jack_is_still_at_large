@@ -70,35 +70,7 @@ class GameOutput {
   }
 
   playSound(String soundId) async {
-    var gainNode = audioContext.createGain();
-    HttpRequest req;
-
-    try {
-      req = await HttpRequest.request('assets/$soundId.wav', responseType: 'arraybuffer');
-    } catch (e) {
-      print('error getting ogg');
-      return;
-    }
-
-    var audioBuffer = await audioContext.decodeAudioData(req.response);
-
-    /*var button = querySelector('#play') as ButtonElement
-    ..disabled = false
-    ..onClick.listen((_) {*/
-    var source = audioContext.createBufferSource();
-    source.buffer = audioBuffer;
-    //source.connectNode(gainNode, 0, 0);
-    source.connectNode(audioContext.destination); // by me
-    //gainNode.connectNode(audioContext.destination, 0, 0);
-    source.start(0);
-    //  });
-
-    /*querySelector('#volume').onChange.listen((e) {
-    var volume = int.parse(e.target.value);
-    var max = int.parse(e.target.max);
-    var fraction = volume / max;
-    gainNode.gain.value = fraction * fraction;
-  });*/
+    assetsManager.playSound(soundId);
   }
 
   printHand(Element output, String name, num value, List<Card> hand) {

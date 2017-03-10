@@ -118,3 +118,8 @@ Dinner
     - Implemented Cover
 44. GameMechanics, Fade, -World
     - Winning condition better implemented
+    
+## Sixth Day
+
+45. AssetsManager, GameMechanics, Main, -GameOutput
+    - Fixed pointer bug and invisibility bug, assets management for sound
