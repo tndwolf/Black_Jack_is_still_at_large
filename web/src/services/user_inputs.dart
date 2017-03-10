@@ -2,6 +2,7 @@ import 'dart:html';
 import '../color.dart';
 import '../services.dart';
 import '../world.dart';
+import '../services/game_mechanics.dart';
 
 class UserInput {
   Element _focusElement;
@@ -13,6 +14,28 @@ class UserInput {
   }
 
   onKeyPressed(KeyboardEvent evt) {
+    switch (gameMechanics.state) {
+      case GameState.DEAD:
+        gameMechanics.hideFade();
+        gameMechanics.showTitle();
+        gameMechanics.state = GameState.TITLE;
+        break;
+      case GameState.HELP:
+        gameMechanics.hideFade();
+        gameMechanics.state = GameState.PLAY;
+        break;
+      case GameState.PLAY:
+        _onKeyPressed(evt);
+        break;
+      case GameState.TITLE:
+        //gameMechanics.hideFade();
+        gameMechanics.showHelp();
+        gameMechanics.state = GameState.HELP;
+        break;
+    }
+  }
+
+  _onKeyPressed(KeyboardEvent evt) {
     //if(_focusElement.focus == false) {
     if(stopInputs == false) {
       var keyEvent = new KeyEvent.wrap(evt);

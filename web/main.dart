@@ -18,4 +18,5 @@ void main() {
   services.gameMechanics.generateLevel();
   world.update();
   world.updateRealTime();
+  services.gameMechanics.showTitle();
 }

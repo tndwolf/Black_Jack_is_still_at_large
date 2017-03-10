@@ -69,16 +69,25 @@ var _levels = [
   }
 ];
 
+enum GameState {
+  TITLE,
+  PLAY,
+  HELP,
+  DEAD
+}
+
 class GameMechanics {
   Deck deck;
   num currentLevel = 0;
   num enemies = 0;
+  Fade currentFade = null;
   num _maxEnemies = 10;
   dynamic nextPlayerMove = null;
   num player = World.INVALID_ENTITY;
   num round = 0;
   num target = World.INVALID_ENTITY;
   RenderObject selectPointer;
+  GameState state = GameState.PLAY;
   World _world;
 
   GameMechanics(World this._world) {
@@ -312,6 +321,10 @@ class GameMechanics {
     return (_world.getSystem(GridManager) as GridManager).hasCover(entity);
   }
 
+  hideFade() {
+    currentFade.fadeOut();
+  }
+
   bool isAlive(num entity) {
     try {
       return (_world.getComponent(Actor, entity) as Actor).isAlive;
@@ -332,9 +345,12 @@ class GameMechanics {
     enemies--;
     if(actor.finalBoss == true) winGame();
     else if(entity == player) {
-      _world.add(new Fade()
+      state = GameState.DEAD;
+      currentFade.fadeOut();
+      currentFade = new Fade()
         ..text = ['You are DEAD', 'Press space to Restart']
-        ..y = 200);
+        ..y = 200;
+      _world.add(currentFade);
     }
   }
 
@@ -493,6 +509,25 @@ class GameMechanics {
     physical.y = y;
     render.x = (x + 0.5) * grid.map.cellWidth;
     render.y = (y + 0.5) * grid.map.cellHeight;
+  }
+
+  showHelp() {
+    currentFade.fadeOut();
+    currentFade = new Fade()
+      ..fadeInMillis = 0
+      ..text = ['This is an help screen']
+      ..y = 400;
+        _world.add(currentFade);
+    state = GameState.HELP;
+  }
+
+  showTitle() {
+    currentFade = new Fade()
+      ..fadeInMillis = 0
+      ..text = ['Press any key to START']
+      ..y = 400;
+    _world.add(currentFade);
+    state = GameState.TITLE;
   }
 
   spawnEnemy() {

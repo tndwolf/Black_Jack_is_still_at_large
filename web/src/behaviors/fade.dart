@@ -25,9 +25,8 @@ class Fade extends Behavior implements Widget {
 
   @override
   draw(CanvasRenderingContext2D context) {
-    //print('Fade.draw: drawing');
-    //_alpha = (fadeMillis - refTime) / fadeMillis;
     context.setFillColorRgb(background.r, background.g, background.b, _alpha);
+    print('Fade.draw: $_alpha');
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);
     num y = this.y;
     for(var row in text) {
@@ -36,6 +35,9 @@ class Fade extends Behavior implements Widget {
       context.textBaseline = 'middle';
       context.fillText(row, context.canvas.width ~/ 2, y);
       y += textRowsSpacing;
+    }
+    if (_alpha <= 0) {
+      deleteMe = true;
     }
   }
 
@@ -47,6 +49,7 @@ class Fade extends Behavior implements Widget {
     fadeMillis = _fadingOut ? fadeInMillis : fadeOutMillis;
     if (_fadingOut) {
       _alpha = (fadeMillis - refTime) / fadeMillis;
+      _alpha = _alpha < 0 ? 0 : _alpha;
       // 1------0.5------0
     } else {
       _alpha = refTime / fadeMillis;

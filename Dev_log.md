@@ -123,3 +123,5 @@ Dinner
 
 45. AssetsManager, GameMechanics, Main, -GameOutput
     - Fixed pointer bug and invisibility bug, assets management for sound
+46. GameMechanics, UserInputs, GameOutput
+    - Game Screens (Title, HELP, DEAD)

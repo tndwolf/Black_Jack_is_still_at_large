@@ -27,7 +27,6 @@ class AssetsManager {
   }
 
   loadSound(String asset) async {
-    //var gainNode = _audioContext.createGain();
     HttpRequest req;
     try {
       req = await HttpRequest.request('assets/$asset', responseType: 'arraybuffer');
@@ -36,10 +35,6 @@ class AssetsManager {
       return;
     }
     AudioBuffer audioBuffer = await _audioContext.decodeAudioData(req.response);
-    //var source = _audioContext.createBufferSource();
-    //source.buffer = audioBuffer;
-    //source.connectNode(gainNode, 0, 0);
-    //source.connectNode(_audioContext.destination);
     _sounds[asset.split('.')[0]] = audioBuffer;
   }
 }
