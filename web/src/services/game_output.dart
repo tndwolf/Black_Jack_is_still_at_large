@@ -31,6 +31,12 @@ class GameOutput {
     output.append(new BRElement());
     printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand, ' / ${actor.cap}');
     output.append(new BRElement());
+    if(actor.bullets < 1) {
+      output.append(new SpanElement()..text = 'Reload!'..className = 'cover');
+    } else {
+      output.appendText('Shots: ${actor.bullets} / ${actor.maxBullets}');
+    }
+    output.append(new BRElement());
     if(hasCover) {
       output.append(new SpanElement()..text = 'Cover'..className = 'cover');
     }
@@ -45,6 +51,12 @@ class GameOutput {
       printHand(output, 'Health', physical.health, physical.healthHand);
       output.append(new BRElement());
       output.appendText('Range: ${actor.range}');
+      output.append(new BRElement());
+      if(actor.bullets < 100) {
+        output.appendText('Shots: ${actor.bullets} / ${actor.maxBullets}');
+      } else {
+        output.appendText('Shots: NA');
+      }
       output.append(new BRElement());
       if(actor.isAlive) {
         if (physical.health < actor.fleeThreshold) {
@@ -71,6 +83,9 @@ class GameOutput {
       output.append(new BRElement());
       output.append(new BRElement());
       output.appendText('Range: ???');
+      output.append(new BRElement());
+      output.append(new BRElement());
+      output.appendText('Shots: ???');
     }
     //printHand(output, 'Action', gameMechanics.getHandValue(actor.hand, cap: actor.cap), actor.hand);
     output.append(new ParagraphElement()..text = physical.description);

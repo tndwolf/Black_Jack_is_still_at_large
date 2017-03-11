@@ -39,9 +39,11 @@ class EntityFactory {
       var position = gameMechanics.randomPosition(6);
       //print('EntityFactory.CreateEnemy: position $position');
       world.add(new Actor(id)
+        ..bullets = temp['bullets']
         ..cap = temp['cap']
         ..finalBoss = temp['finalBoss']
         ..fleeThreshold = temp['fleeThreshold']
+        ..maxBullets = temp['bullets']
         ..range = temp['range']);
       var physical = new PhysicalObject(id)
         ..x = position[0]

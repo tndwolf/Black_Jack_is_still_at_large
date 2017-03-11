@@ -141,3 +141,5 @@ Dinner
 
 51. GameOutput, Main, GameMap, UserInputs, EntityTemplates, EntityFactory
     - Fixed enemy spawn bug 2, some debugging
+52. GameOutput, -Actor, -EntityFactory, GameMechanics, HTML
+    - Implemented Reloading and Help

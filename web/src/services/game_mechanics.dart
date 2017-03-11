@@ -96,6 +96,11 @@ class GameMechanics {
 
   attack(num attacker, num target) {
     var atkActor = _world.getComponent(Actor, attacker) as Actor;
+    if(atkActor.bullets < 1) {
+      reload(attacker);
+      return;
+    }
+    atkActor.bullets--;
     var atkPhy =
         _world.getComponent(PhysicalObject, attacker) as PhysicalObject;
     var defActor = _world.getComponent(Actor, target) as Actor;
@@ -450,6 +455,15 @@ class GameMechanics {
     return source[rng.nextInt(source.length)];
   }
 
+  reload(num entity) {
+    var actor = _world.getComponent(Actor, entity) as Actor;
+    floatTextDeferred('Reload', _world.getComponent(RenderObject, entity) as RenderObject, new Color(0, 255, 255));
+    actor.bullets = actor.maxBullets;
+    if(entity == player) {
+      gameOutput.examinePlayer(actor, _world.getComponent(PhysicalObject, entity) as PhysicalObject, hasCover(entity));
+    }
+  }
+
   runAis() {
     round++;
     if (round % _levels[currentLevel]['howMany'] == 0) spawnEnemy();
@@ -550,8 +564,27 @@ class GameMechanics {
       ..color = new Color(255, 215, 0)
       ..fadeInMillis = 0
       ..fadeOutMillis = 0
-      ..text = ['This is an help screen']
-      ..y = 400;
+      ..text = [
+        r'Move with the "WASD" keys, skip a turn with "."',
+        r'Cycle targets by pressing "Q"',
+        r'Shot with "F"',
+        'And don\'t forget to reload with \"R\"',
+        '',
+        'When you move or shot you action hand will be',
+        'reset, and two cards will be drawn',
+        'Call a new card by pressing \"E\", the total',
+        'displayed is your attack value',
+        'To hit an enemy your action hand must be above',
+        'the target defense, but below 21',
+        'If you go over 21 you will lose a round!',
+        '',
+        'After the first hit an enemy will be identified',
+        'After receiving some damage enemies will flee',
+        'Note that enemies draw random defense cards',
+        'when created!',
+        'Use that above information to your advantage'
+        ]
+      ..y = 20;
     _world.add(currentFade);
     state = GameState.HELP;
   }

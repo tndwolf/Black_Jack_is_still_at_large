@@ -61,6 +61,11 @@ class UserInput {
       } else if (keyEvent.keyCode == 113) { // q
         gameMechanics.updateVisibility();
         gameMechanics.selectNext();
+      } else if (keyEvent.keyCode == 114) { // r
+        gameMechanics.reload(gameMechanics.player);
+        gameMechanics.runAis();
+      } else if (keyEvent.keyCode == 63) { // ?
+        gameMechanics.showHelp();
       } else if (keyEvent.keyCode == 102) { // f
         gameMechanics.attack(gameMechanics.player, gameMechanics.target);
         gameMechanics.runAis();
