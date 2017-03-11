@@ -13,8 +13,8 @@ class RenderObject extends GameComponent implements Widget {
   RenderObject(num entity): super(entity) {}
 
   @override
-  draw(CanvasRenderingContext2D context) {
+  draw(CanvasRenderingContext2D context, [num offsetX = 0, num offsetY = 0]) {
     context.setFillColorRgb(color.r, color.g, color.b, color.a);
-    context.fillText(glyph, x, y);
+    context.fillText(glyph, x - offsetX, y - offsetY);
   }
 }

@@ -24,8 +24,7 @@ var _levels = [
       "Good Luck!"
     ],
     "enemies": ["native"],
-    "howMany": 10,
-    "spawnBoss": true
+    "howMany": 10
   },
   {
     "map": "desert",
@@ -157,6 +156,13 @@ class GameMechanics {
     }
   }
 
+  displayLevelIntro() {
+    for(var text in _levels[currentLevel]['description']) {
+      //floatTextCentered(text, new Color(255, 255, 255), 1000);
+      floatTextDeferred(text, _world.getComponent(RenderObject, player) as RenderObject, new Color(255, 255, 255), 5000);
+    }
+  }
+
   bool draw(num entity, bool newHand) {
     var actor = _world.getComponent(Actor, entity) as Actor;
     try {
@@ -221,7 +227,7 @@ class GameMechanics {
     }
   }
 
-  floatTextDeferred(String text, RenderObject render, Color color) {
+  floatTextDeferred(String text, RenderObject render, Color color, [num fadeOutMillis = 500]) {
     if (render == null) {
       // HACK: this is an horrible hack... but it saves time and refactoring...
       render = _world.getComponent(RenderObject, player) as RenderObject;
@@ -232,15 +238,16 @@ class GameMechanics {
     //print("GameMechanics.floatTextDeferred: fa qualcosa");
     if (ani != null) {
       //print("GameMechanics.floatTextDeferred: found previous");
-      ani.addText(text, render, color);
+      ani.addText(text, render, color, fadeOutMillis);
     } else {
       //print("GameMechanics.floatTextDeferred: new one");
       _world.add(
-          new AnimatedTextQueue(render.entity)..addText(text, render, color));
+          new AnimatedTextQueue(render.entity)
+            ..addText(text, render, color, fadeOutMillis));
     }
   }
 
-  floatTextOn(String text, RenderObject render, Color color) {
+  floatTextOn(String text, RenderObject render, Color color, [num fadeOutMillis = 500]) {
     var tb = new TextBox(World.GENERIC_ENTITY)
       ..color = color
       ..text = text
@@ -250,7 +257,7 @@ class GameMechanics {
     _world.add(tb);
     _world.add(new AnimatedText(tb)
       ..animationPixelPerSec = [0, -32]
-      ..fadeOutMillis = 500);
+      ..fadeOutMillis = fadeOutMillis);
   }
 
   bool inRange(PhysicalObject from, PhysicalObject to, num range) {
@@ -295,9 +302,7 @@ class GameMechanics {
       ..x = -10000
       ..z = 100;
     _world.add(selectPointer);
-    for(var text in _levels[currentLevel]['description']) {
-      floatTextCentered(text, new Color(255, 255, 255), 1000);
-    }
+    if (currentLevel > 0) displayLevelIntro();
     _world.update();
     updateVisibility();
   }
@@ -348,6 +353,7 @@ class GameMechanics {
       state = GameState.DEAD;
       currentFade.fadeOut();
       currentFade = new Fade()
+        ..color = new Color(255, 215, 0)
         ..text = ['You are DEAD', 'Press space to Restart']
         ..y = 200
         ..backgroundImage = assetsManager.getSprite('hat_blood');
@@ -401,6 +407,11 @@ class GameMechanics {
     var dy = (toY - from.y).sign * (flee ? -1 : 1);
     if (move(from.entity, dx, dy)) return;
     else move(from.entity, rng.nextInt(3)-1, rng.nextInt(3)-1);
+  }
+
+  List<num> get playerRenderPosition {
+    var render = _world.getComponent(RenderObject, player) as RenderObject;
+    return <num>[render.x, render.y];
   }
 
   List<num> randomPosition(num deltaBorder) {
@@ -516,6 +527,7 @@ class GameMechanics {
     currentFade.fadeOut();
     currentFade = new Fade()
       ..backgroundImage = assetsManager.getSprite('hat')
+      ..color = new Color(255, 215, 0)
       ..fadeInMillis = 0
       ..fadeOutMillis = 0
       ..text = ['This is an help screen']
@@ -527,6 +539,7 @@ class GameMechanics {
   showTitle() {
     currentFade = new Fade()
       ..backgroundImage = assetsManager.getSprite('title')
+      ..color = new Color(255, 215, 0)
       ..fadeInMillis = 0
       ..fadeOutMillis = 0
       ..text = ['Press any key to START']

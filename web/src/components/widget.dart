@@ -6,5 +6,5 @@ abstract class Widget extends GameComponent {
   num y;
   num z;
   Widget(num entity): super(entity);
-  draw(CanvasRenderingContext2D context);
+  draw(CanvasRenderingContext2D context, [num offsetX = 0, num offsetY = 0]);
 }

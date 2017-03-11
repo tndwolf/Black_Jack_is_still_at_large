@@ -25,7 +25,7 @@ class Fade extends Behavior implements Widget {
   fadeOut() { _fadingOut = true; }
 
   @override
-  draw(CanvasRenderingContext2D context) {
+  draw(CanvasRenderingContext2D context, [num offsetX = 0, num offsetY = 0]) {
     context.setFillColorRgb(background.r, background.g, background.b, _alpha);
     //print('Fade.draw: $_alpha, fadeMillis $fadeMillis, $fadeInMillis, $fadeOutMillis');
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);

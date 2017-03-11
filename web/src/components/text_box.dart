@@ -17,7 +17,7 @@ class TextBox extends GameComponent implements Widget {
   TextBox(num entity): super(entity) { }
 
   @override
-  draw(CanvasRenderingContext2D context) {
+  draw(CanvasRenderingContext2D context, [num offsetX = 0, num offsetY = 0]) {
     context.font = gameOutput.asciiFont;
     context.textAlign = 'center';
     context.textBaseline = 'middle';
@@ -28,8 +28,8 @@ class TextBox extends GameComponent implements Widget {
     //context.fillRect(x - halfWidth, y - halfHeight, width, height);
     context.setStrokeColorRgb(background.r, background.g, background.b, background.a);
     context.lineWidth = 3;
-    context.strokeText(text, x, y);
+    context.strokeText(text, x - offsetX, y - offsetY);
     context.setFillColorRgb(color.r, color.g, color.b, color.a);
-    context.fillText(text, x, y);
+    context.fillText(text, x - offsetX, y - offsetY);
   }
 }

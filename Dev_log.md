@@ -127,3 +127,8 @@ Dinner
     - Game Screens (Title, HELP, DEAD)
 47. GameMechanics, UserInputs, GameOutput, Fade, AssetsManager, -Main
     - Background images and completed game screens and reload after death
+    
+## Seventh Day
+
+48. Renderer, UserInputs, TextBox, Fade, Widget, GameMechanics, GameMap, RenderObject
+    - Center screen around player, better fade and LoS graphics

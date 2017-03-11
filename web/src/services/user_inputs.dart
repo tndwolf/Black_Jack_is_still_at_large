@@ -24,6 +24,7 @@ class UserInput {
       case GameState.HELP:
         gameMechanics.hideFade();
         gameMechanics.state = GameState.PLAY;
+        gameMechanics.displayLevelIntro();
         break;
       case GameState.PLAY:
         _onKeyPressed(evt);

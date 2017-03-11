@@ -40,8 +40,11 @@ class Renderer implements GameSystem {
   updateRealTime(World world) {
     var context = gameOutput.context;
     context.clearRect(0, 0, gameOutput.canvas.width, gameOutput.canvas.height);
+    var offset = gameMechanics.playerRenderPosition
+      ..[0] -= context.canvas.width ~/ 2
+      ..[1] -= context.canvas.height ~/ 2;
     for(var widget in widgets) {
-      widget.draw(context);
+      widget.draw(context, offset[0], offset[1]);
     }
   }
 }

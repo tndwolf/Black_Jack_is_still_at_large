@@ -40,7 +40,7 @@ class GameMap extends GameComponent implements Widget {
   }
 
   @override
-  draw(CanvasRenderingContext2D context) {
+  draw(CanvasRenderingContext2D context, [num offsetX = 0, num offsetY = 0]) {
     context.font = gameOutput.asciiFont;
     context.textAlign = 'center';
     context.textBaseline = 'middle';
@@ -57,10 +57,13 @@ class GameMap extends GameComponent implements Widget {
           context.setFillColorRgb(tile.color.r, tile.color.g, tile.color.b);
           context.fillText(tile.glyph, x, y);
         } else if (tile.visited) {
-          context.setFillColorRgb(0, 0, 0);
+          context.globalAlpha = 0.3;
+          context.setFillColorRgb(
+              tile.background.r, tile.background.g, tile.background.b);
           context.fillRect(x - halfCellWidth, y - halfCellHeight, cellWidth, cellHeight);
-          context.setFillColorRgb(96, 80, 0);
+          context.setFillColorRgb(tile.color.r, tile.color.g, tile.color.b);
           context.fillText(tile.glyph, x, y);
+          context.globalAlpha = 1;
         }
         x += cellWidth;
       }
