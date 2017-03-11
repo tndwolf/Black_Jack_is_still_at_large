@@ -10,7 +10,7 @@ var entityTemplates = {
     "glyph": "n",
     "health": 7,
     "healthBonus": 0,
-    "range": 2,
+    "range": 2
   },
   "nativeBow": {
     "cap": 21,
@@ -23,11 +23,11 @@ var entityTemplates = {
     "glyph": "N",
     "health": 7,
     "healthBonus": 0,
-    "range": 4,
+    "range": 4
   },
   "bandit": {
     "cap": 21,
-    "color": [255, 127, 96, 1],
+    "color": [204, 163, 0, 1],
     "defense": 10,
     "defenseBonus": 2,
     "description": "A petty criminal, but armed with a 6-shots",
@@ -36,11 +36,11 @@ var entityTemplates = {
     "glyph": "b",
     "health": 7,
     "healthBonus": 0,
-    "range": 6,
+    "range": 6
   },
   "outlaw": {
     "cap": 21,
-    "color": [255, 127, 96, 1],
+    "color": [204, 163, 0, 1],
     "defense": 10,
     "defenseBonus": 2,
     "description": "An outlaw, well armed and danguerous",
@@ -49,11 +49,11 @@ var entityTemplates = {
     "glyph": "B",
     "health": 9,
     "healthBonus": 0,
-    "range": 6,
+    "range": 6
   },
   "liutenent": {
     "cap": 21,
-    "color": [255, 127, 96, 1],
+    "color": [255, 102, 102],
     "defense": 10,
     "defenseBonus": 4,
     "description": "An hired gun of Black Jack, very dangerous",
@@ -62,11 +62,11 @@ var entityTemplates = {
     "glyph": "&",
     "health": 10,
     "healthBonus": 4,
-    "range": 6,
+    "range": 6
   },
   "boss": {
     "cap": 21,
-    "color": [0, 0, 0, 1],
+    "color": [128, 0, 0, 1],
     "defense": 10,
     "defenseBonus": 7,
     "description": "Black Jack himself",
@@ -75,6 +75,6 @@ var entityTemplates = {
     "glyph": "J",
     "health": 10,
     "healthBonus": 6,
-    "range": 7,
+    "range": 7
   },
 };

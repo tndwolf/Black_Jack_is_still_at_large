@@ -15,7 +15,7 @@ import '../components/text_box.dart';
 import '../systems/grid_manager.dart';
 
 var _levels = [
-  {
+  /*{
     "map": "desert",
     "description": [
       "- DEAD MAN'S CANYON -",
@@ -58,13 +58,13 @@ var _levels = [
     "description": ["- THE OLD MINES -", "The deeper layer of the mines"],
     "enemies": ["outlaw", "outlaw", "liutenent"],
     "howMany": 10
-  },
+  },*/
   {
     "map": "mine",
     "description": ["♠ BLACK JACK'S LAIR ♠", "Confront the man himself"],
     "enemies": ["outlaw", "outlaw", "liutenent"],
     "howMany": 9,
-    "spawnBoss": true
+    //"spawnBoss": true
   }
 ];
 
@@ -336,6 +336,10 @@ class GameMechanics {
     } catch (ex) {
       return false;
     }
+  }
+
+  bool isOccupied(num x, num y) {
+    return (_world.getSystem(GridManager) as GridManager).isOccupied(x, y);
   }
 
   kill(num entity) {

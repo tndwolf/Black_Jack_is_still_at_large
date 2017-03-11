@@ -48,27 +48,24 @@ class GameMap extends GameComponent implements Widget {
     var halfCellHeight = cellHeight~/2;
     num x = halfCellWidth - offsetX;
     num y = halfCellHeight - offsetY;
+    num cellX = 0;
+    num cellY = 0;
     for(var row in _map) {
       for(var tile in row) {
         if (tile.inLos) {
-          context.setFillColorRgb(
-              tile.background.r, tile.background.g, tile.background.b);
-          context.fillRect(x - halfCellWidth, y - halfCellHeight, cellWidth, cellHeight);
-          context.setFillColorRgb(tile.color.r, tile.color.g, tile.color.b);
-          context.fillText(tile.glyph, x, y);
+          tile.draw(context, x, y, cellWidth, cellHeight, !gameMechanics.isOccupied(cellX, cellY));
         } else if (tile.visited) {
           context.globalAlpha = 0.3;
-          context.setFillColorRgb(
-              tile.background.r, tile.background.g, tile.background.b);
-          context.fillRect(x - halfCellWidth, y - halfCellHeight, cellWidth, cellHeight);
-          context.setFillColorRgb(tile.color.r, tile.color.g, tile.color.b);
-          context.fillText(tile.glyph, x, y);
+          tile.draw(context, x, y, cellWidth, cellHeight);
           context.globalAlpha = 1;
         }
         x += cellWidth;
+        cellX++;
       }
       x = halfCellWidth - offsetX;
       y += cellHeight;
+      cellX = 0;
+      cellY++;
     }
   }
 

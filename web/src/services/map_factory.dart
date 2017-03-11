@@ -45,8 +45,8 @@ class MapFactory {
       var row = <String>[];
       for (var x = 0; x < width; x++) {
         int probFree = 10 * (halfHeight - y).abs() ~/ halfHeight;  //(y < height/2) ? 1 : 100;
-        var next = (rng.nextInt(100) > probFree * probFree) ? ' ' : '#';
-        if (next == ' ') next = (rng.nextInt(100) > 95) ? '♣' : ' ';
+        var next = (rng.nextInt(100) > probFree * probFree) ? '.' : '▲';
+        if (next == '.') next = (rng.nextInt(100) > 95) ? '♣' : '.';
         row.add(next);
       }
       res.add(row);
@@ -56,7 +56,7 @@ class MapFactory {
     num currentY = start[1];
     while(currentX < width) {
       //print("MapFactory._generateDesert: Trying to set $currentX, $currentY");
-      res[currentY][currentX] = ' ';
+      res[currentY][currentX] = '.';
       end[1] = currentY;
       var next = rng.nextInt(3);
       switch(next) {

@@ -132,3 +132,5 @@ Dinner
 
 48. Renderer, UserInputs, TextBox, Fade, Widget, GameMechanics, GameMap, RenderObject
     - Center screen around player, better fade and LoS graphics
+49. Tile, EntityTemplates, GameMechanics, MapFactory, GameMap
+    - Better colors and tile display
