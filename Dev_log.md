@@ -134,3 +134,5 @@ Dinner
     - Center screen around player, better fade and LoS graphics
 49. Tile, EntityTemplates, GameMechanics, MapFactory, GameMap
     - Better colors and tile display
+50. Shot, GameMap, -Tile, GameMechanics
+    - Fixed enemy spawn bug 1

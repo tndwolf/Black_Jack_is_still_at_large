@@ -7,6 +7,7 @@ import '../services.dart';
 import '../behaviors/animated_text.dart';
 import '../behaviors/animated_text_queue.dart';
 import '../behaviors/fade.dart';
+import '../behaviors/shot.dart';
 import '../components/game_map.dart';
 import '../components/actor.dart';
 import '../components/physical_object.dart';
@@ -108,14 +109,26 @@ class GameMechanics {
     }
     try {
       //print('GameMechanics.attack: Test ${atkActor.actionResult} vs ${defPhy.defense}');
+      var atkRender = _world.getComponent(RenderObject, attacker) as RenderObject;
+      var targetRender = _world.getComponent(RenderObject, target) as RenderObject;
       var dam = atkActor.actionResult - defPhy.defense;
       if (dam < 1) {
         //print('GameMechanics.attack: missed! $attacker vs $target');
-        floatTextDeferred('Missed', _world.getComponent(RenderObject, target) as RenderObject, new Color(255, 0, 255));
+        floatTextDeferred('Missed', targetRender, new Color(255, 0, 255));
+        _world.add(new Shot()
+          ..startX = atkRender.x
+          ..startY = atkRender.y
+          ..x = targetRender.x + rng.nextInt(48) - 24
+          ..y = targetRender.y + rng.nextInt(48) - 24);
         gameOutput.playSound('miss_01');
       } else {
         //print('GameMechanics.attack: hit! $dam');
         damage(target, dam);
+        _world.add(new Shot()
+          ..startX = atkRender.x
+          ..startY = atkRender.y
+          ..x = targetRender.x
+          ..y = targetRender.y);
         gameOutput.playSound('shot_01');
         if (attacker == player) {
           gameOutput.examinePlayer(atkActor, atkPhy, hasCover(player));
@@ -424,13 +437,11 @@ class GameMechanics {
     var i = 0;
     var x = -1;
     var y = -1;
-    do {
-      x = rng.nextInt(grid.map.width - margin) + margin;
-      y = rng.nextInt(grid.map.height - margin) + margin;
-    } while (
-      grid.isWalkable(x, y) == true
-      && grid.isOccupied(x, y) == false
-      && i++ < 1000);
+    while (i++ < 1000) {
+      x = rng.nextInt(grid.map.width - deltaBorder) + margin;
+      y = rng.nextInt(grid.map.height - deltaBorder) + margin;
+      if (grid.isWalkable(x, y) && !grid.isOccupied(x, y)) break;
+    }
     return [x, y];
   }
 

@@ -48,7 +48,13 @@ class Tile {
         background = new Color(61, 61, 67);
         break;
       case '>': // exits
-      case '?':
+        color = new Color(255, 225, 0);
+        background = new Color(61, 61, 67);
+        blockLos = false;
+        blocksMovement = false;
+        isEndOfLevel = true;
+        providesCover = false;
+        break;
       case '»':
       case '∩':
         blockLos = false;
