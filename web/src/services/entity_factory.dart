@@ -15,10 +15,11 @@ class EntityFactory {
     print('EntityFactory.CreatePlayer: $id');
     var x = 6;
     var y = 6;
-    world.add(new Actor(id));
+    world.add(new Actor(id)..surprised = false);
     world.add(new PhysicalObject(id)
       ..x = x
-      ..y = y);
+      ..y = y
+    ..healthHand.add(new Card(10, suites.Hearths)));
     world.add(new RenderObject(id)
       ..x = grid.map.cellWidth * (x + 0.5)
       ..y = grid.map.cellHeight * (y + 0.5)

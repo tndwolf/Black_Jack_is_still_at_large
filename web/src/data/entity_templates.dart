@@ -1,5 +1,6 @@
 var entityTemplates = {
   "native": {
+    "bullets": 1000,
     "cap": 21,
     "color": [255, 127, 96, 1],
     "defense": 10,
@@ -13,6 +14,7 @@ var entityTemplates = {
     "range": 2
   },
   "nativeBow": {
+    "bullets": 1,
     "cap": 21,
     "color": [255, 127, 96, 1],
     "defense": 10,
@@ -26,6 +28,7 @@ var entityTemplates = {
     "range": 4
   },
   "bandit": {
+    "bullets": 6,
     "cap": 21,
     "color": [204, 163, 0, 1],
     "defense": 10,
@@ -39,6 +42,7 @@ var entityTemplates = {
     "range": 6
   },
   "outlaw": {
+    "bullets": 6,
     "cap": 21,
     "color": [204, 163, 0, 1],
     "defense": 10,
@@ -52,8 +56,9 @@ var entityTemplates = {
     "range": 6
   },
   "liutenent": {
+    "bullets": 6,
     "cap": 21,
-    "color": [255, 102, 102],
+    "color": [255, 102, 102, 1],
     "defense": 10,
     "defenseBonus": 4,
     "description": "An hired gun of Black Jack, very dangerous",
@@ -65,11 +70,12 @@ var entityTemplates = {
     "range": 6
   },
   "boss": {
+    "bullets": 12,
     "cap": 21,
-    "color": [128, 0, 0, 1],
+    "color": [255, 255, 255, 1],
     "defense": 10,
     "defenseBonus": 7,
-    "description": "Black Jack himself",
+    "description": "Black Jack himself, armed with dual revolvers",
     "finalBoss": true,
     "fleeThreshold": 0,
     "glyph": "J",

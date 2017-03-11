@@ -61,6 +61,7 @@ class Tile {
         blocksMovement = false;
         isEndOfLevel = true;
         providesCover = false;
+        color = new Color(255, 215, 0);
         break;
       case '~': // water
         blockLos = false;

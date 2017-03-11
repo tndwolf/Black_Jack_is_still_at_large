@@ -136,3 +136,8 @@ Dinner
     - Better colors and tile display
 50. Shot, GameMap, -Tile, GameMechanics
     - Fixed enemy spawn bug 1
+
+Dinner
+
+51. GameOutput, Main, GameMap, UserInputs, EntityTemplates, EntityFactory
+    - Fixed enemy spawn bug 2, some debugging

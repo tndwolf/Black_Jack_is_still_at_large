@@ -16,6 +16,7 @@ class UserInput {
   onKeyPressed(KeyboardEvent evt) {
     switch (gameMechanics.state) {
       case GameState.DEAD:
+        gameOutput.clear();
         gameMechanics.hideFade();
         gameMechanics.showTitle();
         gameMechanics.generateLevel();
@@ -41,27 +42,30 @@ class UserInput {
     //if(_focusElement.focus == false) {
     if(stopInputs == false) {
       var keyEvent = new KeyEvent.wrap(evt);
-      //print("UserInput.onKeyPressed: ${keyEvent.keyCode}");
-      if (keyEvent.keyCode == 97) {
+      print("UserInput.onKeyPressed: ${keyEvent.keyCode}");
+      if (keyEvent.keyCode == 97) { // a
         gameMechanics.move(gameMechanics.player, -1, 0);
         gameMechanics.runAis();
-      } else if (keyEvent.keyCode == 100) {
+      } else if (keyEvent.keyCode == 100) { // d
         gameMechanics.move(gameMechanics.player, 1, 0);
         gameMechanics.runAis();
-      } else if (keyEvent.keyCode == 119) {
+      } else if (keyEvent.keyCode == 119) { // s
         gameMechanics.move(gameMechanics.player, 0, -1);
         gameMechanics.runAis();
-      } else if (keyEvent.keyCode == 115) {
+      } else if (keyEvent.keyCode == 115) { // w
         gameMechanics.move(gameMechanics.player, 0, 1);
+        gameMechanics.runAis();
+      } else if (keyEvent.keyCode == 99 || keyEvent.keyCode == 46) { // c, .
+        gameMechanics.move(gameMechanics.player, 0, 0);
         gameMechanics.runAis();
       } else if (keyEvent.keyCode == 113) { // q
         gameMechanics.updateVisibility();
         gameMechanics.selectNext();
-      } else if (keyEvent.keyCode == 101) { // e
+      } else if (keyEvent.keyCode == 102) { // f
         gameMechanics.attack(gameMechanics.player, gameMechanics.target);
         gameMechanics.runAis();
         gameMechanics.draw(gameMechanics.player, true);
-      } else if (keyEvent.keyCode == 32) { // space
+      } else if (keyEvent.keyCode == 101) { // e
         if(gameMechanics.draw(gameMechanics.player, false) == true) {
           print("BUSTED");
           gameMechanics.draw(gameMechanics.player, true);

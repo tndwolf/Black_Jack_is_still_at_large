@@ -17,6 +17,11 @@ class GameOutput {
     context.imageSmoothingEnabled = false;
   }
 
+  clear() {
+    querySelector('#player').innerHtml = '';
+    querySelector('#target').innerHtml = '';
+  }
+
   examinePlayer(Actor actor, PhysicalObject physical, bool hasCover) {
     var output = querySelector('#player');
     output.innerHtml = '';

@@ -16,7 +16,7 @@ import '../components/text_box.dart';
 import '../systems/grid_manager.dart';
 
 var _levels = [
-  /*{
+  {
     "map": "desert",
     "description": [
       "- DEAD MAN'S CANYON -",
@@ -59,13 +59,13 @@ var _levels = [
     "description": ["- THE OLD MINES -", "The deeper layer of the mines"],
     "enemies": ["outlaw", "outlaw", "liutenent"],
     "howMany": 10
-  },*/
+  },
   {
     "map": "mine",
     "description": ["♠ BLACK JACK'S LAIR ♠", "Confront the man himself"],
     "enemies": ["outlaw", "outlaw", "liutenent"],
     "howMany": 9,
-    //"spawnBoss": true
+    "spawnBoss": true
   }
 ];
 
@@ -300,6 +300,7 @@ class GameMechanics {
     gameOutput.examinePlayer(_world.getComponent(Actor, player) as Actor,
         _world.getComponent(PhysicalObject, player) as PhysicalObject,
         hasCover(player));
+    print("GameMechanics.generateLevel: Enemies from ${_levels[currentLevel]['enemies']}");
     for (num i = 0; i < _levels[currentLevel]['howMany']; i++) {
       entityFactory.CreateEnemy(
           _world, randomItem(_levels[currentLevel]['enemies']));
@@ -466,6 +467,10 @@ class GameMechanics {
     var physical =
         _world.getComponent(PhysicalObject, actor.entity) as PhysicalObject;
     if (grid.isInLos(physical.x, physical.y)) {
+      if(actor.surprised) {
+        actor.surprised = false;
+        return;
+      }
       var target =
           _world.getComponent(PhysicalObject, player) as PhysicalObject;
       if (inRange(physical, target, actor.range)) {

@@ -24,7 +24,7 @@ class GridManager implements GameSystem {
     var fovRadiusSquared = fovRadius * fovRadius;
     for (num y = minY; y < maxY; y++) {
       for (num x = minX; x < maxX; x++) {
-        //if((x-cx) * x + y * y < fovRadiusSquared)
+        if((x-cx) * (x-cx) + (y-cy) * (y-cy) < fovRadiusSquared)
         {
           var cell = map.at(x, y)..inLos = inLoS(cx, cy, x, y);
           if (cell.inLos) cell.visited = true;

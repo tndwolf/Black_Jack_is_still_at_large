@@ -52,13 +52,13 @@ class GameMap extends GameComponent implements Widget {
     num cellY = 0;
     for(var row in _map) {
       for(var tile in row) {
-        //if (tile.inLos) {
+        if (tile.inLos) {
           tile.draw(context, x, y, cellWidth, cellHeight, !gameMechanics.isOccupied(cellX, cellY));
-        /*} else if (tile.visited) {
+        } else if (tile.visited) {
           context.globalAlpha = 0.3;
           tile.draw(context, x, y, cellWidth, cellHeight);
           context.globalAlpha = 1;
-        }*/
+        }
         x += cellWidth;
         cellX++;
       }
