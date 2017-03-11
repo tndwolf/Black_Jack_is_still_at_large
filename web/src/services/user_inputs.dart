@@ -17,6 +17,7 @@ class UserInput {
     switch (gameMechanics.state) {
       case GameState.DEAD:
         gameOutput.clear();
+        gameMechanics.currentLevel = 0;
         gameMechanics.hideFade();
         gameMechanics.showTitle();
         gameMechanics.generateLevel();

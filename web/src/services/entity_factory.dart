@@ -18,8 +18,7 @@ class EntityFactory {
     world.add(new Actor(id)..surprised = false);
     world.add(new PhysicalObject(id)
       ..x = x
-      ..y = y
-    ..healthHand.add(new Card(10, suites.Hearths)));
+      ..y = y);
     world.add(new RenderObject(id)
       ..x = grid.map.cellWidth * (x + 0.5)
       ..y = grid.map.cellHeight * (y + 0.5)

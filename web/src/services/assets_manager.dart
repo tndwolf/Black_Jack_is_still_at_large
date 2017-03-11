@@ -34,7 +34,12 @@ class AssetsManager {
   loadSound(String asset) async {
     HttpRequest req;
     try {
-      req = await HttpRequest.request('assets/$asset', responseType: 'arraybuffer');
+      //request.response.headers.add("Access-Control-Allow-Origin", "*");
+      req = await HttpRequest.request('assets/$asset', responseType: 'arraybuffer',
+          requestHeaders: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"});
     } catch (e) {
       print('AssetsManager.loadSound: error getting sound $asset');
       return;

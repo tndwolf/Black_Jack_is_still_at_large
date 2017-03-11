@@ -13,7 +13,7 @@ var entityTemplates = {
     "healthBonus": 0,
     "range": 2
   },
-  "nativeBow": {
+  "native Bow": {
     "bullets": 1,
     "cap": 21,
     "color": [255, 127, 96, 1],
@@ -69,7 +69,7 @@ var entityTemplates = {
     "healthBonus": 4,
     "range": 6
   },
-  "boss": {
+  "black jack": {
     "bullets": 12,
     "cap": 21,
     "color": [255, 255, 255, 1],

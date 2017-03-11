@@ -34,7 +34,7 @@ var _levels = [
       "The natives know of you",
       "Prepare your irons"
     ],
-    "enemies": ["native", "nativeBow"],
+    "enemies": ["native", "native Bow"],
     "howMany": 10
   },
   {
@@ -44,7 +44,7 @@ var _levels = [
       "Climb the side of the old mesa",
       "And reach the abandoned mines"
     ],
-    "enemies": ["native", "nativeBow"],
+    "enemies": ["native", "native Bow"],
     "howMany": 10
   },
   {
@@ -327,7 +327,7 @@ class GameMechanics {
       enemies++;
     }
     if (_levels[currentLevel]['spawnBoss'] != null) {
-      entityFactory.CreateEnemy(_world, 'boss');
+      entityFactory.CreateEnemy(_world, 'black jack');
       map.at(mapFactory.end[0], mapFactory.end[1])..isEndOfLevel = false;
     }
     if (currentLevel > 0 && currentLevel % 2 == 1) {
