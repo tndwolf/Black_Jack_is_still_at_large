@@ -1,4 +1,10 @@
-##Pomodoros
+# DEV LOG
+Every time slot lasts 25 minutes, after that 5 minutes of break.
+Entries tagged with '-' are only minor edits.
+Sub paragraphs detail what has been done for that time slot.
+
+## First Day
+
 1. World, GameComponent, Behavior, GameSystem
 2. HTML, Services, UserInput, -Card, -Deck
     - First issue, not getting focus from Canvas
@@ -143,3 +149,7 @@ Dinner
     - Fixed enemy spawn bug 2, some debugging
 52. GameOutput, -Actor, -EntityFactory, GameMechanics, HTML
     - Implemented Reloading and Help
+53. MapFactory, GameMechanics
+    - New Level: Mesa
+54. Shot, GameMechanics, GameOutput, UserInputs, Fade
+    - Finished 7drl version
