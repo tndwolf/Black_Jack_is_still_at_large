@@ -7,6 +7,7 @@ class PhysicalObject extends GameComponent {
   String description = '';
   bool hasCover = false;
   List<Card> healthHand = <Card>[];
+  String name = '';
   num get defense => gameMechanics.getHandValue(defenseHand);
   num get health => gameMechanics.getHandValue(healthHand, acesAsEleven: false);
   num x;

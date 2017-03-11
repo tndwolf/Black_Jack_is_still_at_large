@@ -6,6 +6,7 @@ import 'src/services.dart' as services;
 import 'src/world.dart';
 
 var assets = [
+  'reload_01.wav',
   'shot_01.wav',
   'miss_01.wav',
   'hat.png',

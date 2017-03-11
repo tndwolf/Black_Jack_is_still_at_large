@@ -23,8 +23,9 @@ class MapFactory {
   List<String> generate(String template) {
     var res = <String>[];
     switch(template) {
-      case 'desert': res = _generateDesert(40, 30); break;
-      case 'mine': res = res = _generateMine(40, 30, 2); break;
+      case 'desert': res = _generateDesert(40, 40); break;
+      case 'mesa': res = res = _generateMesa(40, 40, 5); break;
+      case 'mine': res = res = _generateMine(40, 40, 2); break;
       default:
         for (var y = 0; y < 480 / 24; y++) {
           var row = '';
@@ -69,6 +70,55 @@ class MapFactory {
     end[0] = currentX-1;
     //print("MapFactory._generateDesert: Trying to end at $end");
     res[end[1]][end[0]] = '»';
+    return _doubleListToSingle(res);
+  }
+
+  List<String> _generateMesa(num width, num height, num levels) {
+    print("MapFactory._generateMesa: Generating Mesa");
+    var res = <List<String>>[];
+    for (var y = 0; y < height; y++) {
+      var row = <String>[];
+      for (var x = 0; x < width; x++) {
+        row.add((rng.nextInt(100) > 95) ? '♣' : '.');
+      }
+      res.add(row);
+    }
+    for (var y = 0; y < height; y++) {
+      print("MapFactory._generateMesa: Filling mountain range");
+      res[y][width-1] = '▲';
+    }
+    var x = 0;
+    for(var i = 0; i < levels; i++) {
+      print("MapFactory._generateMesa: Filling level $i of $levels");
+      x += rng.nextInt(width ~/ levels) + 1;
+      var y = 0;
+      print("MapFactory._generateMesa: Start $x, $y");
+      while(y < height) {
+        res[y][x] = '▲';
+        var next = rng.nextInt(100);
+        if(next > 30) y++;
+        else if(next > 15) x++;
+        else x--;
+      }
+      print("MapFactory._generateMesa: End $x, $y");
+    }
+    start = [0, rng.nextInt(height)];
+    num currentX = start[0];
+    num currentY = start[1];
+    while(currentX < width) {
+      //print("MapFactory._generateDesert: Trying to set $currentX, $currentY");
+      res[currentY][currentX] = '.';
+      end[1] = currentY;
+      var next = rng.nextInt(3);
+      switch(next) {
+        case 0: currentX++; break;
+        case 1: currentY++; break;
+        case 2: currentY--; break;
+      }
+      currentY = (currentY > height - 1) ? height - 1 : (currentY < 0) ? 0 : currentY;
+    }
+    end[0] = currentX-1;
+    res[end[1]][end[0]] = '∩';
     return _doubleListToSingle(res);
   }
 

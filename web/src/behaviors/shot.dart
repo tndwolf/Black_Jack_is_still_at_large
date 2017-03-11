@@ -7,7 +7,7 @@ import 'dart:html';
 class Shot extends Behavior implements Widget {
   num _alpha = 0;
   Color color = new Color(189, 212, 219);
-  num fadeMillis = 150;
+  num fadeMillis = 250;
   num refTime = 0;
   num startX = 0;
   num startY = 0;
@@ -19,9 +19,9 @@ class Shot extends Behavior implements Widget {
 
   @override
   draw(CanvasRenderingContext2D context, [num offsetX = 0, num offsetY = 0]) {
-    context.setFillColorRgb(color.r, color.g, color.b, _alpha);
+    context.setStrokeColorRgb(color.r, color.g, color.b, _alpha);
     context.beginPath();
-    context.lineWidth = 1;
+    context.lineWidth = 2;
     context.moveTo(startX - offsetX, startY - offsetY);
     context.lineTo(x - offsetX, y - offsetY);
     context.stroke();

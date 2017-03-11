@@ -1,4 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto);
+@font-face {
+    font-family: carnevalee;
+    src: url("assets/Carnevalee Freakshow.ttf");
+}
 
 html, body {
     background: #444444;
@@ -14,6 +18,12 @@ h1 {
     color: gold;
     text-align: center;
     text-decoration: underline;
+}
+
+h3 {
+    color: gold;
+    margin: 0px;
+    padding 0px;
 }
 
 .box {

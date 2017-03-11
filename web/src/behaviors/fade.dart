@@ -1,6 +1,7 @@
 import '../color.dart';
 import '../game_component.dart';
 import '../components/widget.dart';
+import '../services.dart';
 import '../world.dart';
 import 'dart:html';
 
@@ -14,6 +15,7 @@ class Fade extends Behavior implements Widget {
   num fadeInMillis = 1000;
   bool _fadingOut = false;
   num refTime = 0;
+  bool special = false; // HACK: just to finish in time... too sleepy
   num textRowsSpacing = 24;
   List<String> text = <String>[];
   @override  num x = 0;
@@ -36,11 +38,18 @@ class Fade extends Behavior implements Widget {
     }
     num y = this.y;
     for(var row in text) {
+      context.font = gameOutput.asciiFont;
       context.setFillColorRgb(color.r, color.g, color.b, _alpha);
       context.textAlign = 'center';
       context.textBaseline = 'middle';
       context.fillText(row, context.canvas.width ~/ 2, y);
       y += textRowsSpacing;
+    }
+    if(special) {
+      context.font = gameOutput.westernFont;
+      context.fillText("Black jacK", context.canvas.width ~/ 2, 120);
+      context.font = gameOutput.asciiFont;
+      context.fillText("Is still at large", context.canvas.width ~/ 2, 172);
     }
     if (_alpha <= 0) {
       deleteMe = true;

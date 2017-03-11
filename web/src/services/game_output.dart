@@ -12,6 +12,7 @@ class GameOutput {
   CanvasRenderingContext2D get context => canvas.context2D;
   num get height => canvas.height;
   num get width => canvas.width;
+  String westernFont = '96px carnevalee';
 
   GameOutput(CanvasElement this.canvas) {
     context.imageSmoothingEnabled = false;
@@ -25,6 +26,7 @@ class GameOutput {
   examinePlayer(Actor actor, PhysicalObject physical, bool hasCover) {
     var output = querySelector('#player');
     output.innerHtml = '';
+    output.append(new HeadingElement.h3()..text = 'PLAYER');
     printHand(output, 'Defense', physical.defense, physical.defenseHand);
     output.append(new BRElement());
     printHand(output, 'Health', physical.health, physical.healthHand);
@@ -45,6 +47,7 @@ class GameOutput {
   examineTarget(Actor actor, PhysicalObject physical, bool hasCover) {
     var output = querySelector('#target');
     output.innerHtml = '';
+    output.append(new HeadingElement.h3()..text = physical.name);
     if (actor.isIdentified) {
       printHand(output, 'Defense', physical.defense, physical.defenseHand);
       output.append(new BRElement());

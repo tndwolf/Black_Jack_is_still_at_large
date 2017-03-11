@@ -38,10 +38,20 @@ var _levels = [
     "howMany": 10
   },
   {
+    "map": "mesa",
+    "description": [
+      "- GOLDEN MESA -",
+      "Climb the side of the old mesa",
+      "And reach the abandoned mines"
+    ],
+    "enemies": ["native", "nativeBow"],
+    "howMany": 10
+  },
+  {
     "map": "mine",
     "description": [
       "- MINES, TOP FLOOR -",
-      "The bandit-s lair is in the mines",
+      "The bandit's lair is in the mines",
       "They deal in lead",
       "Beware"
     ],
@@ -81,6 +91,7 @@ class GameMechanics {
   num currentLevel = 0;
   num enemies = 0;
   Fade currentFade = null;
+  bool displayedIntro = false;
   num _maxEnemies = 10;
   dynamic nextPlayerMove = null;
   num player = World.INVALID_ENTITY;
@@ -175,10 +186,12 @@ class GameMechanics {
   }
 
   displayLevelIntro() {
+    if (displayedIntro) return;
     for(var text in _levels[currentLevel]['description']) {
       //floatTextCentered(text, new Color(255, 255, 255), 1000);
       floatTextDeferred(text, _world.getComponent(RenderObject, player) as RenderObject, new Color(255, 255, 255), 5000);
     }
+    displayedIntro = true;
   }
 
   bool draw(num entity, bool newHand) {
@@ -288,6 +301,7 @@ class GameMechanics {
     _world.clear();
     round = 0;
     enemies = 0;
+    displayedIntro = false;
     var map = new GameMap(
         _world.nextEntity, mapFactory.generate(_levels[currentLevel]['map']));
     //print("GameMechanics.generateLevel: $map");
@@ -300,10 +314,11 @@ class GameMechanics {
         _world.add(component);
       }
     }
+    var physicalPlayer = _world.getComponent(PhysicalObject, player) as PhysicalObject;
     setPosition(player, mapFactory.start[0], mapFactory.start[1]);
     draw(player, true);
     gameOutput.examinePlayer(_world.getComponent(Actor, player) as Actor,
-        _world.getComponent(PhysicalObject, player) as PhysicalObject,
+        physicalPlayer,
         hasCover(player));
     print("GameMechanics.generateLevel: Enemies from ${_levels[currentLevel]['enemies']}");
     for (num i = 0; i < _levels[currentLevel]['howMany']; i++) {
@@ -314,6 +329,17 @@ class GameMechanics {
     if (_levels[currentLevel]['spawnBoss'] != null) {
       entityFactory.CreateEnemy(_world, 'boss');
       map.at(mapFactory.end[0], mapFactory.end[1])..isEndOfLevel = false;
+    }
+    if (currentLevel > 0 && currentLevel % 2 == 1) {
+      physicalPlayer.healthHand.first.value = 10;
+      if (physicalPlayer.healthHand.length == 1) {
+        physicalPlayer.healthHand.add(new Card(2, suites.Hearths));
+      } else {
+        physicalPlayer.healthHand[1].value += 2;
+      }
+    }
+    else {
+      physicalPlayer.healthHand.first.value = 10;
     }
     selectPointer = new RenderObject(World.GENERIC_ENTITY)
       ..color = new Color(255, 127, 127)
@@ -460,6 +486,7 @@ class GameMechanics {
     floatTextDeferred('Reload', _world.getComponent(RenderObject, entity) as RenderObject, new Color(0, 255, 255));
     actor.bullets = actor.maxBullets;
     if(entity == player) {
+      assetsManager.playSound('reload_01');
       gameOutput.examinePlayer(actor, _world.getComponent(PhysicalObject, entity) as PhysicalObject, hasCover(entity));
     }
   }
@@ -582,21 +609,24 @@ class GameMechanics {
         'After receiving some damage enemies will flee',
         'Note that enemies draw random defense cards',
         'when created!',
-        'Use that above information to your advantage'
+        'Use that above information to your advantage',
+        '',
+        'Press \"?\" to show this help'
         ]
-      ..y = 20;
+      ..y = 10;
     _world.add(currentFade);
     state = GameState.HELP;
   }
 
   showTitle() {
     currentFade = new Fade()
-      ..backgroundImage = assetsManager.getSprite('title')
+      ..backgroundImage = assetsManager.getSprite('hat')
       ..color = new Color(255, 215, 0)
       ..fadeInMillis = 0
       ..fadeOutMillis = 0
       ..text = ['Press any key to START']
-      ..y = 400;
+      ..y = 400
+      ..special = true;
     _world.add(currentFade);
     state = GameState.TITLE;
   }
@@ -626,7 +656,7 @@ class GameMechanics {
             _world.getComponent(PhysicalObject, obj.entity) as PhysicalObject;
         var render =
             _world.getComponent(RenderObject, obj.entity) as RenderObject;
-        render.color.a = grid.isInLos(physical.x, physical.y) ? 1 : 0.2;
+        render.color.a = grid.isInLos(physical.x, physical.y) ? 1 : 0;
         //print('GameMechanics.updateVisibility: ${obj.entity} to ${render.color.a}');
       }
     } catch (ex) {
